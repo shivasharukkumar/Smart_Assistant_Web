@@ -77,8 +77,9 @@ class ConnectionManager {
             });
         }
 
-        // Auto-connect on page load
+        // Auto-connect and start status polling
         this.connect();
+        this.startStatusPolling();
     }
 
     updateModeButtons() {
@@ -239,7 +240,22 @@ class ConnectionManager {
 
     async fetchStatus() {
         const data = await this.get('/api/status');
-        if (data) this.emit('status', data);
+        if (data) {
+            // Normalize field names if needed
+            if (data.temperature !== undefined && data.temp === undefined) data.temp = data.temperature;
+            if (data.humidity !== undefined && data.hum === undefined) data.hum = data.humidity;
+            if (data.freeHeap !== undefined && data.heap === undefined) data.heap = data.freeHeap;
+            
+            this.emit('status', data);
+            this.emit('telemetry', data);
+        }
+    }
+
+    startStatusPolling() {
+        if (this.statusPollTimer) clearInterval(this.statusPollTimer);
+        this.statusPollTimer = setInterval(() => {
+            this.fetchStatus();
+        }, 2000);
     }
 
     on(event, callback) {

@@ -3,21 +3,21 @@
  */
 
 const PAGES_LIST = [
-    { id: 'face', name: 'Face & Mood', desc: 'Companion animated physical eye expressions & reactions', icon: '👁️' },
-    { id: 'clock', name: 'Digital Clock', desc: 'FreeSans NTP synced digital time & calendar date', icon: '⏰' },
-    { id: 'weather', name: 'Live Weather', desc: 'Current city temperature, condition icon & humidity', icon: '⛅' },
-    { id: 'world_clock', name: 'World Clock', desc: 'Dual international timezones (India & Sydney)', icon: '🌍' },
-    { id: 'forecast', name: '3-Day Forecast', desc: 'Multi-day temperature predictions & mini weather icons', icon: '📅' },
-    { id: 'temperature', name: 'Temperature', desc: 'Environmental thermometer gauge and status', icon: '🌡️' },
-    { id: 'humidity', name: 'Humidity', desc: 'Relative humidity droplet percentage meter', icon: '💧' },
-    { id: 'wifi', name: 'Wi-Fi Status', desc: 'Connected SSID, signal RSSI and MAC address', icon: '📶' },
-    { id: 'ip', name: 'IP Address', desc: 'Device LAN IP address & API connection details', icon: '🌐' },
-    { id: 'system', name: 'System Info', desc: 'ESP32 dual-core CPU, flash & firmware version', icon: '💻' },
-    { id: 'memory', name: 'Memory Usage', desc: 'Real-time Free Heap RAM & allocation monitor', icon: '🧠' },
-    { id: 'drawing', name: 'Drawing Canvas', desc: '128x64 custom monochrome bitmap canvas', icon: '🎨' },
-    { id: 'game_center', name: 'Game Center', desc: '6 interactive retro arcade games hub', icon: '🎮' },
-    { id: 'message', name: 'Custom Message', desc: 'Marquee scrolling banner announcement', icon: '📢' },
-    { id: 'settings', name: 'System Settings', desc: 'Brightness, sound, and rotation settings', icon: '⚙️' }
+    { id: 'face', name: 'Face & Mood', desc: 'Companion animated physical eye expressions & reactions', icon: 'face' },
+    { id: 'clock', name: 'Digital Clock', desc: 'FreeSans NTP synced digital time & calendar date', icon: 'schedule' },
+    { id: 'weather', name: 'Live Weather', desc: 'Current city temperature, condition icon & humidity', icon: 'partly_cloudy_day' },
+    { id: 'world_clock', name: 'World Clock', desc: 'Dual international timezones (India & Sydney)', icon: 'public' },
+    { id: 'forecast', name: '3-Day Forecast', desc: 'Multi-day temperature predictions & mini weather icons', icon: 'calendar_month' },
+    { id: 'temperature', name: 'Temperature', desc: 'Environmental thermometer gauge and status', icon: 'device_thermostat' },
+    { id: 'humidity', name: 'Humidity', desc: 'Relative humidity droplet percentage meter', icon: 'humidity_mid' },
+    { id: 'wifi', name: 'Wi-Fi Status', desc: 'Connected SSID, signal RSSI and MAC address', icon: 'wifi' },
+    { id: 'ip', name: 'IP Address', desc: 'Device LAN IP address & API connection details', icon: 'lan' },
+    { id: 'system', name: 'System Info', desc: 'ESP32 dual-core CPU, flash & firmware version', icon: 'memory' },
+    { id: 'memory', name: 'Memory Usage', desc: 'Real-time Free Heap RAM & allocation monitor', icon: 'storage' },
+    { id: 'drawing', name: 'Drawing Canvas', desc: '128x64 custom monochrome bitmap canvas', icon: 'draw' },
+    { id: 'game_center', name: 'Game Center', desc: '6 interactive retro arcade games hub', icon: 'sports_esports' },
+    { id: 'message', name: 'Custom Message', desc: 'Marquee scrolling banner announcement', icon: 'campaign' },
+    { id: 'settings', name: 'System Settings', desc: 'Brightness, sound, and rotation settings', icon: 'tune' }
 ];
 
 class PageController {
@@ -71,7 +71,7 @@ class PageController {
             card.innerHTML = `
                 <div class="page-item-top">
                     <div class="page-item-title">
-                        <span>${page.icon}</span>
+                        <span class="material-symbols-outlined" style="font-size: 20px; color: var(--color-midnight);">${page.icon}</span>
                         <span>${page.name}</span>
                     </div>
                     <label class="cyber-switch" title="Toggle page in auto-rotation">
@@ -85,7 +85,7 @@ class PageController {
                         ${isCurrent ? 'ACTIVE ON OLED' : 'Standby'}
                     </span>
                     <button class="btn btn-secondary activate-page-btn" data-page="${page.id}" style="padding: 5px 12px; font-size: 0.78rem;">
-                        Activate ▶
+                        <span class="material-symbols-outlined" style="font-size: 14px;">play_arrow</span> Activate
                     </button>
                 </div>
             `;

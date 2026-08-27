@@ -15,8 +15,9 @@ class DashboardManager {
     init() {
         if (!this.canvas || !this.ctx) return;
 
-        // Register telemetry listener
+        // Register telemetry and status listeners
         Connection.on('telemetry', (data) => this.updateTelemetry(data));
+        Connection.on('status', (data) => this.updateTelemetry(data));
 
         // Prev / Next / Home buttons
         document.getElementById('btnOledPrev')?.addEventListener('click', () => {
@@ -72,23 +73,31 @@ class DashboardManager {
         }
 
         const statHeap = document.getElementById('statHeap');
-        if (statHeap && data.heap !== undefined) {
-            statHeap.textContent = `${(data.heap / 1024).toFixed(1)} KB`;
+        const heapVal = data.heap !== undefined ? data.heap : data.freeHeap;
+        if (statHeap && heapVal !== undefined) {
+            statHeap.textContent = `${(heapVal / 1024).toFixed(1)} KB`;
         }
 
         const statTemp = document.getElementById('statTemp');
-        if (statTemp && data.temp !== undefined) {
-            statTemp.textContent = `${parseFloat(data.temp).toFixed(1)} °C`;
+        const tempVal = data.temp !== undefined ? data.temp : data.temperature;
+        if (statTemp && tempVal !== undefined) {
+            statTemp.textContent = `${parseFloat(tempVal).toFixed(1)} °C`;
         }
 
         const statHum = document.getElementById('statHum');
-        if (statHum && data.hum !== undefined) {
-            statHum.textContent = `${parseFloat(data.hum).toFixed(1)} %`;
+        const humVal = data.hum !== undefined ? data.hum : data.humidity;
+        if (statHum && humVal !== undefined) {
+            statHum.textContent = `${parseFloat(humVal).toFixed(1)} %`;
         }
 
         const statRssi = document.getElementById('statRssi');
         if (statRssi && data.rssi !== undefined) {
             statRssi.textContent = `${data.rssi} dBm`;
+        }
+
+        const weatherBadge = document.getElementById('weatherSummaryBadge');
+        if (weatherBadge && data.weather) {
+            weatherBadge.textContent = data.weather;
         }
 
         this.updateBadges();
@@ -113,14 +122,14 @@ class DashboardManager {
     renderMirrorCanvas() {
         if (!this.ctx) return;
         const ctx = this.ctx;
-        ctx.fillStyle = '#05080f';
+        ctx.fillStyle = '#020617';
         ctx.fillRect(0, 0, 128, 64);
-        ctx.fillStyle = '#00f0ff';
-        ctx.strokeStyle = '#00f0ff';
+        ctx.fillStyle = '#ffffff';
+        ctx.strokeStyle = '#ffffff';
         ctx.lineWidth = 1;
 
         if (this.currentPage === 'face') {
-            FaceRenderer.drawFace(ctx, this.currentFace, this.frameCounter);
+            FaceRenderer.drawFace(ctx, this.currentFace, this.frameCounter, '#ffffff', '#020617');
         } else if (this.currentPage === 'clock') {
             const now = new Date();
             const timeStr = now.toTimeString().split(' ')[0];
@@ -130,9 +139,10 @@ class DashboardManager {
             ctx.strokeRect(8, 48, 112, 6);
             ctx.fillRect(10, 50, (now.getSeconds() * 108) / 60, 2);
         } else if (this.currentPage === 'temperature') {
+            const temp = document.getElementById('statTemp')?.textContent || '24.5 °C';
             ctx.font = '14px monospace';
             ctx.textAlign = 'center';
-            ctx.fillText('TEMP: 24.5 C', 64, 34);
+            ctx.fillText(`TEMP: ${temp}`, 64, 34);
             ctx.strokeRect(14, 46, 100, 8);
             ctx.fillRect(16, 48, 50, 4);
         } else if (this.currentPage === 'drawing') {
@@ -140,11 +150,12 @@ class DashboardManager {
                 ctx.drawImage(window.DrawingStudioInstance.canvas, 0, 0, 128, 64);
             }
         } else {
-            ctx.font = '10px monospace';
+            ctx.font = '12px monospace';
             ctx.textAlign = 'center';
-            ctx.fillText(`PAGE: ${this.currentPage.toUpperCase()}`, 64, 34);
+            ctx.fillText(`PAGE: ${this.currentPage.toUpperCase()}`, 64, 36);
         }
     }
 }
 
-window.Dashboard = new DashboardManager();
+window.DashboardManagerInstance = new DashboardManager();
+document.addEventListener('DOMContentLoaded', () => window.DashboardManagerInstance.init());

@@ -3,39 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ESP32 Smart Assistant - Cloud & Cybernetic Dashboard</title>
-    <meta name="description" content="Futuristic Web Dashboard for ESP32 Interactive Smart Assistant Companion.">
+    <title>ESP32 Smart Assistant - Autonomous AI Companion</title>
+    <meta name="description" content="Professional Cybernetic Neural Companion Dashboard for ESP32 Interactive Smart Assistant.">
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#00f0ff">
+    <meta name="theme-color" content="#7c8c66">
+    <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAACXBIWXMAAA7EAAAOxAGVKw4bAAACVklEQVRYR+2WP2gTURzHP7m0Fxx0EgRBqFihgx2E1q2Di4ODg4u4dDCCoIOQDoKLi0gHB3FxEZci6lCnDgURkXZwcHAQpIMgDjp16F5v7jGk5b3c5S7XlB74cRzy4f2+3+/33r17FyoqKhU0A2XgG7AU8R7wAPhR5n0v3X+l77Z21w8r2wAegEvAL80vAL+AV8BNk7u1707v307049w2qf4z8B5Y1/wA+K/5W+Ct5g/31F0VwARQ8iJ+2eT99dIeOAPcBmZ1YQ04qXl2j+vCfs3b6e82aX0BHAeOgJ6mY2W5kFwFHgFXgS57gWbL+039G104qfmW6f0bK4DtwB3gpq7L9p8s88C5Z2hZ3c2999/RvgPMAJ9t+Znl5q/o4l9f7f4O8NPy9q3uT71/FegCV4CLmrNqYx/wDtg1s0j4o1Z4qWb39d1O81w3/mF7k30yV8B1m4GvNuv52p12+03mH5uB8rB5r88FfGz/3VbN6Z+3F0bE965P1G2A1wFfgDHgq41v/k3pUeC2vV/11GkL4CPwU4/x1O771X67t+P2B8C61T/23Gl7wWvN+5kC7gMv/Wp19O3V/Z0/BtwCHtuz2Pez6333333tC116pP0r8L6aA1y1wz9n+cE5oE1mXNrmw/4M0N+f04C5vR7jJ+k7eH/X+u/9/yugq33f/6/70y1n7T9V9a+iomL/8Q/U4G9Zg5eKcwAAAABJRU5ErkJggg==">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <!-- Top Header & Connection Bar -->
+    <!-- Top Command Header & Connection HUD (#7c8c66 Sage Header) -->
     <header class="app-header">
         <div class="brand-section">
             <div class="brand-logo">
-                <svg viewBox="0 0 24 24">
-                    <circle cx="12" cy="12" r="9" stroke="#fff" stroke-width="2" fill="none"/>
-                    <circle cx="9" cy="10" r="1.5" fill="#fff"/>
-                    <circle cx="15" cy="10" r="1.5" fill="#fff"/>
-                    <path d="M8 15s1.5 2 4 2 4-2 4-2" stroke="#fff" stroke-width="2" stroke-linecap="round" fill="none"/>
-                </svg>
+                <span class="material-symbols-outlined" style="font-size: 24px; color: #ffffff;">memory</span>
             </div>
             <div class="brand-text">
-                <h1>ESP32 SMART ASSISTANT</h1>
-                <p>Cloud & AI Companion Dashboard</p>
+                <h1>
+                    NEXUS-32
+                    <span class="version-tag">v2.4 AI</span>
+                </h1>
+                <p>AUTONOMOUS NEURAL COMPANION DASHBOARD</p>
             </div>
         </div>
 
         <div class="connection-bar">
             <!-- Connection Mode Switcher (LAN vs Cloud Tunnel) -->
             <div class="mode-switch-group">
-                <button id="modeLanBtn" class="mode-btn active">🏠 LAN IP</button>
-                <button id="modeCloudBtn" class="mode-btn">☁️ Cloud Tunnel</button>
+                <button id="modeLanBtn" class="mode-btn active">
+                    <span class="material-symbols-outlined" style="font-size: 16px;">wifi</span> LAN IP
+                </button>
+                <button id="modeCloudBtn" class="mode-btn">
+                    <span class="material-symbols-outlined" style="font-size: 16px;">cloud</span> Cloud Tunnel
+                </button>
             </div>
 
             <input type="text" id="esp32IpInput" placeholder="192.168.1.105 or https://..." value="192.168.1.105">
-            <button id="connectBtn" class="btn btn-primary">Connect</button>
+            <button id="connectBtn" class="btn btn-primary">
+                <span class="material-symbols-outlined" style="font-size: 18px;">link</span> Connect
+            </button>
             
             <div id="connectionStatus" class="status-badge">
                 <span class="status-dot"></span>
@@ -43,7 +49,7 @@
             </div>
 
             <button id="cloudGuideBtn" class="btn btn-secondary" style="padding: 6px 12px; font-size: 0.78rem;">
-                ☁️ Cloud Guide
+                <span class="material-symbols-outlined" style="font-size: 16px;">cloud_sync</span> Cloud Guide
             </button>
         </div>
     </header>
@@ -51,31 +57,31 @@
     <!-- Navigation Tabs -->
     <nav class="app-nav">
         <div class="nav-tab active" data-tab="dashboard">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            <span class="material-symbols-outlined">dashboard</span>
             Dashboard
         </div>
         <div class="nav-tab" data-tab="faces">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+            <span class="material-symbols-outlined">face</span>
             Face Studio
         </div>
         <div class="nav-tab" data-tab="pages">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            <span class="material-symbols-outlined">layers</span>
             Page Manager
         </div>
         <div class="nav-tab" data-tab="drawing">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/></svg>
+            <span class="material-symbols-outlined">draw</span>
             Drawing Studio
         </div>
         <div class="nav-tab" data-tab="games">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            <span class="material-symbols-outlined">sports_esports</span>
             Game Center
         </div>
         <div class="nav-tab" data-tab="notifications">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            <span class="material-symbols-outlined">notifications_active</span>
             Notifications
         </div>
         <div class="nav-tab" data-tab="settings">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            <span class="material-symbols-outlined">tune</span>
             Settings
         </div>
     </nav>
@@ -84,40 +90,39 @@
     <main class="app-content">
         <!-- 1. DASHBOARD VIEW -->
         <section id="dashboard-tab" class="tab-pane active">
-            <!-- Cloud Status Ribbon -->
-            <div class="cloud-banner">
-                <div class="cloud-banner-text">
-                    🌐 <span>Cloud Hosting Mode:</span> Accessible on any browser or mobile device. Connects to your ESP32 via local Wi-Fi or secure cloud tunnel.
-                </div>
-                <button class="btn btn-secondary" onclick="document.getElementById('cloudModal').classList.add('open')">
-                    Deploy to Vercel / GitHub
-                </button>
-            </div>
-
             <div class="grid-container grid-cols-3">
                 <!-- OLED Live Simulator -->
                 <div class="card" style="grid-column: span 2;">
                     <div class="card-header">
                         <div class="card-title">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-cyan)" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                            <span class="material-symbols-outlined" style="color: var(--color-midnight);">tv</span>
                             Live OLED Simulation (128x64)
                         </div>
-                        <span id="oledPageBadge" class="status-badge" style="background: rgba(0,240,255,0.15); color: var(--accent-cyan); border-color: rgba(0,240,255,0.3);">Page: Face</span>
+                        <span id="oledPageBadge" class="status-badge connected">Page: FACE</span>
                     </div>
                     <div class="oled-preview-box">
                         <canvas id="oledMirrorCanvas" class="oled-screen" width="128" height="64"></canvas>
-                        <div style="display: flex; gap: 12px; margin-top: 14px;">
-                            <button id="btnOledPrev" class="btn btn-secondary">◀ Prev Page</button>
-                            <button id="btnOledNext" class="btn btn-secondary">Next Page ▶</button>
-                            <button id="btnOledHome" class="btn btn-secondary">🏠 Face Home</button>
+                        <div style="display: flex; gap: 12px; margin-top: 18px;">
+                            <button id="btnOledPrev" class="btn btn-secondary">
+                                <span class="material-symbols-outlined" style="font-size: 18px;">skip_previous</span> Prev
+                            </button>
+                            <button id="btnOledHome" class="btn btn-primary">
+                                <span class="material-symbols-outlined" style="font-size: 18px;">home</span> Home
+                            </button>
+                            <button id="btnOledNext" class="btn btn-secondary">
+                                Next <span class="material-symbols-outlined" style="font-size: 18px;">skip_next</span>
+                            </button>
                         </div>
                     </div>
                 </div>
 
-                <!-- Companion Mood & Quick Switches -->
+                <!-- Neural Companion Controls & Quick Moods -->
                 <div class="card">
                     <div class="card-header">
-                        <div class="card-title">Companion Controls</div>
+                        <div class="card-title">
+                            <span class="material-symbols-outlined" style="color: var(--color-sage);">psychology</span>
+                            Companion Controls
+                        </div>
                         <span id="activeFaceNameBadge" class="status-badge connected">HAPPY</span>
                     </div>
 
@@ -126,7 +131,7 @@
                         <div class="switch-row">
                             <div>
                                 <div class="switch-label">Auto-Rotate OLED</div>
-                                <div class="switch-subtext">Cycle pages automatically</div>
+                                <div class="switch-subtext">Cycle enabled pages automatically</div>
                             </div>
                             <label class="cyber-switch">
                                 <input type="checkbox" id="switchAutoRotate">
@@ -136,8 +141,8 @@
 
                         <div class="switch-row">
                             <div>
-                                <div class="switch-label">Sound FX & Buzzer</div>
-                                <div class="switch-subtext">Click & reaction chimes</div>
+                                <div class="switch-label">Sound FX & Chimes</div>
+                                <div class="switch-subtext">Interactive audio cues</div>
                             </div>
                             <label class="cyber-switch switch-emerald">
                                 <input type="checkbox" id="switchSound" checked>
@@ -147,8 +152,8 @@
 
                         <div class="switch-row">
                             <div>
-                                <div class="switch-label">Live OLED Stream</div>
-                                <div class="switch-subtext">Real-time canvas mirror</div>
+                                <div class="switch-label">Real-Time OLED Mirror</div>
+                                <div class="switch-subtext">60 FPS canvas telemetry stream</div>
                             </div>
                             <label class="cyber-switch switch-purple">
                                 <input type="checkbox" id="switchStream" checked>
@@ -157,60 +162,74 @@
                         </div>
                     </div>
 
-                    <div style="padding-top: 8px; border-top: 1px solid var(--border-color);">
-                        <span class="switch-label" style="display: block; margin-bottom: 8px;">Quick Mood Triggers:</span>
+                    <div style="padding-top: 12px; border-top: 1px solid var(--border-subtle);">
+                        <span class="switch-label" style="display: block; margin-bottom: 8px; font-size: 0.78rem; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.05em;">Quick Mood Triggers:</span>
                         <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px;">
-                            <button class="btn btn-secondary quick-mood-btn" data-mood="happy">😊 Happy</button>
-                            <button class="btn btn-secondary quick-mood-btn" data-mood="love">😍 Love</button>
-                            <button class="btn btn-secondary quick-mood-btn" data-mood="excited">🤩 Excited</button>
-                            <button class="btn btn-secondary quick-mood-btn" data-mood="wink">😉 Wink</button>
+                            <button class="btn btn-secondary quick-mood-btn" data-mood="happy">
+                                <span class="material-symbols-outlined" style="font-size: 16px;">sentiment_satisfied</span> Happy
+                            </button>
+                            <button class="btn btn-secondary quick-mood-btn" data-mood="love">
+                                <span class="material-symbols-outlined" style="font-size: 16px;">favorite</span> Love
+                            </button>
+                            <button class="btn btn-secondary quick-mood-btn" data-mood="excited">
+                                <span class="material-symbols-outlined" style="font-size: 16px;">celebration</span> Excited
+                            </button>
+                            <button class="btn btn-secondary quick-mood-btn" data-mood="wink">
+                                <span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Wink
+                            </button>
                         </div>
                     </div>
                 </div>
 
-                <!-- Telemetry & Sensor Gauges -->
+                <!-- Environmental Sensor Gauges -->
                 <div class="card">
                     <div class="card-header">
-                        <div class="card-title">Environment & Weather</div>
+                        <div class="card-title">
+                            <span class="material-symbols-outlined" style="color: var(--color-midnight);">thermostat</span>
+                            Atmospheric Climate
+                        </div>
                         <span class="status-badge connected" id="weatherSummaryBadge">Sunny</span>
                     </div>
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
-                        <div style="background: rgba(0,0,0,0.3); padding: 12px; border-radius: 8px; text-align: center;">
+                        <div style="background: #f8fafc; padding: 14px; border-radius: var(--radius-md); text-align: center; border: 1px solid var(--border-subtle);">
                             <div class="switch-subtext">Temperature</div>
-                            <div id="statTemp" style="font-size: 1.5rem; font-weight: 700; color: var(--accent-amber); margin-top: 4px;">-- °C</div>
+                            <div id="statTemp" class="font-mono" style="font-size: 1.6rem; font-weight: 700; color: var(--color-midnight); margin-top: 4px;">-- °C</div>
                         </div>
-                        <div style="background: rgba(0,0,0,0.3); padding: 12px; border-radius: 8px; text-align: center;">
-                            <div class="switch-subtext">Humidity</div>
-                            <div id="statHum" style="font-size: 1.5rem; font-weight: 700; color: var(--accent-cyan); margin-top: 4px;">-- %</div>
+                        <div style="background: #f8fafc; padding: 14px; border-radius: var(--radius-md); text-align: center; border: 1px solid var(--border-subtle);">
+                            <div class="switch-subtext">Relative Humidity</div>
+                            <div id="statHum" class="font-mono" style="font-size: 1.6rem; font-weight: 700; color: var(--color-midnight); margin-top: 4px;">-- %</div>
                         </div>
                     </div>
-                    <div style="margin-top: 12px; font-size: 0.8rem; color: var(--text-secondary); text-align: center;">
-                        City: <span id="statCity" class="font-mono" style="color: #fff;">Tirunelveli, IN</span>
+                    <div style="margin-top: 14px; font-size: 0.82rem; color: var(--text-secondary); text-align: center;">
+                        Location: <span id="statCity" class="font-mono" style="color: var(--text-primary); font-weight: 600;">Tirunelveli, IN</span>
                     </div>
                 </div>
 
                 <!-- Hardware & Network Telemetry -->
                 <div class="card" style="grid-column: span 2;">
                     <div class="card-header">
-                        <div class="card-title">System & Network Telemetry</div>
+                        <div class="card-title">
+                            <span class="material-symbols-outlined" style="color: var(--color-sage);">monitoring</span>
+                            System & Telemetry Status
+                        </div>
                         <span class="status-badge" id="statPing">-- ms</span>
                     </div>
                     <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;">
-                        <div style="background: rgba(0,0,0,0.3); padding: 12px; border-radius: 8px;">
-                            <div class="switch-subtext">Uptime</div>
-                            <div id="statUptime" class="font-mono" style="font-size: 1rem; font-weight: 700; color: var(--text-primary); margin-top: 4px;">0s</div>
+                        <div style="background: #f8fafc; padding: 14px; border-radius: var(--radius-md); border: 1px solid var(--border-subtle);">
+                            <div class="switch-subtext">System Uptime</div>
+                            <div id="statUptime" class="font-mono" style="font-size: 1.05rem; font-weight: 700; color: var(--text-primary); margin-top: 4px;">0s</div>
                         </div>
-                        <div style="background: rgba(0,0,0,0.3); padding: 12px; border-radius: 8px;">
-                            <div class="switch-subtext">Free Heap</div>
-                            <div id="statHeap" class="font-mono" style="font-size: 1rem; font-weight: 700; color: var(--accent-emerald); margin-top: 4px;">-- KB</div>
+                        <div style="background: #f8fafc; padding: 14px; border-radius: var(--radius-md); border: 1px solid var(--border-subtle);">
+                            <div class="switch-subtext">Free Heap RAM</div>
+                            <div id="statHeap" class="font-mono" style="font-size: 1.05rem; font-weight: 700; color: var(--status-emerald); margin-top: 4px;">-- KB</div>
                         </div>
-                        <div style="background: rgba(0,0,0,0.3); padding: 12px; border-radius: 8px;">
+                        <div style="background: #f8fafc; padding: 14px; border-radius: var(--radius-md); border: 1px solid var(--border-subtle);">
                             <div class="switch-subtext">Wi-Fi Signal (RSSI)</div>
-                            <div id="statRssi" class="font-mono" style="font-size: 1rem; font-weight: 700; color: var(--accent-cyan); margin-top: 4px;">-- dBm</div>
+                            <div id="statRssi" class="font-mono" style="font-size: 1.05rem; font-weight: 700; color: var(--color-midnight); margin-top: 4px;">-- dBm</div>
                         </div>
-                        <div style="background: rgba(0,0,0,0.3); padding: 12px; border-radius: 8px;">
-                            <div class="switch-subtext">Active Game</div>
-                            <div id="statGame" class="font-mono" style="font-size: 1rem; font-weight: 700; color: var(--accent-purple); margin-top: 4px;">None</div>
+                        <div style="background: #f8fafc; padding: 14px; border-radius: var(--radius-md); border: 1px solid var(--border-subtle);">
+                            <div class="switch-subtext">Active Arcade</div>
+                            <div id="statGame" class="font-mono" style="font-size: 1.05rem; font-weight: 700; color: var(--color-sage); margin-top: 4px;">None</div>
                         </div>
                     </div>
                 </div>
@@ -221,13 +240,16 @@
         <section id="faces-tab" class="tab-pane">
             <div class="card" style="margin-bottom: 20px;">
                 <div class="card-header">
-                    <div class="card-title">Face Parameters & Physics Switches</div>
+                    <div class="card-title">
+                        <span class="material-symbols-outlined" style="color: var(--color-midnight);">tune</span>
+                        Expression Engine & Physics Parameters
+                    </div>
                 </div>
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px;">
                     <div class="switch-row">
                         <div>
                             <div class="switch-label">Physics Saccades</div>
-                            <div class="switch-subtext">Natural gaze wandering</div>
+                            <div class="switch-subtext">Natural stochastic gaze wandering</div>
                         </div>
                         <label class="cyber-switch">
                             <input type="checkbox" id="switchSaccades" checked>
@@ -237,7 +259,7 @@
                     <div class="switch-row">
                         <div>
                             <div class="switch-label">Auto Blinking</div>
-                            <div class="switch-subtext">Spring damper blinks</div>
+                            <div class="switch-subtext">Spring damper eyelid cycle</div>
                         </div>
                         <label class="cyber-switch switch-emerald">
                             <input type="checkbox" id="switchBlinking" checked>
@@ -246,8 +268,8 @@
                     </div>
                     <div class="switch-row">
                         <div>
-                            <div class="switch-label">Weather Mood Adaptation</div>
-                            <div class="switch-subtext">React to climate changes</div>
+                            <div class="switch-label">Climate Mood Adaptation</div>
+                            <div class="switch-subtext">Sensory reaction to weather shifts</div>
                         </div>
                         <label class="cyber-switch switch-purple">
                             <input type="checkbox" id="switchWeatherMood" checked>
@@ -259,8 +281,11 @@
 
             <div class="card">
                 <div class="card-header">
-                    <div class="card-title">30 Dynamic Companion Expressions</div>
-                    <span class="switch-subtext">Click any expression to activate immediately</span>
+                    <div class="card-title">
+                        <span class="material-symbols-outlined" style="color: var(--color-sage);">grid_view</span>
+                        30 Dynamic Expression Matrices
+                    </div>
+                    <span class="switch-subtext">Click any expression to switch the OLED face immediately</span>
                 </div>
                 <div id="facesGrid" class="faces-grid">
                     <!-- Populated dynamically via js/faces.js -->
@@ -272,9 +297,12 @@
         <section id="pages-tab" class="tab-pane">
             <div class="card" style="margin-bottom: 20px;">
                 <div class="card-header">
-                    <div class="card-title">OLED Page Rotation Settings</div>
+                    <div class="card-title">
+                        <span class="material-symbols-outlined" style="color: var(--color-midnight);">sync</span>
+                        OLED Page Auto-Rotation
+                    </div>
                     <div style="display: flex; align-items: center; gap: 16px;">
-                        <span class="switch-label">Auto-Rotate:</span>
+                        <span class="switch-label">Auto-Rotation:</span>
                         <label class="cyber-switch">
                             <input type="checkbox" id="switchPageAutoRotate">
                             <span class="switch-slider"></span>
@@ -282,15 +310,18 @@
                     </div>
                 </div>
                 <div style="display: flex; align-items: center; gap: 16px;">
-                    <span class="switch-subtext">Rotation Interval:</span>
-                    <input type="range" id="pageIntervalSlider" min="2" max="30" value="8" style="flex: 1;">
-                    <span id="pageIntervalLabel" class="font-mono" style="font-weight: 700; color: var(--accent-cyan); width: 45px;">8s</span>
+                    <span class="switch-subtext" style="font-size: 0.85rem; font-weight: 500;">Cycle Interval:</span>
+                    <input type="range" id="pageIntervalSlider" min="2" max="30" value="8" style="flex: 1; accent-color: var(--color-midnight);">
+                    <span id="pageIntervalLabel" class="font-mono" style="font-weight: 700; color: var(--color-midnight); width: 45px;">8s</span>
                 </div>
             </div>
 
             <div class="card">
                 <div class="card-header">
-                    <div class="card-title">15 OLED Pages (Individual Toggles)</div>
+                    <div class="card-title">
+                        <span class="material-symbols-outlined" style="color: var(--color-sage);">view_carousel</span>
+                        15 OLED Display Pages
+                    </div>
                 </div>
                 <div id="pagesGrid" class="pages-grid">
                     <!-- Populated dynamically via js/pages.js -->
@@ -302,40 +333,73 @@
         <section id="drawing-tab" class="tab-pane">
             <div class="card">
                 <div class="card-header">
-                    <div class="card-title">128x64 Monochrome Drawing Canvas</div>
+                    <div class="card-title">
+                        <span class="material-symbols-outlined" style="color: var(--color-midnight);">palette</span>
+                        128x64 Monochrome Pixel Studio
+                    </div>
                     <div style="display: flex; gap: 10px;">
-                        <button id="btnClearDrawing" class="btn btn-secondary">Clear</button>
-                        <button id="btnInvertDrawing" class="btn btn-secondary">Invert</button>
-                        <button id="btnSendDrawing" class="btn btn-primary">🚀 Send to OLED</button>
+                        <button id="btnClearDrawing" class="btn btn-secondary">
+                            <span class="material-symbols-outlined" style="font-size: 16px;">clear_all</span> Clear
+                        </button>
+                        <button id="btnInvertDrawing" class="btn btn-secondary">
+                            <span class="material-symbols-outlined" style="font-size: 16px;">invert_colors</span> Invert
+                        </button>
+                        <button id="btnSendDrawing" class="btn btn-primary">
+                            <span class="material-symbols-outlined" style="font-size: 16px;">send</span> Send to OLED
+                        </button>
                     </div>
                 </div>
                 <div class="drawing-workspace">
                     <div class="drawing-canvas-wrapper">
                         <canvas id="drawingCanvas" width="512" height="256"></canvas>
-                        <div class="switch-subtext" style="margin-top: 10px;">
-                            Grid Size: 128 x 64 pixels (8,192 px) | 1-bit monochrome bitmap
+                        <div class="switch-subtext" style="margin-top: 10px; color: #94a3b8;">
+                            Resolution: 128 x 64 pixels (8,192 px) | 1-bit SSD1306 Buffer | Keyboard: Ctrl+Z Undo / Ctrl+Y Redo
                         </div>
                     </div>
 
                     <div class="tools-sidebar">
-                        <div class="switch-label">Drawing Tools</div>
+                        <div class="switch-label">Studio Tools</div>
                         <div class="tool-grid">
-                            <button class="tool-btn active" data-tool="pencil">✏️ Pencil</button>
-                            <button class="tool-btn" data-tool="eraser">🧹 Eraser</button>
-                            <button class="tool-btn" data-tool="line">📏 Line</button>
-                            <button class="tool-btn" data-tool="rect">⬜ Rect</button>
-                            <button class="tool-btn" data-tool="circle">⭕ Circle</button>
-                            <button class="tool-btn" data-tool="fill">🪣 Fill</button>
+                            <button class="tool-btn active" data-tool="pencil">
+                                <span class="material-symbols-outlined" style="font-size: 16px;">edit</span> Pencil
+                            </button>
+                            <button class="tool-btn" data-tool="eraser">
+                                <span class="material-symbols-outlined" style="font-size: 16px;">ink_eraser</span> Eraser
+                            </button>
+                            <button class="tool-btn" data-tool="line">
+                                <span class="material-symbols-outlined" style="font-size: 16px;">horizontal_rule</span> Line
+                            </button>
+                            <button class="tool-btn" data-tool="rect">
+                                <span class="material-symbols-outlined" style="font-size: 16px;">crop_square</span> Rect
+                            </button>
+                            <button class="tool-btn" data-tool="circle">
+                                <span class="material-symbols-outlined" style="font-size: 16px;">radio_button_unchecked</span> Circle
+                            </button>
+                            <button class="tool-btn" data-tool="fill">
+                                <span class="material-symbols-outlined" style="font-size: 16px;">format_color_fill</span> Fill
+                            </button>
                         </div>
 
-                        <div class="switch-label" style="margin-top: 10px;">Preset Shapes</div>
+                        <div class="switch-label" style="margin-top: 10px;">Preset Pixel Stamps</div>
                         <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px;">
-                            <button class="btn btn-secondary preset-btn" data-preset="heart">❤️ Heart</button>
-                            <button class="btn btn-secondary preset-btn" data-preset="smile">😊 Smile</button>
-                            <button class="btn btn-secondary preset-btn" data-preset="star">⭐ Star</button>
-                            <button class="btn btn-secondary preset-btn" data-preset="robot">🤖 Robot</button>
-                            <button class="btn btn-secondary preset-btn" data-preset="cat">🐱 Cat</button>
-                            <button class="btn btn-secondary preset-btn" data-preset="ghost">👻 Ghost</button>
+                            <button class="btn btn-secondary preset-btn" data-preset="heart">
+                                <span class="material-symbols-outlined" style="font-size: 16px;">favorite</span> Heart
+                            </button>
+                            <button class="btn btn-secondary preset-btn" data-preset="smile">
+                                <span class="material-symbols-outlined" style="font-size: 16px;">sentiment_satisfied</span> Smile
+                            </button>
+                            <button class="btn btn-secondary preset-btn" data-preset="star">
+                                <span class="material-symbols-outlined" style="font-size: 16px;">star</span> Star
+                            </button>
+                            <button class="btn btn-secondary preset-btn" data-preset="robot">
+                                <span class="material-symbols-outlined" style="font-size: 16px;">smart_toy</span> Robot
+                            </button>
+                            <button class="btn btn-secondary preset-btn" data-preset="cat">
+                                <span class="material-symbols-outlined" style="font-size: 16px;">pets</span> Cat
+                            </button>
+                            <button class="btn btn-secondary preset-btn" data-preset="ghost">
+                                <span class="material-symbols-outlined" style="font-size: 16px;">blur_on</span> Ghost
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -346,51 +410,75 @@
         <section id="games-tab" class="tab-pane">
             <div class="card" style="margin-bottom: 20px;">
                 <div class="card-header">
-                    <div class="card-title">Select Active Game</div>
-                    <span id="activeGameTitle" class="status-badge" style="color: var(--accent-purple); border-color: rgba(157,78,221,0.4);">No Game Active</span>
+                    <div class="card-title">
+                        <span class="material-symbols-outlined" style="color: var(--color-midnight);">sports_esports</span>
+                        Select Active Retro Game
+                    </div>
+                    <span id="activeGameTitle" class="status-badge">No Game Active</span>
                 </div>
                 <div class="game-hub-grid">
                     <div class="game-tile" data-game="snake">
-                        <div class="game-tile-icon">🐍</div>
-                        <div style="font-weight: 700;">Retro Snake</div>
+                        <div class="game-tile-icon">
+                            <span class="material-symbols-outlined" style="font-size: 24px;">gesture</span>
+                        </div>
+                        <div style="font-weight: 700; font-family: 'Space Grotesk', sans-serif;">Retro Snake</div>
                         <div class="switch-subtext">Eat food & grow</div>
                     </div>
                     <div class="game-tile" data-game="flappy">
-                        <div class="game-tile-icon">🐥</div>
-                        <div style="font-weight: 700;">Flappy Bird</div>
+                        <div class="game-tile-icon">
+                            <span class="material-symbols-outlined" style="font-size: 24px;">flight</span>
+                        </div>
+                        <div style="font-weight: 700; font-family: 'Space Grotesk', sans-serif;">Flappy Bird</div>
                         <div class="switch-subtext">Tap to fly through pipes</div>
                     </div>
                     <div class="game-tile" data-game="pong">
-                        <div class="game-tile-icon">🏓</div>
-                        <div style="font-weight: 700;">Paddle Pong</div>
+                        <div class="game-tile-icon">
+                            <span class="material-symbols-outlined" style="font-size: 24px;">sports_tennis</span>
+                        </div>
+                        <div style="font-weight: 700; font-family: 'Space Grotesk', sans-serif;">Paddle Pong</div>
                         <div class="switch-subtext">Bounce the ball vs AI</div>
                     </div>
                     <div class="game-tile" data-game="reaction">
-                        <div class="game-tile-icon">⚡</div>
-                        <div style="font-weight: 700;">Reaction Test</div>
+                        <div class="game-tile-icon">
+                            <span class="material-symbols-outlined" style="font-size: 24px;">bolt</span>
+                        </div>
+                        <div style="font-weight: 700; font-family: 'Space Grotesk', sans-serif;">Reaction Test</div>
                         <div class="switch-subtext">Tap when signal appears</div>
                     </div>
                     <div class="game-tile" data-game="tictactoe">
-                        <div class="game-tile-icon">❌</div>
-                        <div style="font-weight: 700;">Tic-Tac-Toe</div>
-                        <div class="switch-subtext">Play 3x3 against ESP32</div>
+                        <div class="game-tile-icon">
+                            <span class="material-symbols-outlined" style="font-size: 24px;">grid_3x3</span>
+                        </div>
+                        <div style="font-weight: 700; font-family: 'Space Grotesk', sans-serif;">Tic-Tac-Toe</div>
+                        <div class="switch-subtext">Play 3x3 against ESP32 AI</div>
                     </div>
                     <div class="game-tile" data-game="flappy_face">
-                        <div class="game-tile-icon">😆</div>
-                        <div style="font-weight: 700;">Flappy Face</div>
+                        <div class="game-tile-icon">
+                            <span class="material-symbols-outlined" style="font-size: 24px;">mood</span>
+                        </div>
+                        <div style="font-weight: 700; font-family: 'Space Grotesk', sans-serif;">Flappy Face</div>
                         <div class="switch-subtext">Fly companion head</div>
                     </div>
                 </div>
             </div>
 
             <!-- Virtual Controller -->
-            <div class="card">
+            <div class="card" id="gameControllerPanel">
                 <div class="card-header">
-                    <div class="card-title">Virtual Game Controller</div>
+                    <div class="card-title">
+                        <span class="material-symbols-outlined" style="color: var(--color-midnight);">gamepad</span>
+                        Virtual Game Controller
+                    </div>
                     <div style="display: flex; gap: 8px;">
-                        <button id="btnGamePause" class="btn btn-secondary">⏸ Pause</button>
-                        <button id="btnGameResume" class="btn btn-secondary">▶ Resume</button>
-                        <button id="btnGameExit" class="btn btn-danger">⏹ Exit Game</button>
+                        <button id="btnGamePause" class="btn btn-secondary">
+                            <span class="material-symbols-outlined" style="font-size: 16px;">pause</span> Pause
+                        </button>
+                        <button id="btnGameResume" class="btn btn-secondary">
+                            <span class="material-symbols-outlined" style="font-size: 16px;">play_arrow</span> Resume
+                        </button>
+                        <button id="btnGameExit" class="btn btn-danger">
+                            <span class="material-symbols-outlined" style="font-size: 16px;">stop</span> Exit
+                        </button>
                     </div>
                 </div>
 
@@ -400,28 +488,39 @@
                         <div class="switch-subtext" style="text-align: center; margin-bottom: 6px;">Direction Pad</div>
                         <div class="dpad-container">
                             <div></div>
-                            <button id="btnDpadUp" class="dpad-btn">▲</button>
+                            <button id="btnDpadUp" class="dpad-btn">
+                                <span class="material-symbols-outlined">arrow_upward</span>
+                            </button>
                             <div></div>
-                            <button id="btnDpadLeft" class="dpad-btn">◀</button>
-                            <button id="btnDpadCenter" class="dpad-btn">●</button>
-                            <button id="btnDpadRight" class="dpad-btn">▶</button>
+                            <button id="btnDpadLeft" class="dpad-btn">
+                                <span class="material-symbols-outlined">arrow_back</span>
+                            </button>
+                            <button id="btnDpadCenter" class="dpad-btn">
+                                <span class="material-symbols-outlined">radio_button_checked</span>
+                            </button>
+                            <button id="btnDpadRight" class="dpad-btn">
+                                <span class="material-symbols-outlined">arrow_forward</span>
+                            </button>
                             <div></div>
-                            <button id="btnDpadDown" class="dpad-btn">▼</button>
+                            <button id="btnDpadDown" class="dpad-btn">
+                                <span class="material-symbols-outlined">arrow_downward</span>
+                            </button>
                             <div></div>
                         </div>
                     </div>
 
                     <!-- Jump / Action Touch -->
                     <div style="display: flex; flex-direction: column; align-items: center; gap: 12px;">
-                        <div class="switch-subtext">Action / Touch Button</div>
-                        <button id="btnGameAction" class="btn btn-primary" style="width: 110px; height: 110px; border-radius: 50%; font-size: 1.1rem; box-shadow: 0 0 25px var(--accent-cyan-glow);">
+                        <div class="switch-subtext">Action Trigger</div>
+                        <button id="btnGameAction" class="btn btn-primary" style="width: 120px; height: 120px; border-radius: 50%; font-size: 0.95rem; display: flex; flex-direction: column; gap: 4px;">
+                            <span class="material-symbols-outlined" style="font-size: 28px;">touch_app</span>
                             JUMP / TOUCH
                         </button>
                     </div>
 
                     <!-- Tic-Tac-Toe 3x3 Grid Overlay -->
-                    <div id="tttContainer" style="display: none;">
-                        <div class="switch-subtext" style="text-align: center; margin-bottom: 6px;">Tic-Tac-Toe Board</div>
+                    <div id="tttContainer" style="display: none; text-align: center;">
+                        <div id="tttStatusBanner" class="switch-subtext" style="font-weight: 700; color: var(--color-midnight); margin-bottom: 6px;">Your Turn (X)</div>
                         <div class="ttt-grid">
                             <div class="ttt-cell" data-r="0" data-c="0"></div>
                             <div class="ttt-cell" data-r="0" data-c="1"></div>
@@ -433,7 +532,23 @@
                             <div class="ttt-cell" data-r="2" data-c="1"></div>
                             <div class="ttt-cell" data-r="2" data-c="2"></div>
                         </div>
+                        <button id="btnTttReset" class="btn btn-secondary" style="margin-top: 6px; padding: 4px 14px; font-size: 0.76rem;">
+                            <span class="material-symbols-outlined" style="font-size: 14px;">restart_alt</span> Reset Board
+                        </button>
                     </div>
+                </div>
+
+                <!-- Keyboard Controls HUD Guide -->
+                <div class="keyboard-hud-guide">
+                    <span style="font-family: 'Space Grotesk', sans-serif; font-size: 0.82rem; font-weight: 700; color: var(--color-midnight); display: flex; align-items: center; gap: 6px;">
+                        <span class="material-symbols-outlined" style="font-size: 18px;">keyboard</span> Keyboard Controls:
+                    </span>
+                    <div class="kbd-badge"><kbd>W / ▲</kbd> <kbd>S / ▼</kbd> <kbd>A / ◀</kbd> <kbd>D / ▶</kbd> Move</div>
+                    <div class="kbd-badge"><kbd>Space</kbd> / <kbd>Enter</kbd> Jump / Touch</div>
+                    <div class="kbd-badge"><kbd>1 - 9</kbd> Tic-Tac-Toe Cells</div>
+                    <div class="kbd-badge"><kbd>P</kbd> Pause</div>
+                    <div class="kbd-badge"><kbd>R</kbd> Resume</div>
+                    <div class="kbd-badge"><kbd>Esc</kbd> / <kbd>Q</kbd> Exit</div>
                 </div>
             </div>
         </section>
@@ -442,21 +557,26 @@
         <section id="notifications-tab" class="tab-pane">
             <div class="card">
                 <div class="card-header">
-                    <div class="card-title">Send Live Notification Banner to OLED</div>
+                    <div class="card-title">
+                        <span class="material-symbols-outlined" style="color: var(--color-midnight);">send</span>
+                        Broadcast Live Notification Banner to OLED
+                    </div>
                 </div>
                 <div style="max-width: 600px; display: flex; flex-direction: column; gap: 16px;">
                     <div>
                         <label class="switch-label">Notification Title</label>
-                        <input type="text" id="notifTitleInput" placeholder="ALERT" value="ALERT" style="width: 100%; margin-top: 6px; padding: 10px; background: rgba(10,12,18,0.7); border: 1px solid var(--border-color); color: #fff; border-radius: 8px;">
+                        <input type="text" id="notifTitleInput" placeholder="ALERT" value="ALERT" style="width: 100%; margin-top: 6px; padding: 10px; background: #f8fafc; border: 1px solid var(--border-strong); color: var(--text-primary); border-radius: var(--radius-md);">
                     </div>
                     <div>
                         <label class="switch-label">Message Body</label>
-                        <textarea id="notifMsgInput" rows="3" placeholder="Enter message text..." style="width: 100%; margin-top: 6px; padding: 10px; background: rgba(10,12,18,0.7); border: 1px solid var(--border-color); color: #fff; border-radius: 8px;">System Online! Welcome Shiva.</textarea>
+                        <textarea id="notifMsgInput" rows="3" placeholder="Enter message text..." style="width: 100%; margin-top: 6px; padding: 10px; background: #f8fafc; border: 1px solid var(--border-strong); color: var(--text-primary); border-radius: var(--radius-md);">System Online! Welcome Shiva.</textarea>
                     </div>
                     <div style="display: flex; gap: 12px; align-items: center;">
                         <label class="switch-label">Duration (ms):</label>
-                        <input type="number" id="notifDurInput" value="3500" style="width: 100px; padding: 8px; background: rgba(10,12,18,0.7); border: 1px solid var(--border-color); color: #fff; border-radius: 8px;">
-                        <button id="btnSendNotif" class="btn btn-primary" style="flex: 1;">📢 Push Notification</button>
+                        <input type="number" id="notifDurInput" value="3500" style="width: 110px; padding: 8px; background: #f8fafc; border: 1px solid var(--border-strong); color: var(--text-primary); border-radius: var(--radius-md);">
+                        <button id="btnSendNotif" class="btn btn-primary" style="flex: 1;">
+                            <span class="material-symbols-outlined" style="font-size: 18px;">campaign</span> Push Notification
+                        </button>
                     </div>
                 </div>
             </div>
@@ -468,21 +588,24 @@
                 <!-- Hardware Settings -->
                 <div class="card">
                     <div class="card-header">
-                        <div class="card-title">Display & Hardware Settings</div>
+                        <div class="card-title">
+                            <span class="material-symbols-outlined" style="color: var(--color-midnight);">display_settings</span>
+                            Display & Hardware Configuration
+                        </div>
                     </div>
                     <div style="display: flex; flex-direction: column; gap: 16px;">
                         <div>
                             <div class="switch-label" style="margin-bottom: 6px;">OLED Contrast & Brightness</div>
                             <div style="display: flex; align-items: center; gap: 12px;">
-                                <input type="range" id="settingBrightnessSlider" min="1" max="255" value="255" style="flex: 1;">
-                                <span id="settingBrightnessLabel" class="font-mono" style="font-weight: 700; color: var(--accent-cyan); width: 40px;">255</span>
+                                <input type="range" id="settingBrightnessSlider" min="1" max="255" value="255" style="flex: 1; accent-color: var(--color-midnight);">
+                                <span id="settingBrightnessLabel" class="font-mono" style="font-weight: 700; color: var(--color-midnight); width: 40px;">255</span>
                             </div>
                         </div>
 
                         <div class="switch-row">
                             <div>
                                 <div class="switch-label">Auto-Reconnect Watchdog</div>
-                                <div class="switch-subtext">Keep reconnecting to ESP32</div>
+                                <div class="switch-subtext">Maintains persistent heartbeat link</div>
                             </div>
                             <label class="cyber-switch">
                                 <input type="checkbox" id="switchAutoReconnect" checked>
@@ -493,9 +616,11 @@
                         <div class="switch-row">
                             <div>
                                 <div class="switch-label">PWA Standalone App</div>
-                                <div class="switch-subtext">Install on Home Screen</div>
+                                <div class="switch-subtext">Install on Home Screen / Desktop</div>
                             </div>
-                            <button id="pwaInstallBtn" class="btn btn-secondary" style="padding: 6px 12px; font-size: 0.78rem;">📲 Install App</button>
+                            <button id="pwaInstallBtn" class="btn btn-secondary" style="padding: 6px 12px; font-size: 0.78rem;">
+                                <span class="material-symbols-outlined" style="font-size: 16px;">install_mobile</span> Install App
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -503,22 +628,31 @@
                 <!-- Wi-Fi & System Control -->
                 <div class="card">
                     <div class="card-header">
-                        <div class="card-title">Wi-Fi & ESP32 System Control</div>
+                        <div class="card-title">
+                            <span class="material-symbols-outlined" style="color: var(--color-sage);">wifi_password</span>
+                            Wi-Fi & ESP32 System Control
+                        </div>
                     </div>
                     <div style="display: flex; flex-direction: column; gap: 14px;">
                         <div>
                             <label class="switch-label">Wi-Fi SSID</label>
-                            <input type="text" id="settingSsidInput" value="vivo T4 5G" style="width: 100%; margin-top: 4px; padding: 8px 12px; background: rgba(10,12,18,0.7); border: 1px solid var(--border-color); color: #fff; border-radius: 8px;">
+                            <input type="text" id="settingSsidInput" value="vivo T4 5G" style="width: 100%; margin-top: 4px; padding: 8px 12px; background: #f8fafc; border: 1px solid var(--border-strong); color: var(--text-primary); border-radius: var(--radius-md);">
                         </div>
                         <div>
                             <label class="switch-label">Wi-Fi Password</label>
-                            <input type="password" id="settingPassInput" value="1234567890" style="width: 100%; margin-top: 4px; padding: 8px 12px; background: rgba(10,12,18,0.7); border: 1px solid var(--border-color); color: #fff; border-radius: 8px;">
+                            <input type="password" id="settingPassInput" value="1234567890" style="width: 100%; margin-top: 4px; padding: 8px 12px; background: #f8fafc; border: 1px solid var(--border-strong); color: var(--text-primary); border-radius: var(--radius-md);">
                         </div>
-                        <button id="btnSaveWifi" class="btn btn-primary">Save Wi-Fi & Reconnect</button>
+                        <button id="btnSaveWifi" class="btn btn-primary">
+                            <span class="material-symbols-outlined" style="font-size: 18px;">save</span> Save Wi-Fi & Reconnect
+                        </button>
                         
                         <div style="display: flex; gap: 10px; margin-top: 8px;">
-                            <button id="btnRebootEsp" class="btn btn-secondary" style="flex: 1;">🔄 Reboot ESP32</button>
-                            <button id="btnFactoryReset" class="btn btn-danger" style="flex: 1;">⚠️ Factory Reset</button>
+                            <button id="btnRebootEsp" class="btn btn-secondary" style="flex: 1;">
+                                <span class="material-symbols-outlined" style="font-size: 16px;">restart_alt</span> Reboot ESP32
+                            </button>
+                            <button id="btnFactoryReset" class="btn btn-danger" style="flex: 1;">
+                                <span class="material-symbols-outlined" style="font-size: 16px;">warning</span> Factory Reset
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -530,7 +664,9 @@
     <div id="cloudModal" class="modal-backdrop">
         <div class="modal-dialog">
             <div class="modal-header">
-                <div class="card-title" style="color: var(--accent-cyan);">☁️ Cloud Hosting & Tunnel Guide</div>
+                <div class="card-title" style="color: var(--color-midnight);">
+                    <span class="material-symbols-outlined">cloud</span> Cloud Hosting & Tunnel Guide
+                </div>
                 <button class="modal-close" onclick="document.getElementById('cloudModal').classList.remove('open')">&times;</button>
             </div>
             <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 16px;">
@@ -538,7 +674,9 @@
             </div>
 
             <div class="guide-step">
-                <div class="guide-step-title">Option 1: Deploy to Vercel (1-Click Free Hosting)</div>
+                <div class="guide-step-title">
+                    <span class="material-symbols-outlined" style="font-size: 18px;">bolt</span> Option 1: Deploy to Vercel (1-Click Free Hosting)
+                </div>
                 <div>Install Vercel CLI and run inside <code>Smart_Assistant_Web</code>:</div>
                 <div class="code-box">
                     <span>npx vercel --prod</span>
@@ -546,12 +684,16 @@
             </div>
 
             <div class="guide-step">
-                <div class="guide-step-title">Option 2: GitHub Pages (100% Free Forever)</div>
+                <div class="guide-step-title">
+                    <span class="material-symbols-outlined" style="font-size: 18px;">public</span> Option 2: GitHub Pages (100% Free Forever)
+                </div>
                 <div>Push the <code>Smart_Assistant_Web</code> folder to GitHub and enable <strong>Settings &gt; Pages &gt; Deploy from Branch (main)</strong>.</div>
             </div>
 
             <div class="guide-step">
-                <div class="guide-step-title">Option 3: ngrok Secure Tunnel (Worldwide Access to ESP32)</div>
+                <div class="guide-step-title">
+                    <span class="material-symbols-outlined" style="font-size: 18px;">vpn_lock</span> Option 3: ngrok Secure Tunnel (Worldwide Access to ESP32)
+                </div>
                 <div>If your website is hosted on HTTPS, forward your ESP32 IP with free ngrok:</div>
                 <div class="code-box">
                     <span>ngrok http 192.168.1.105:80</span>

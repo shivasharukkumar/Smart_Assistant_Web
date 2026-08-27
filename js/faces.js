@@ -1,185 +1,323 @@
 /**
- * Face Studio - 12 Animated Facial Expressions & Parameter Tuning Engine
+ * Face Studio - 30 Animated Physical Eye Expressions matching ESP32 FaceManager
  */
 
 const FACES_LIST = [
-    { id: 'happy', name: 'Happy', emoji: '😊' },
-    { id: 'normal', name: 'Normal', emoji: '😐' },
-    { id: 'laugh', name: 'Laughing', emoji: '😆' },
-    { id: 'love', name: 'Love', emoji: '😍' },
-    { id: 'sleep', name: 'Sleep', emoji: '💤' },
-    { id: 'sleepy', name: 'Sleepy', emoji: '😴' },
-    { id: 'angry', name: 'Angry', emoji: '😠' },
-    { id: 'sad', name: 'Sad', emoji: '😢' },
-    { id: 'cry', name: 'Crying', emoji: '😭' },
-    { id: 'shock', name: 'Shocked', emoji: '😱' },
-    { id: 'thinking', name: 'Thinking', emoji: '🤔' },
-    { id: 'confused', name: 'Confused', emoji: '😕' },
-    { id: 'cool', name: 'Cool Glasses', emoji: '😎' },
-    { id: 'robot', name: 'Pixel Robot', emoji: '🤖' },
-    { id: 'surprised', name: 'Surprised', emoji: '😮' },
-    { id: 'heart_eyes', name: 'Heart Eyes', emoji: '💖' },
-    { id: 'dizzy', name: 'Dizzy Swirl', emoji: '💫' },
-    { id: 'excited', name: 'Excited', emoji: '🤩' },
-    { id: 'scared', name: 'Scared', emoji: '😨' },
-    { id: 'nervous', name: 'Nervous', emoji: '😬' },
-    { id: 'sweat', name: 'Hot Sweat', emoji: '🥵' },
-    { id: 'shiver', name: 'Cold Shiver', emoji: '🥶' },
-    { id: 'wink', name: 'Wink', emoji: '😉' },
-    { id: 'yawn', name: 'Yawn', emoji: '🥱' },
-    { id: 'neutral', name: 'Neutral', emoji: '😶' },
-    { id: 'suspicious', name: 'Suspicious', emoji: '🤨' },
-    { id: 'look_left', name: 'Look Left', emoji: '👈' },
-    { id: 'look_right', name: 'Look Right', emoji: '👉' },
-    { id: 'look_up', name: 'Look Up', emoji: '👆' },
-    { id: 'look_down', name: 'Look Down', emoji: '👇' }
+    { id: 'happy', name: 'Happy' },
+    { id: 'normal', name: 'Normal' },
+    { id: 'laugh', name: 'Laughing' },
+    { id: 'love', name: 'Love' },
+    { id: 'sleep', name: 'Sleep' },
+    { id: 'sleepy', name: 'Sleepy' },
+    { id: 'angry', name: 'Angry' },
+    { id: 'sad', name: 'Sad' },
+    { id: 'cry', name: 'Crying' },
+    { id: 'shock', name: 'Shocked' },
+    { id: 'thinking', name: 'Thinking' },
+    { id: 'confused', name: 'Confused' },
+    { id: 'cool', name: 'Cool Glasses' },
+    { id: 'robot', name: 'Pixel Robot' },
+    { id: 'surprised', name: 'Surprised' },
+    { id: 'heart_eyes', name: 'Heart Eyes' },
+    { id: 'dizzy', name: 'Dizzy Swirl' },
+    { id: 'excited', name: 'Excited' },
+    { id: 'scared', name: 'Scared' },
+    { id: 'nervous', name: 'Nervous' },
+    { id: 'sweat', name: 'Hot Sweat' },
+    { id: 'shiver', name: 'Cold Shiver' },
+    { id: 'wink', name: 'Wink' },
+    { id: 'yawn', name: 'Yawn' },
+    { id: 'neutral', name: 'Neutral' },
+    { id: 'suspicious', name: 'Suspicious' },
+    { id: 'look_left', name: 'Look Left' },
+    { id: 'look_right', name: 'Look Right' },
+    { id: 'look_up', name: 'Look Up' },
+    { id: 'look_down', name: 'Look Down' }
 ];
 
-const FaceRenderer = {
-    drawFace(ctx, faceType, frame = 0, color = '#00f0ff') {
-        const sine = Math.sin(frame * 0.08) * 2;
-        const blinkCycle = frame % 90;
-        const isBlinking = blinkCycle >= 84;
+function drawHeart(ctx, x, y, size, color) {
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    const topCurveHeight = size * 0.3;
+    ctx.moveTo(x + size / 2, y + size / 5);
+    ctx.bezierCurveTo(x + size / 2, y, x, y, x, y + topCurveHeight);
+    ctx.bezierCurveTo(x, y + (size + topCurveHeight) / 2, x + size / 2, y + (size + topCurveHeight) / 1.5, x + size / 2, y + size);
+    ctx.bezierCurveTo(x + size / 2, y + (size + topCurveHeight) / 1.5, x + size, y + (size + topCurveHeight) / 2, x + size, y + topCurveHeight);
+    ctx.bezierCurveTo(x + size, y, x + size / 2, y, x + size / 2, y + size / 5);
+    ctx.fill();
+}
 
+function drawDrop(ctx, x, y, size, color) {
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+    ctx.quadraticCurveTo(x + size, y + size, x, y + size * 1.5);
+    ctx.quadraticCurveTo(x - size, y + size, x, y);
+    ctx.fill();
+}
+
+const FaceRenderer = {
+    drawFace(ctx, mood, frame = 0, color = '#ffffff', bgColor = '#0f172a') {
+        const breath = Math.sin(frame * 0.05) * 1.5;
+        const blinkCycle = frame % 100;
+        const isBlinking = (mood !== 'sleep' && mood !== 'wink' && mood !== 'heart_eyes') && (blinkCycle >= 92);
+
+        ctx.fillStyle = bgColor;
+        ctx.fillRect(0, 0, 128, 64);
+
+        const fillRoundRect = (x, y, w, h, r) => {
+            if (w <= 0 || h <= 0) return;
+            r = Math.min(r, w / 2, h / 2);
+            ctx.beginPath();
+            ctx.moveTo(x + r, y);
+            ctx.arcTo(x + w, y, x + w, y + h, r);
+            ctx.arcTo(x + w, y + h, x, y + h, r);
+            ctx.arcTo(x, y + h, x, y, r);
+            ctx.arcTo(x, y, x + w, y, r);
+            ctx.closePath();
+            ctx.fill();
+        };
+
+        // Base geometry matching ESP32 FaceManager.cpp
+        let lw = 36, rw = 36, lh = 36 + breath, rh = 36 + breath;
+        let lx = 18, rx = 74, ly = 14, ry = 14;
+        let pupilX = 0, pupilY = 0;
+
+        switch (mood) {
+            case 'happy': case 'love': case 'heart_eyes':
+                lw = rw = 40; lh = rh = 32; break;
+            case 'laugh': case 'excited':
+                lw = rw = 42; lh = rh = 26; break;
+            case 'shock': case 'surprised': case 'scared':
+                lw = rw = 30; lh = rh = 45; break;
+            case 'sleepy': case 'yawn':
+                lw = rw = 38; lh = rh = 30; break;
+            case 'sleep':
+                lw = rw = 36; lh = rh = 4; break;
+            case 'angry':
+                lw = rw = 34; lh = rh = 32; break;
+            case 'sad': case 'cry':
+                lw = rw = 34; lh = rh = 40; break;
+            case 'suspicious':
+                lw = 36; lh = 20; rw = 36; rh = 42; break;
+            case 'cool': case 'robot': case 'neutral':
+                lw = rw = 34; lh = rh = 28; break;
+            case 'nervous': case 'confused': case 'thinking':
+            case 'sweat': case 'shiver':
+                lw = rw = 32; lh = rh = 34; break;
+            case 'wink':
+                lw = rw = 36; lh = rh = 32; break;
+        }
+
+        // Gaze simulation
+        if (mood === 'look_left') pupilX = -9;
+        else if (mood === 'look_right') pupilX = 9;
+        else if (mood === 'look_up') pupilY = -7;
+        else if (mood === 'look_down') pupilY = 7;
+        else if (mood === 'dizzy') {
+            pupilX = Math.cos(frame * 0.15) * 7;
+            pupilY = Math.sin(frame * 0.15) * 7;
+        } else {
+            const wander = Math.floor(frame / 60) % 4;
+            if (wander === 1) { pupilX = 4; pupilY = 2; }
+            else if (wander === 3) { pupilX = -4; pupilY = -2; }
+        }
+
+        if (isBlinking) {
+            lh = 3; rh = 3;
+        }
+
+        // 1. Emotion Particles
         ctx.fillStyle = color;
+        if (mood === 'love') {
+            drawHeart(ctx, 58, 2, 12, color);
+        } else if (mood === 'sleep' || mood === 'sleepy') {
+            ctx.font = 'bold 9px monospace';
+            const floatZ = (frame % 30);
+            ctx.fillText('Z', 106, 16 - floatZ * 0.4);
+            ctx.font = 'bold 7px monospace';
+            ctx.fillText('z', 116, 11 - floatZ * 0.4);
+        } else if (mood === 'angry') {
+            ctx.strokeStyle = color;
+            ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            ctx.moveTo(59, 3); ctx.lineTo(65, 9);
+            ctx.moveTo(65, 3); ctx.lineTo(59, 9);
+            ctx.stroke();
+        } else if (mood === 'sweat') {
+            drawDrop(ctx, 102, 6, 5, color);
+        } else if (mood === 'thinking' || mood === 'confused') {
+            ctx.font = 'bold 12px sans-serif';
+            ctx.fillText('?', 104, 14);
+        } else if (mood === 'dizzy') {
+            ctx.strokeStyle = color;
+            ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            ctx.arc(64, 8, 5, 0, Math.PI * 2.5);
+            ctx.stroke();
+        }
+
+        // 2. Eyes Drawing Routine
+        const drawEye = (x, y, w, h, isLeft) => {
+            if (mood === 'heart_eyes') {
+                drawHeart(ctx, x + 8, y + 4, 20, color);
+                return;
+            }
+
+            ctx.fillStyle = color;
+            fillRoundRect(x, y, w, h, w < 20 ? 3 : 8);
+
+            const pw = w / 2.2;
+            const ph = h / 2.2;
+            let px = x + w / 2 + pupilX - pw / 2;
+            let py = y + h / 2 + pupilY - ph / 2;
+            px = Math.max(x, Math.min(x + w - pw, px));
+            py = Math.max(y, Math.min(y + h - ph, py));
+
+            ctx.fillStyle = bgColor;
+            if (mood === 'robot') {
+                ctx.fillRect(px, py, pw, ph);
+            } else {
+                fillRoundRect(px, py, pw, ph, 4);
+            }
+
+            // Catchlight glint
+            if (w > 15 && h > 15 && mood !== 'robot') {
+                ctx.fillStyle = color;
+                ctx.beginPath();
+                ctx.arc(px + pw - 4, py + 4, 1.8, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            // Eyelid masks matching FaceManager.cpp
+            ctx.fillStyle = bgColor;
+            if (mood === 'angry') {
+                ctx.beginPath();
+                if (isLeft) {
+                    ctx.moveTo(x - 2, y - 2); ctx.lineTo(x + w + 2, y + 10); ctx.lineTo(x - 2, y + 10);
+                } else {
+                    ctx.moveTo(x + w + 2, y - 2); ctx.lineTo(x - 2, y + 10); ctx.lineTo(x + w + 2, y + 10);
+                }
+                ctx.fill();
+            } else if (mood === 'sad' || mood === 'cry') {
+                ctx.beginPath();
+                if (isLeft) {
+                    ctx.moveTo(x + w + 2, y - 2); ctx.lineTo(x - 2, y + 10); ctx.lineTo(x + w + 2, y + 10);
+                } else {
+                    ctx.moveTo(x - 2, y - 2); ctx.lineTo(x + w + 2, y + 10); ctx.lineTo(x - 2, y + 10);
+                }
+                ctx.fill();
+            } else if (mood === 'happy' || mood === 'laugh' || mood === 'love' || mood === 'excited') {
+                ctx.beginPath();
+                ctx.arc(x + w / 2, y + h + 6, w / 1.3, 0, Math.PI * 2);
+                ctx.fill();
+            } else if (mood === 'sleepy' || mood === 'yawn') {
+                ctx.fillRect(x - 1, y - 1, w + 2, h / 2 + 2);
+            } else if (mood === 'sleep') {
+                ctx.fillRect(x - 1, y - 1, w + 2, h);
+                ctx.strokeStyle = color;
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(x + 2, y + h / 2); ctx.lineTo(x + w - 2, y + h / 2);
+                ctx.stroke();
+            } else if (mood === 'wink' && isLeft) {
+                ctx.fillRect(x - 1, y - 1, w + 2, h + 2);
+                ctx.strokeStyle = color;
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(x + 2, y + h / 2); ctx.lineTo(x + w - 2, y + h / 2);
+                ctx.stroke();
+            } else if (mood === 'cool') {
+                ctx.fillStyle = bgColor;
+                ctx.fillRect(x - 2, y + h / 2 - 4, w + 4, 10);
+                ctx.strokeStyle = color;
+                ctx.lineWidth = 2;
+                ctx.strokeRect(x, y + h / 2 - 6, w, 12);
+            }
+        };
+
+        drawEye(lx, ly, lw, lh, true);
+        drawEye(rx, ry, rw, rh, false);
+
+        // 3. Mouth Drawing Routine at cx=64, baseY=50
+        const cx = 64, baseY = 50;
         ctx.strokeStyle = color;
+        ctx.fillStyle = color;
         ctx.lineWidth = 2;
 
-        switch (faceType) {
-            case 'happy': {
-                // Curved smiling eyes
-                if (isBlinking) {
-                    ctx.beginPath(); ctx.moveTo(28, 26 + sine); ctx.lineTo(52, 26 + sine); ctx.stroke();
-                    ctx.beginPath(); ctx.moveTo(76, 26 + sine); ctx.lineTo(100, 26 + sine); ctx.stroke();
-                } else {
-                    ctx.beginPath(); ctx.arc(40, 26 + sine, 12, Math.PI, 0, false); ctx.stroke();
-                    ctx.beginPath(); ctx.arc(88, 26 + sine, 12, Math.PI, 0, false); ctx.stroke();
+        switch (mood) {
+            case 'happy': case 'heart_eyes': case 'love':
+                ctx.beginPath();
+                ctx.moveTo(cx - 10, baseY);
+                ctx.lineTo(cx, baseY + 5);
+                ctx.lineTo(cx + 10, baseY);
+                ctx.stroke();
+                break;
+            case 'laugh': case 'excited':
+                fillRoundRect(cx - 12, baseY - 2, 24, 10, 4);
+                break;
+            case 'sad': case 'scared':
+                ctx.beginPath();
+                ctx.moveTo(cx - 10, baseY + 5);
+                ctx.lineTo(cx, baseY);
+                ctx.lineTo(cx + 10, baseY + 5);
+                ctx.stroke();
+                break;
+            case 'cry':
+                ctx.beginPath();
+                ctx.moveTo(cx - 10, baseY + 5);
+                ctx.lineTo(cx, baseY);
+                ctx.lineTo(cx + 10, baseY + 5);
+                ctx.stroke();
+                drawDrop(ctx, cx - 18, baseY - 12, 5, color);
+                drawDrop(ctx, cx + 14, baseY - 12, 5, color);
+                break;
+            case 'angry':
+                ctx.beginPath();
+                ctx.moveTo(cx - 10, baseY + 3);
+                ctx.lineTo(cx + 10, baseY + 3);
+                ctx.stroke();
+                break;
+            case 'shock': case 'surprised':
+                ctx.beginPath();
+                ctx.arc(cx, baseY, 5, 0, Math.PI * 2);
+                ctx.stroke();
+                break;
+            case 'thinking':
+                ctx.beginPath();
+                ctx.moveTo(cx - 6, baseY);
+                ctx.lineTo(cx + 4, baseY);
+                ctx.stroke();
+                break;
+            case 'confused': case 'nervous':
+                ctx.beginPath();
+                ctx.moveTo(cx - 8, baseY);
+                ctx.lineTo(cx - 3, baseY + 3);
+                ctx.lineTo(cx + 3, baseY - 3);
+                ctx.lineTo(cx + 8, baseY);
+                ctx.stroke();
+                break;
+            case 'robot':
+                ctx.strokeRect(cx - 10, baseY - 3, 20, 8);
+                for (let i = -6; i <= 6; i += 4) {
+                    ctx.beginPath(); ctx.moveTo(cx + i, baseY - 3); ctx.lineTo(cx + i, baseY + 5); ctx.stroke();
                 }
-                // Joyful mouth
-                ctx.beginPath(); ctx.arc(64, 42 + sine, 14, 0, Math.PI, false); ctx.fill();
                 break;
-            }
-
-            case 'normal': {
-                // Round blinking eyes
-                const ry = isBlinking ? 1 : 10;
-                ctx.beginPath(); ctx.ellipse(40, 26 + sine, 10, ry, 0, 0, Math.PI * 2); ctx.fill();
-                ctx.beginPath(); ctx.ellipse(88, 26 + sine, 10, ry, 0, 0, Math.PI * 2); ctx.fill();
-                // Gentle smile
-                ctx.beginPath(); ctx.arc(64, 46 + sine, 12, 0.2 * Math.PI, 0.8 * Math.PI, false); ctx.stroke();
+            case 'shiver':
+                for (let i = -8; i <= 8; i += 4) {
+                    ctx.beginPath(); ctx.moveTo(cx + i, baseY); ctx.lineTo(cx + i, baseY + 5); ctx.stroke();
+                }
                 break;
-            }
-
-            case 'sad': {
-                // Slanted eyebrows
-                ctx.beginPath(); ctx.moveTo(26, 16); ctx.lineTo(48, 22); ctx.stroke();
-                ctx.beginPath(); ctx.moveTo(102, 16); ctx.lineTo(80, 22); ctx.stroke();
-                // Drooping eyes
-                ctx.beginPath(); ctx.arc(40, 28, 8, 0, Math.PI * 2); ctx.fill();
-                ctx.beginPath(); ctx.arc(88, 28, 8, 0, Math.PI * 2); ctx.fill();
-                // Frown mouth
-                ctx.beginPath(); ctx.arc(64, 54, 12, Math.PI * 1.1, Math.PI * 1.9, false); ctx.stroke();
-                break;
-            }
-
-            case 'angry': {
-                // Slanted eyebrows
-                ctx.beginPath(); ctx.moveTo(26, 22); ctx.lineTo(50, 16); ctx.stroke();
-                ctx.beginPath(); ctx.moveTo(102, 22); ctx.lineTo(78, 16); ctx.stroke();
-                // Narrow eyes
-                ctx.fillRect(28, 24, 22, 8);
-                ctx.fillRect(78, 24, 22, 8);
-                // Jagged frown
+            case 'yawn':
                 ctx.beginPath();
-                ctx.moveTo(50, 48); ctx.lineTo(58, 44); ctx.lineTo(64, 48); ctx.lineTo(72, 44); ctx.lineTo(78, 48);
-                ctx.stroke();
+                ctx.arc(cx, baseY + 2, 6, 0, Math.PI * 2);
+                ctx.fill();
                 break;
-            }
-
-            case 'sleepy': {
-                // Slit eyes
-                ctx.fillRect(28, 30 + sine, 22, 2);
-                ctx.fillRect(78, 30 + sine, 22, 2);
-                // Calm small mouth
-                ctx.beginPath(); ctx.arc(64, 48 + sine, 4, 0, Math.PI * 2); ctx.stroke();
-                // Floating Z
-                ctx.font = '10px monospace';
-                ctx.fillText('Z', 104, 20 - (frame % 20));
-                break;
-            }
-
-            case 'surprised': {
-                // Wide eyes
-                ctx.beginPath(); ctx.arc(40, 24, 12, 0, Math.PI * 2); ctx.stroke();
-                ctx.beginPath(); ctx.arc(88, 24, 12, 0, Math.PI * 2); ctx.stroke();
-                ctx.beginPath(); ctx.arc(40, 24, 3, 0, Math.PI * 2); ctx.fill();
-                ctx.beginPath(); ctx.arc(88, 24, 3, 0, Math.PI * 2); ctx.fill();
-                // Big O mouth
-                ctx.beginPath(); ctx.arc(64, 48, 8, 0, Math.PI * 2); ctx.stroke();
-                break;
-            }
-
-            case 'love': {
-                const beat = Math.abs(Math.sin(frame * 0.15) * 3);
-                // Heart eyes
-                ctx.beginPath(); ctx.arc(36, 24, 6 + beat, 0, Math.PI * 2); ctx.fill();
-                ctx.beginPath(); ctx.arc(44, 24, 6 + beat, 0, Math.PI * 2); ctx.fill();
-                ctx.beginPath(); ctx.arc(84, 24, 6 + beat, 0, Math.PI * 2); ctx.fill();
-                ctx.beginPath(); ctx.arc(92, 24, 6 + beat, 0, Math.PI * 2); ctx.fill();
-                // Cute mouth
-                ctx.beginPath(); ctx.arc(64, 46, 10, 0, Math.PI, false); ctx.stroke();
-                break;
-            }
-
-            case 'wink': {
-                // Left open, right wink
-                ctx.beginPath(); ctx.arc(40, 26, 10, 0, Math.PI * 2); ctx.fill();
-                ctx.beginPath(); ctx.moveTo(76, 28); ctx.lineTo(88, 22); ctx.lineTo(100, 28); ctx.stroke();
-                // Smirk
-                ctx.beginPath(); ctx.arc(68, 46, 10, 0, Math.PI * 0.8, false); ctx.stroke();
-                break;
-            }
-
-            case 'confused': {
-                ctx.beginPath(); ctx.moveTo(28, 12); ctx.lineTo(50, 16); ctx.stroke();
-                ctx.beginPath(); ctx.moveTo(78, 20); ctx.lineTo(100, 20); ctx.stroke();
-                ctx.beginPath(); ctx.arc(38, 26, 10, 0, Math.PI * 2); ctx.fill();
-                ctx.beginPath(); ctx.arc(88, 28, 6, 0, Math.PI * 2); ctx.fill();
-                // Squiggle
-                ctx.beginPath();
-                ctx.moveTo(52, 48); ctx.lineTo(58, 51); ctx.lineTo(64, 46); ctx.lineTo(70, 50); ctx.lineTo(76, 47);
-                ctx.stroke();
-                break;
-            }
-
-            case 'excited': {
-                const bounce = Math.abs(sine * 2);
-                ctx.fillRect(28, 20 - bounce, 24, 14);
-                ctx.fillRect(76, 20 - bounce, 24, 14);
-                ctx.beginPath(); ctx.arc(64, 46 - bounce, 12, 0, Math.PI, false); ctx.fill();
-                break;
-            }
-
-            case 'laughing': {
-                const shake = (frame % 4 < 2) ? 1 : -1;
-                ctx.beginPath(); ctx.moveTo(28 + shake, 20); ctx.lineTo(48 + shake, 28); ctx.lineTo(28 + shake, 36); ctx.stroke();
-                ctx.beginPath(); ctx.moveTo(100 + shake, 20); ctx.lineTo(80 + shake, 28); ctx.lineTo(100 + shake, 36); ctx.stroke();
-                ctx.beginPath(); ctx.arc(64, 44, 14, 0, Math.PI, false); ctx.fill();
-                break;
-            }
-
-            case 'crying': {
-                ctx.beginPath(); ctx.moveTo(28, 28); ctx.lineTo(48, 24); ctx.stroke();
-                ctx.beginPath(); ctx.moveTo(100, 28); ctx.lineTo(80, 24); ctx.stroke();
-                // Falling tears
-                const tearY = 30 + ((frame * 2) % 25);
-                ctx.fillRect(38, tearY, 4, 6);
-                ctx.fillRect(88, tearY, 4, 6);
-                ctx.beginPath(); ctx.arc(64, 52, 10, Math.PI * 1.1, Math.PI * 1.9, false); ctx.stroke();
-                break;
-            }
-
             default:
+                ctx.beginPath();
+                ctx.moveTo(cx - 8, baseY);
+                ctx.lineTo(cx + 8, baseY);
+                ctx.stroke();
                 break;
         }
     }
@@ -192,7 +330,6 @@ class FaceStudioManager {
     }
 
     init() {
-        // ID in index.html is 'facesGrid'
         const grid = document.getElementById('facesGrid');
         if (!grid) return;
         grid.innerHTML = '';
@@ -209,7 +346,7 @@ class FaceStudioManager {
 
             const title = document.createElement('div');
             title.className = 'face-title';
-            title.textContent = `${face.emoji} ${face.name}`;
+            title.textContent = face.name;
 
             card.appendChild(canvas);
             card.appendChild(title);
@@ -222,7 +359,7 @@ class FaceStudioManager {
             });
         });
 
-        // Sliders & Controls (only bind if elements exist in HTML)
+        // Switches
         const animToggle = document.getElementById('switchSaccades');
         if (animToggle) {
             animToggle.addEventListener('change', (e) => {
@@ -247,14 +384,12 @@ class FaceStudioManager {
             });
         }
 
-        // Start animation loop for cards
+        // 30 FPS Render loop for all 30 mini cards
         let frame = 0;
         setInterval(() => {
             frame++;
             this.miniCanvases.forEach(item => {
-                item.ctx.fillStyle = '#05080f';
-                item.ctx.fillRect(0, 0, 128, 64);
-                FaceRenderer.drawFace(item.ctx, item.id, frame);
+                FaceRenderer.drawFace(item.ctx, item.id, frame, '#ffffff', '#0f172a');
             });
         }, 33);
     }
@@ -267,8 +402,11 @@ class FaceStudioManager {
 
         Connection.sendWs({ type: 'set_face', face: faceId });
         Connection.post('/api/face', { face: faceId });
-        App.showToast(`Active Face: ${faceId.toUpperCase()} 😊`);
+
+        if (window.App) App.showToast(`Active Face set to: ${faceId.toUpperCase()}`);
     }
 }
 
 window.FaceStudio = new FaceStudioManager();
+window.FaceRenderer = FaceRenderer;
+document.addEventListener('DOMContentLoaded', () => window.FaceStudio.init());

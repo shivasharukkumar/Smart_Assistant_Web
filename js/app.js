@@ -41,24 +41,32 @@ class AppController {
     }
 
     showToast(message, type = 'info') {
-        // ID matches the HTML: <div id="toastContainer">
         const container = document.getElementById('toastContainer');
         if (!container) return;
+
+        // Limit concurrent toasts so they never block or overlap the screen
+        while (container.children.length >= 3) {
+            container.removeChild(container.firstChild);
+        }
 
         const toast = document.createElement('div');
         toast.className = `toast ${type}`;
         toast.innerHTML = `
-            <span style="font-size: 1.1rem;">${type === 'error' ? '⚠️' : '✨'}</span>
-            <span style="font-size: 0.88rem; font-weight: 500;">${message}</span>
+            <span class="material-symbols-outlined" style="font-size: 18px; color: ${type === 'error' ? 'var(--status-rose)' : 'var(--color-sage)'};">${type === 'error' ? 'error' : 'check_circle'}</span>
+            <span style="font-size: 0.85rem; font-weight: 500; line-height: 1.3;">${message}</span>
         `;
-        container.appendChild(toast);
 
-        setTimeout(() => {
+        const dismiss = () => {
             toast.style.opacity = '0';
             toast.style.transform = 'translateX(100%)';
-            toast.style.transition = '0.3s ease-out';
-            setTimeout(() => toast.remove(), 300);
-        }, 3200);
+            setTimeout(() => toast.remove(), 250);
+        };
+
+        // Click to dismiss immediately
+        toast.addEventListener('click', dismiss);
+        container.appendChild(toast);
+
+        setTimeout(dismiss, 2800);
     }
 }
 

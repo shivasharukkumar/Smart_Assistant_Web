@@ -39,7 +39,7 @@ class SettingsManagerWeb {
             if (deferredInstallPrompt) {
                 deferredInstallPrompt.prompt();
             } else {
-                App.showToast('Open in Chrome on Android/Desktop to install as PWA 📲', 'info');
+                App.showToast('Open in Chrome on Android/Desktop to install as PWA', 'info');
             }
         });
 
@@ -58,14 +58,14 @@ class SettingsManagerWeb {
                 wifiPass: pass
             });
 
-            App.showToast('Wi-Fi credentials updated. ESP32 will reconnect. 📶');
+            App.showToast('Wi-Fi credentials updated. ESP32 will reconnect.');
         });
 
         // Reboot ESP32 — ID: btnRebootEsp
         document.getElementById('btnRebootEsp')?.addEventListener('click', () => {
             if (confirm('Are you sure you want to reboot the ESP32?')) {
                 Connection.post('/api/restart', {});
-                App.showToast('ESP32 Rebooting... 🔄');
+                App.showToast('ESP32 Rebooting...');
             }
         });
 
@@ -73,7 +73,7 @@ class SettingsManagerWeb {
         document.getElementById('btnFactoryReset')?.addEventListener('click', () => {
             if (confirm('WARNING: This will wipe all NVS settings, Wi-Fi credentials, and high scores. Proceed?')) {
                 Connection.post('/api/factory-reset', {});
-                App.showToast('Factory reset initiated. ESP32 rebooting... ⚠️');
+                App.showToast('Factory reset initiated. ESP32 rebooting...', 'error');
             }
         });
     }

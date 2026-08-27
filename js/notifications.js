@@ -40,7 +40,7 @@ class NotificationManager {
             duration: duration
         });
 
-        App.showToast(`Notification Sent: "${title}" 📢`);
+        App.showToast(`Notification Sent: "${title}"`);
     }
 }
 
