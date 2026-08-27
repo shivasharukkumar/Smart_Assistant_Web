@@ -1,0 +1,16 @@
+{
+  "version": 2,
+  "name": "esp32-smart-assistant",
+  "cleanUrls": true,
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        }
+      ]
+    }
+  ]
+}
