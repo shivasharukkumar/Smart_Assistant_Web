@@ -41,6 +41,24 @@ class AppController {
     switchTab(tabId) {
         this.activeTab = tabId;
 
+        // Auto-exit active arcade game when navigating away from Game Center
+        if (tabId !== 'games' && window.GameCenter && window.GameCenter.activeGame !== 'none') {
+            Connection.sendWs({ type: 'game_input', action: 'EXIT' });
+            Connection.post('/api/game/exit', {});
+            window.GameCenter.activeGame = 'none';
+            window.GameCenter.updateControllerLayout();
+            document.querySelectorAll('.game-tile').forEach(tile => tile.classList.remove('active-game'));
+        }
+
+        // Auto-sync OLED page on primary tab selection
+        if (tabId === 'drawing') {
+            Connection.sendWs({ type: 'set_page', page: 'drawing' });
+            Connection.post('/api/page', { page: 'drawing' });
+        } else if (tabId === 'faces') {
+            Connection.sendWs({ type: 'set_page', page: 'face' });
+            Connection.post('/api/page', { page: 'face' });
+        }
+
         // Update nav styling
         document.querySelectorAll('.nav-tab').forEach(t => {
             t.classList.toggle('active', t.getAttribute('data-tab') === tabId);

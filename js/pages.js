@@ -22,13 +22,20 @@ const PAGES_LIST = [
 
 class PageController {
     constructor() {
-        this.activePage = 'face';
-        this.autoRotate = false;
-        this.rotateInterval = 8;
+        this.activePage = localStorage.getItem('esp32_active_page') || 'face';
+        this.autoRotate = localStorage.getItem('esp32_auto_rotate') === 'true';
+        this.rotateInterval = parseInt(localStorage.getItem('esp32_rotate_interval') || '8');
         this.pageEnabledStates = {};
         
+        try {
+            const saved = localStorage.getItem('esp32_page_enabled_states');
+            if (saved) this.pageEnabledStates = JSON.parse(saved);
+        } catch (e) {}
+
         PAGES_LIST.forEach(p => {
-            this.pageEnabledStates[p.id] = true;
+            if (this.pageEnabledStates[p.id] === undefined) {
+                this.pageEnabledStates[p.id] = true;
+            }
         });
 
         this.grid = document.getElementById('pagesGrid');
@@ -94,6 +101,7 @@ class PageController {
             const toggle = card.querySelector('.page-enable-switch');
             toggle.addEventListener('change', (e) => {
                 this.pageEnabledStates[page.id] = e.target.checked;
+                localStorage.setItem('esp32_page_enabled_states', JSON.stringify(this.pageEnabledStates));
                 App.showToast(`${page.name} ${e.target.checked ? 'Enabled' : 'Disabled'}`, 'info');
             });
 
@@ -109,16 +117,20 @@ class PageController {
 
     bindEvents() {
         if (this.switchAutoRotate) {
+            this.switchAutoRotate.checked = this.autoRotate;
             this.switchAutoRotate.addEventListener('change', (e) => {
                 this.setAutoRotate(e.target.checked);
             });
         }
 
         if (this.intervalSlider && this.intervalLabel) {
+            this.intervalSlider.value = this.rotateInterval;
+            this.intervalLabel.textContent = `${this.rotateInterval}s`;
             this.intervalSlider.addEventListener('input', (e) => {
                 const val = e.target.value;
                 this.rotateInterval = parseInt(val);
                 this.intervalLabel.textContent = `${val}s`;
+                localStorage.setItem('esp32_rotate_interval', val);
             });
 
             this.intervalSlider.addEventListener('change', () => {
@@ -131,6 +143,7 @@ class PageController {
 
     activatePage(pageId) {
         this.activePage = pageId;
+        localStorage.setItem('esp32_active_page', pageId);
         this.updateActiveBadge();
 
         Connection.sendWs({
@@ -147,6 +160,7 @@ class PageController {
 
     setAutoRotate(enabled) {
         this.autoRotate = enabled;
+        localStorage.setItem('esp32_auto_rotate', enabled);
         if (this.switchAutoRotate) this.switchAutoRotate.checked = enabled;
         const dashSwitch = document.getElementById('switchAutoRotate');
         if (dashSwitch) dashSwitch.checked = enabled;

@@ -391,35 +391,61 @@
                         </div>
                     </div>
 
-                    <div class="tools-sidebar">
-                        <div class="switch-label">Studio Tools</div>
+                    <div class="tools-sidebar">                        <div class="switch-label">Studio Tools &amp; Shapes</div>
                         <div class="tool-grid">
-                            <button class="tool-btn active" data-tool="pencil">
+                            <button class="tool-btn active" data-tool="pencil" title="1px Fine Pencil">
                                 <span class="material-symbols-outlined" style="font-size: 16px;">edit</span> Pencil
                             </button>
-                            <button class="tool-btn" data-tool="eraser">
-                                <span class="material-symbols-outlined" style="font-size: 16px;">ink_eraser</span>
-                                Eraser
+                            <button class="tool-btn" data-tool="brush" title="Thick 2px/3px Brush">
+                                <span class="material-symbols-outlined" style="font-size: 16px;">brush</span> Brush
                             </button>
-                            <button class="tool-btn" data-tool="line">
-                                <span class="material-symbols-outlined" style="font-size: 16px;">horizontal_rule</span>
-                                Line
+                            <button class="tool-btn" data-tool="spray" title="Airbrush Dither Spray">
+                                <span class="material-symbols-outlined" style="font-size: 16px;">grain</span> Spray
                             </button>
-                            <button class="tool-btn" data-tool="rect">
+                            <button class="tool-btn" data-tool="eraser" title="Pixel Eraser">
+                                <span class="material-symbols-outlined" style="font-size: 16px;">ink_eraser</span> Eraser
+                            </button>
+                            <button class="tool-btn" data-tool="line" title="Straight Line">
+                                <span class="material-symbols-outlined" style="font-size: 16px;">horizontal_rule</span> Line
+                            </button>
+                            <button class="tool-btn" data-tool="rect" title="Rectangle Outline">
                                 <span class="material-symbols-outlined" style="font-size: 16px;">crop_square</span> Rect
                             </button>
-                            <button class="tool-btn" data-tool="circle">
-                                <span class="material-symbols-outlined"
-                                    style="font-size: 16px;">radio_button_unchecked</span> Circle
+                            <button class="tool-btn" data-tool="filled_rect" title="Solid Filled Rectangle">
+                                <span class="material-symbols-outlined" style="font-size: 16px;">crop_5_4</span> Fill Rect
                             </button>
-                            <button class="tool-btn" data-tool="fill">
-                                <span class="material-symbols-outlined"
-                                    style="font-size: 16px;">format_color_fill</span> Fill
+                            <button class="tool-btn" data-tool="circle" title="Circle Outline">
+                                <span class="material-symbols-outlined" style="font-size: 16px;">radio_button_unchecked</span> Circle
+                            </button>
+                            <button class="tool-btn" data-tool="filled_circle" title="Solid Filled Circle">
+                                <span class="material-symbols-outlined" style="font-size: 16px;">circle</span> Fill Circ
+                            </button>
+                            <button class="tool-btn" data-tool="fill" title="Flood Bucket Fill">
+                                <span class="material-symbols-outlined" style="font-size: 16px;">format_color_fill</span> Bucket
+                            </button>
+                            <button class="tool-btn" data-tool="text" title="Pixel Text Stamper">
+                                <span class="material-symbols-outlined" style="font-size: 16px;">title</span> Text
                             </button>
                         </div>
 
-                        <div class="switch-label" style="margin-top: 10px;">Preset Pixel Stamps</div>
-                        <div class="preset-stamps-grid">
+                        <div class="switch-label" style="margin-top: 10px;">Canvas Transforms</div>
+                        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px;">
+                            <button class="btn btn-secondary transform-btn" data-action="flip_h" title="Flip Horizontal" style="padding: 6px 2px; font-size: 0.7rem;">
+                                <span class="material-symbols-outlined" style="font-size: 14px;">flip</span> Flip H
+                            </button>
+                            <button class="btn btn-secondary transform-btn" data-action="flip_v" title="Flip Vertical" style="padding: 6px 2px; font-size: 0.7rem;">
+                                <span class="material-symbols-outlined" style="font-size: 14px;">swap_vert</span> Flip V
+                            </button>
+                            <button class="btn btn-secondary transform-btn" data-action="shift_left" title="Shift Left 4px" style="padding: 6px 2px; font-size: 0.7rem;">
+                                <span class="material-symbols-outlined" style="font-size: 14px;">west</span> &larr; 4px
+                            </button>
+                            <button class="btn btn-secondary transform-btn" data-action="shift_right" title="Shift Right 4px" style="padding: 6px 2px; font-size: 0.7rem;">
+                                <span class="material-symbols-outlined" style="font-size: 14px;">east</span> &rarr; 4px
+                            </button>
+                        </div>
+
+                        <div class="switch-label" style="margin-top: 10px;">Preset Pixel Stamps (28+)</div>
+                        <div class="preset-stamps-grid" style="max-height: 240px; overflow-y: auto; padding-right: 2px;">
                             <button class="btn btn-secondary preset-btn" data-preset="heart">
                                 <span class="material-symbols-outlined" style="font-size: 16px;">favorite</span> Heart
                             </button>
@@ -428,6 +454,15 @@
                             </button>
                             <button class="btn btn-secondary preset-btn" data-preset="star">
                                 <span class="material-symbols-outlined" style="font-size: 16px;">star</span> Star
+                            </button>
+                            <button class="btn btn-secondary preset-btn" data-preset="skull">
+                                <span class="material-symbols-outlined" style="font-size: 16px;">psychology</span> Skull
+                            </button>
+                            <button class="btn btn-secondary preset-btn" data-preset="fire">
+                                <span class="material-symbols-outlined" style="font-size: 16px;">local_fire_department</span> Fire
+                            </button>
+                            <button class="btn btn-secondary preset-btn" data-preset="bolt">
+                                <span class="material-symbols-outlined" style="font-size: 16px;">bolt</span> Bolt
                             </button>
                             <button class="btn btn-secondary preset-btn" data-preset="robot">
                                 <span class="material-symbols-outlined" style="font-size: 16px;">smart_toy</span> Robot
@@ -444,8 +479,29 @@
                             <button class="btn btn-secondary preset-btn" data-preset="gamepad">
                                 <span class="material-symbols-outlined" style="font-size: 16px;">sports_esports</span> Gamepad
                             </button>
+                            <button class="btn btn-secondary preset-btn" data-preset="pacman">
+                                <span class="material-symbols-outlined" style="font-size: 16px;">trip_origin</span> Pacman
+                            </button>
+                            <button class="btn btn-secondary preset-btn" data-preset="sword">
+                                <span class="material-symbols-outlined" style="font-size: 16px;">sports_kabaddi</span> Sword
+                            </button>
+                            <button class="btn btn-secondary preset-btn" data-preset="shield">
+                                <span class="material-symbols-outlined" style="font-size: 16px;">shield</span> Shield
+                            </button>
+                            <button class="btn btn-secondary preset-btn" data-preset="crown">
+                                <span class="material-symbols-outlined" style="font-size: 16px;">workspace_premium</span> Crown
+                            </button>
+                            <button class="btn btn-secondary preset-btn" data-preset="trophy">
+                                <span class="material-symbols-outlined" style="font-size: 16px;">emoji_events</span> Trophy
+                            </button>
                             <button class="btn btn-secondary preset-btn" data-preset="diamond">
                                 <span class="material-symbols-outlined" style="font-size: 16px;">diamond</span> Diamond
+                            </button>
+                            <button class="btn btn-secondary preset-btn" data-preset="battery">
+                                <span class="material-symbols-outlined" style="font-size: 16px;">battery_full</span> Battery
+                            </button>
+                            <button class="btn btn-secondary preset-btn" data-preset="wifi">
+                                <span class="material-symbols-outlined" style="font-size: 16px;">wifi</span> Wi-Fi
                             </button>
                             <button class="btn btn-secondary preset-btn" data-preset="coffee">
                                 <span class="material-symbols-outlined" style="font-size: 16px;">coffee</span> Coffee
@@ -455,6 +511,24 @@
                             </button>
                             <button class="btn btn-secondary preset-btn" data-preset="sun">
                                 <span class="material-symbols-outlined" style="font-size: 16px;">wb_sunny</span> Sun
+                            </button>
+                            <button class="btn btn-secondary preset-btn" data-preset="flower">
+                                <span class="material-symbols-outlined" style="font-size: 16px;">local_florist</span> Flower
+                            </button>
+                            <button class="btn btn-secondary preset-btn" data-preset="tree">
+                                <span class="material-symbols-outlined" style="font-size: 16px;">park</span> Tree
+                            </button>
+                            <button class="btn btn-secondary preset-btn" data-preset="rocket">
+                                <span class="material-symbols-outlined" style="font-size: 16px;">flight_takeoff</span> Rocket
+                            </button>
+                            <button class="btn btn-secondary preset-btn" data-preset="alien">
+                                <span class="material-symbols-outlined" style="font-size: 16px;">radar</span> Alien
+                            </button>
+                            <button class="btn btn-secondary preset-btn" data-preset="car">
+                                <span class="material-symbols-outlined" style="font-size: 16px;">directions_car</span> Car
+                            </button>
+                            <button class="btn btn-secondary preset-btn" data-preset="bell">
+                                <span class="material-symbols-outlined" style="font-size: 16px;">notifications</span> Bell
                             </button>
                         </div>
                     </div>
