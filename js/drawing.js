@@ -464,4 +464,5 @@ class DrawingStudio {
 }
 
 window.DrawingStudioInstance = new DrawingStudio();
-document.addEventListener('DOMContentLoaded', () => window.DrawingStudioInstance.init());
+window.DrawingStudio = window.DrawingStudioInstance;
+document.addEventListener('DOMContentLoaded', () => window.DrawingStudio.init());

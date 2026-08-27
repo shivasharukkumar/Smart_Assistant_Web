@@ -80,3 +80,5 @@ class SettingsManagerWeb {
 }
 
 window.SettingsWeb = new SettingsManagerWeb();
+window.Settings = window.SettingsWeb;
+document.addEventListener('DOMContentLoaded', () => window.SettingsWeb.init());

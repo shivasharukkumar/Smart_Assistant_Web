@@ -16,14 +16,26 @@ class AppController {
             });
         });
 
-        // Initialize subsystems that don't self-initialize
-        Dashboard.init();
-        FaceStudio.init();
-        GameCenterInstance.init();
-        NotificationManagerInstance.init();
-        SettingsWeb.init();
+        // Initialize subsystems safely with individual error boundaries
+        const subsystems = [
+            { name: 'Dashboard', init: () => window.Dashboard?.init() },
+            { name: 'FaceStudio', init: () => window.FaceStudio?.init() },
+            { name: 'Pages', init: () => window.Pages?.init() },
+            { name: 'DrawingStudio', init: () => window.DrawingStudio?.init() },
+            { name: 'GameCenter', init: () => window.GameCenter?.init() },
+            { name: 'Notifications', init: () => window.Notifications?.init() },
+            { name: 'Settings', init: () => window.Settings?.init() }
+        ];
 
-        console.log('[APP] ESP32 Smart Assistant Web Dashboard initialized.');
+        subsystems.forEach(sub => {
+            try {
+                if (typeof sub.init === 'function') sub.init();
+            } catch (err) {
+                console.warn(`[APP] Error initializing ${sub.name}:`, err);
+            }
+        });
+
+        console.log('[APP] ESP32 Smart Assistant Web Dashboard fully initialized.');
     }
 
     switchTab(tabId) {

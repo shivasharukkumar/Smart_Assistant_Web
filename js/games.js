@@ -476,17 +476,27 @@ class GameCenter {
                 document.querySelectorAll('.game-tile').forEach(tile => tile.classList.remove('active-game'));
                 App.showToast('Exited Game');
             }
-            // Number keys 1-9 for Tic-Tac-Toe or Fast Game Launch
-            else if (/^[1-9]$/.test(key)) {
-                const num = parseInt(key);
+            // Number keys & Numpad keys for Tic-Tac-Toe (789 Top, 456 Middle, 123 Bottom)
+            const numpadLayout = {
+                '7': [0, 0], '8': [0, 1], '9': [0, 2],
+                '4': [1, 0], '5': [1, 1], '6': [1, 2],
+                '1': [2, 0], '2': [2, 1], '3': [2, 2],
+                'Numpad7': [0, 0], 'Numpad8': [0, 1], 'Numpad9': [0, 2],
+                'Numpad4': [1, 0], 'Numpad5': [1, 1], 'Numpad6': [1, 2],
+                'Numpad1': [2, 0], 'Numpad2': [2, 1], 'Numpad3': [2, 2]
+            };
+
+            const targetPos = numpadLayout[code] || numpadLayout[key];
+            if (targetPos) {
                 if (this.activeGame === 'tictactoe') {
                     e.preventDefault();
-                    const r = Math.floor((num - 1) / 3);
-                    const c = (num - 1) % 3;
-                    this.playTicTacToeMove(r, c);
-                } else if (this.activeGame === 'none' && num <= GAMES_LIST.length) {
-                    e.preventDefault();
-                    this.startGame(GAMES_LIST[num - 1].id);
+                    this.playTicTacToeMove(targetPos[0], targetPos[1]);
+                } else if (this.activeGame === 'none') {
+                    const cleanNum = parseInt(key.replace('Numpad', ''));
+                    if (!isNaN(cleanNum) && cleanNum >= 1 && cleanNum <= GAMES_LIST.length) {
+                        e.preventDefault();
+                        this.startGame(GAMES_LIST[cleanNum - 1].id);
+                    }
                 }
             }
         });
@@ -494,4 +504,5 @@ class GameCenter {
 }
 
 window.GameCenterInstance = new GameCenter();
-document.addEventListener('DOMContentLoaded', () => window.GameCenterInstance.init());
+window.GameCenter = window.GameCenterInstance;
+document.addEventListener('DOMContentLoaded', () => window.GameCenter.init());

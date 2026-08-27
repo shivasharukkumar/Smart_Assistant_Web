@@ -45,3 +45,5 @@ class NotificationManager {
 }
 
 window.NotificationManagerInstance = new NotificationManager();
+window.Notifications = window.NotificationManagerInstance;
+document.addEventListener('DOMContentLoaded', () => window.Notifications.init());

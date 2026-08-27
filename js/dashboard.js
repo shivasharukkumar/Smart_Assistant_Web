@@ -158,4 +158,5 @@ class DashboardManager {
 }
 
 window.DashboardManagerInstance = new DashboardManager();
-document.addEventListener('DOMContentLoaded', () => window.DashboardManagerInstance.init());
+window.Dashboard = window.DashboardManagerInstance;
+document.addEventListener('DOMContentLoaded', () => window.Dashboard.init());
