@@ -751,22 +751,22 @@ canvas.oled-screen {
 }
 
 .tools-sidebar {
-    width: 220px;
+    width: 280px;
     display: flex;
     flex-direction: column;
-    gap: 14px;
+    gap: 12px;
 }
 
 .tool-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 8px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
 }
 
 .tool-btn {
-    padding: 9px;
+    padding: 8px 4px;
     font-family: 'Space Grotesk', sans-serif;
-    font-size: 0.82rem;
+    font-size: 0.76rem;
     font-weight: 600;
     border-radius: var(--radius-sm);
     border: 1px solid var(--border-strong);
@@ -774,9 +774,10 @@ canvas.oled-screen {
     color: var(--text-primary);
     cursor: pointer;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 6px;
+    gap: 3px;
     transition: var(--transition-fast);
 }
 
@@ -784,6 +785,44 @@ canvas.oled-screen {
     background: var(--color-midnight);
     border-color: var(--color-midnight);
     color: #ffffff;
+}
+
+/* 12 Preset Pixel Stamps Grid */
+.preset-stamps-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+}
+
+.preset-btn {
+    padding: 8px 2px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 600;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-strong);
+    background: #f8fafc;
+    color: var(--color-midnight);
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    transition: var(--transition-fast);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+}
+
+.preset-btn:hover {
+    background: #ffffff;
+    border-color: var(--color-midnight);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(15, 23, 42, 0.08);
+}
+
+.preset-btn .material-symbols-outlined {
+    font-size: 18px;
+    color: var(--color-midnight);
 }
 
 /* ==========================================================================
