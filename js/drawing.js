@@ -412,11 +412,86 @@ class DrawingStudio {
             this.drawRect(54, 24, 60, 30, 1);
             this.drawRect(68, 24, 74, 30, 1);
             this.floodFill(64, 32, 1);
+        } else if (presetName === 'space_invader') {
+            const invader = [
+                "00011000",
+                "00111100",
+                "01111110",
+                "11011011",
+                "11111111",
+                "00100100",
+                "01011010",
+                "10100101"
+            ];
+            const startX = 64 - 16;
+            const startY = 32 - 16;
+            for (let r = 0; r < 8; r++) {
+                for (let c = 0; c < 8; c++) {
+                    if (invader[r][c] === '1') {
+                        for (let py = 0; py < 4; py++) {
+                            for (let px = 0; px < 4; px++) {
+                                this.plotPoint(startX + c * 4 + px, startY + r * 4 + py, 1);
+                            }
+                        }
+                    }
+                }
+            }
+        } else if (presetName === 'gamepad') {
+            // Body
+            this.drawRect(36, 20, 92, 44, 1);
+            this.drawCircle(44, 32, 44 + 12, 32, 1);
+            this.drawCircle(84, 32, 84 + 12, 32, 1);
+            // D-Pad +
+            this.drawRect(46, 26, 50, 38, 1);
+            this.drawRect(42, 30, 54, 34, 1);
+            // Action Buttons
+            this.drawCircle(78, 28, 80, 28, 1);
+            this.drawCircle(84, 34, 86, 34, 1);
+        } else if (presetName === 'diamond') {
+            // Gem outline
+            this.drawLineInterpolated(64, 12, 92, 28, 1);
+            this.drawLineInterpolated(92, 28, 64, 52, 1);
+            this.drawLineInterpolated(64, 52, 36, 28, 1);
+            this.drawLineInterpolated(36, 28, 64, 12, 1);
+            // Facets
+            this.drawLineInterpolated(50, 28, 78, 28, 1);
+            this.drawLineInterpolated(64, 12, 64, 52, 1);
+            this.drawLineInterpolated(50, 28, 64, 52, 1);
+            this.drawLineInterpolated(78, 28, 64, 52, 1);
+        } else if (presetName === 'coffee') {
+            // Cup
+            this.drawRect(44, 24, 76, 50, 1);
+            // Handle
+            this.drawCircle(82, 36, 82 + 6, 36, 1);
+            // Steam lines
+            this.drawLineInterpolated(50, 18, 52, 12, 1);
+            this.drawLineInterpolated(60, 18, 60, 10, 1);
+            this.drawLineInterpolated(70, 18, 68, 12, 1);
+        } else if (presetName === 'music') {
+            // Double Note
+            this.drawCircle(48, 44, 54, 44, 1);
+            this.drawCircle(72, 38, 78, 38, 1);
+            this.drawLineInterpolated(54, 44, 54, 18, 1);
+            this.drawLineInterpolated(78, 38, 78, 12, 1);
+            this.drawLineInterpolated(54, 18, 78, 12, 1);
+            this.drawLineInterpolated(54, 22, 78, 16, 1);
+        } else if (presetName === 'sun') {
+            // Sun core
+            this.drawCircle(cx, cy, cx + 12, cy, 1);
+            // 8 Rays
+            for (let a = 0; a < 360; a += 45) {
+                const rad = a * (Math.PI / 180);
+                const x1 = Math.round(cx + Math.cos(rad) * 16);
+                const y1 = Math.round(cy + Math.sin(rad) * 16);
+                const x2 = Math.round(cx + Math.cos(rad) * 24);
+                const y2 = Math.round(cy + Math.sin(rad) * 24);
+                this.drawLineInterpolated(x1, y1, x2, y2, 1);
+            }
         }
 
         this.renderFromMatrix();
         this.saveState();
-        App.showToast(`Loaded Shape: ${presetName.toUpperCase()} ✨`);
+        App.showToast(`Loaded Shape: ${presetName.toUpperCase()}`);
     }
 
     encode1BitBitmap() {

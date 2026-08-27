@@ -1,23 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ESP32 Smart Assistant - Autonomous AI Companion</title>
-    <meta name="description" content="Professional Cybernetic Neural Companion Dashboard for ESP32 Interactive Smart Assistant.">
+    <meta name="description"
+        content="Professional Cybernetic Neural Companion Dashboard for ESP32 Interactive Smart Assistant.">
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#7c8c66">
-    <link rel="icon" type="image/png" href="assets/icon.png">
-    <link rel="apple-touch-icon" href="assets/icon.png">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
     <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
     <!-- Top Command Header & Connection HUD (#7c8c66 Sage Header) -->
     <header class="app-header">
         <div class="brand-section">
-            <div class="brand-logo" style="background: transparent; border: none; padding: 0;">
-                <img src="assets/icon.png" alt="ESP32 Assistant Icon" style="width: 38px; height: 38px; object-fit: contain; filter: drop-shadow(0 0 8px rgba(34, 197, 94, 0.5));">
+            <div class="brand-logo">
+                <img src="assets/icon.png" alt="ESP32 Assistant Icon" class="app-brand-icon">
             </div>
             <div class="brand-text">
                 <h1>
@@ -43,7 +49,7 @@
             <button id="connectBtn" class="btn btn-primary">
                 <span class="material-symbols-outlined" style="font-size: 18px;">link</span> Connect
             </button>
-            
+
             <div id="connectionStatus" class="status-badge">
                 <span class="status-dot"></span>
                 <span id="statusText">Disconnected</span>
@@ -105,7 +111,8 @@
                         <canvas id="oledMirrorCanvas" class="oled-screen" width="128" height="64"></canvas>
                         <div style="display: flex; gap: 12px; margin-top: 18px;">
                             <button id="btnOledPrev" class="btn btn-secondary">
-                                <span class="material-symbols-outlined" style="font-size: 18px;">skip_previous</span> Prev
+                                <span class="material-symbols-outlined" style="font-size: 18px;">skip_previous</span>
+                                Prev
                             </button>
                             <button id="btnOledHome" class="btn btn-primary">
                                 <span class="material-symbols-outlined" style="font-size: 18px;">home</span> Home
@@ -164,16 +171,20 @@
                     </div>
 
                     <div style="padding-top: 12px; border-top: 1px solid var(--border-subtle);">
-                        <span class="switch-label" style="display: block; margin-bottom: 8px; font-size: 0.78rem; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.05em;">Quick Mood Triggers:</span>
+                        <span class="switch-label"
+                            style="display: block; margin-bottom: 8px; font-size: 0.78rem; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.05em;">Quick
+                            Mood Triggers:</span>
                         <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px;">
                             <button class="btn btn-secondary quick-mood-btn" data-mood="happy">
-                                <span class="material-symbols-outlined" style="font-size: 16px;">sentiment_satisfied</span> Happy
+                                <span class="material-symbols-outlined"
+                                    style="font-size: 16px;">sentiment_satisfied</span> Happy
                             </button>
                             <button class="btn btn-secondary quick-mood-btn" data-mood="love">
                                 <span class="material-symbols-outlined" style="font-size: 16px;">favorite</span> Love
                             </button>
                             <button class="btn btn-secondary quick-mood-btn" data-mood="excited">
-                                <span class="material-symbols-outlined" style="font-size: 16px;">celebration</span> Excited
+                                <span class="material-symbols-outlined" style="font-size: 16px;">celebration</span>
+                                Excited
                             </button>
                             <button class="btn btn-secondary quick-mood-btn" data-mood="wink">
                                 <span class="material-symbols-outlined" style="font-size: 16px;">visibility</span> Wink
@@ -186,23 +197,32 @@
                 <div class="card">
                     <div class="card-header">
                         <div class="card-title">
-                            <span class="material-symbols-outlined" style="color: var(--color-midnight);">thermostat</span>
+                            <span class="material-symbols-outlined"
+                                style="color: var(--color-midnight);">thermostat</span>
                             Atmospheric Climate
                         </div>
                         <span class="status-badge connected" id="weatherSummaryBadge">Sunny</span>
                     </div>
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
-                        <div style="background: #f8fafc; padding: 14px; border-radius: var(--radius-md); text-align: center; border: 1px solid var(--border-subtle);">
+                        <div
+                            style="background: #f8fafc; padding: 14px; border-radius: var(--radius-md); text-align: center; border: 1px solid var(--border-subtle);">
                             <div class="switch-subtext">Temperature</div>
-                            <div id="statTemp" class="font-mono" style="font-size: 1.6rem; font-weight: 700; color: var(--color-midnight); margin-top: 4px;">-- °C</div>
+                            <div id="statTemp" class="font-mono"
+                                style="font-size: 1.6rem; font-weight: 700; color: var(--color-midnight); margin-top: 4px;">
+                                -- °C</div>
                         </div>
-                        <div style="background: #f8fafc; padding: 14px; border-radius: var(--radius-md); text-align: center; border: 1px solid var(--border-subtle);">
+                        <div
+                            style="background: #f8fafc; padding: 14px; border-radius: var(--radius-md); text-align: center; border: 1px solid var(--border-subtle);">
                             <div class="switch-subtext">Relative Humidity</div>
-                            <div id="statHum" class="font-mono" style="font-size: 1.6rem; font-weight: 700; color: var(--color-midnight); margin-top: 4px;">-- %</div>
+                            <div id="statHum" class="font-mono"
+                                style="font-size: 1.6rem; font-weight: 700; color: var(--color-midnight); margin-top: 4px;">
+                                -- %</div>
                         </div>
                     </div>
-                    <div style="margin-top: 14px; font-size: 0.82rem; color: var(--text-secondary); text-align: center;">
-                        Location: <span id="statCity" class="font-mono" style="color: var(--text-primary); font-weight: 600;">Tirunelveli, IN</span>
+                    <div
+                        style="margin-top: 14px; font-size: 0.82rem; color: var(--text-secondary); text-align: center;">
+                        Location: <span id="statCity" class="font-mono"
+                            style="color: var(--text-primary); font-weight: 600;">Tirunelveli, IN</span>
                     </div>
                 </div>
 
@@ -216,21 +236,33 @@
                         <span class="status-badge" id="statPing">-- ms</span>
                     </div>
                     <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;">
-                        <div style="background: #f8fafc; padding: 14px; border-radius: var(--radius-md); border: 1px solid var(--border-subtle);">
+                        <div
+                            style="background: #f8fafc; padding: 14px; border-radius: var(--radius-md); border: 1px solid var(--border-subtle);">
                             <div class="switch-subtext">System Uptime</div>
-                            <div id="statUptime" class="font-mono" style="font-size: 1.05rem; font-weight: 700; color: var(--text-primary); margin-top: 4px;">0s</div>
+                            <div id="statUptime" class="font-mono"
+                                style="font-size: 1.05rem; font-weight: 700; color: var(--text-primary); margin-top: 4px;">
+                                0s</div>
                         </div>
-                        <div style="background: #f8fafc; padding: 14px; border-radius: var(--radius-md); border: 1px solid var(--border-subtle);">
+                        <div
+                            style="background: #f8fafc; padding: 14px; border-radius: var(--radius-md); border: 1px solid var(--border-subtle);">
                             <div class="switch-subtext">Free Heap RAM</div>
-                            <div id="statHeap" class="font-mono" style="font-size: 1.05rem; font-weight: 700; color: var(--status-emerald); margin-top: 4px;">-- KB</div>
+                            <div id="statHeap" class="font-mono"
+                                style="font-size: 1.05rem; font-weight: 700; color: var(--status-emerald); margin-top: 4px;">
+                                -- KB</div>
                         </div>
-                        <div style="background: #f8fafc; padding: 14px; border-radius: var(--radius-md); border: 1px solid var(--border-subtle);">
+                        <div
+                            style="background: #f8fafc; padding: 14px; border-radius: var(--radius-md); border: 1px solid var(--border-subtle);">
                             <div class="switch-subtext">Wi-Fi Signal (RSSI)</div>
-                            <div id="statRssi" class="font-mono" style="font-size: 1.05rem; font-weight: 700; color: var(--color-midnight); margin-top: 4px;">-- dBm</div>
+                            <div id="statRssi" class="font-mono"
+                                style="font-size: 1.05rem; font-weight: 700; color: var(--color-midnight); margin-top: 4px;">
+                                -- dBm</div>
                         </div>
-                        <div style="background: #f8fafc; padding: 14px; border-radius: var(--radius-md); border: 1px solid var(--border-subtle);">
+                        <div
+                            style="background: #f8fafc; padding: 14px; border-radius: var(--radius-md); border: 1px solid var(--border-subtle);">
                             <div class="switch-subtext">Active Arcade</div>
-                            <div id="statGame" class="font-mono" style="font-size: 1.05rem; font-weight: 700; color: var(--color-sage); margin-top: 4px;">None</div>
+                            <div id="statGame" class="font-mono"
+                                style="font-size: 1.05rem; font-weight: 700; color: var(--color-sage); margin-top: 4px;">
+                                None</div>
                         </div>
                     </div>
                 </div>
@@ -312,8 +344,10 @@
                 </div>
                 <div style="display: flex; align-items: center; gap: 16px;">
                     <span class="switch-subtext" style="font-size: 0.85rem; font-weight: 500;">Cycle Interval:</span>
-                    <input type="range" id="pageIntervalSlider" min="2" max="30" value="8" style="flex: 1; accent-color: var(--color-midnight);">
-                    <span id="pageIntervalLabel" class="font-mono" style="font-weight: 700; color: var(--color-midnight); width: 45px;">8s</span>
+                    <input type="range" id="pageIntervalSlider" min="2" max="30" value="8"
+                        style="flex: 1; accent-color: var(--color-midnight);">
+                    <span id="pageIntervalLabel" class="font-mono"
+                        style="font-weight: 700; color: var(--color-midnight); width: 45px;">8s</span>
                 </div>
             </div>
 
@@ -354,7 +388,8 @@
                     <div class="drawing-canvas-wrapper">
                         <canvas id="drawingCanvas" width="512" height="256"></canvas>
                         <div class="switch-subtext" style="margin-top: 10px; color: #94a3b8;">
-                            Resolution: 128 x 64 pixels (8,192 px) | 1-bit SSD1306 Buffer | Keyboard: Ctrl+Z Undo / Ctrl+Y Redo
+                            Resolution: 128 x 64 pixels (8,192 px) | 1-bit SSD1306 Buffer | Keyboard: Ctrl+Z Undo /
+                            Ctrl+Y Redo
                         </div>
                     </div>
 
@@ -365,19 +400,23 @@
                                 <span class="material-symbols-outlined" style="font-size: 16px;">edit</span> Pencil
                             </button>
                             <button class="tool-btn" data-tool="eraser">
-                                <span class="material-symbols-outlined" style="font-size: 16px;">ink_eraser</span> Eraser
+                                <span class="material-symbols-outlined" style="font-size: 16px;">ink_eraser</span>
+                                Eraser
                             </button>
                             <button class="tool-btn" data-tool="line">
-                                <span class="material-symbols-outlined" style="font-size: 16px;">horizontal_rule</span> Line
+                                <span class="material-symbols-outlined" style="font-size: 16px;">horizontal_rule</span>
+                                Line
                             </button>
                             <button class="tool-btn" data-tool="rect">
                                 <span class="material-symbols-outlined" style="font-size: 16px;">crop_square</span> Rect
                             </button>
                             <button class="tool-btn" data-tool="circle">
-                                <span class="material-symbols-outlined" style="font-size: 16px;">radio_button_unchecked</span> Circle
+                                <span class="material-symbols-outlined"
+                                    style="font-size: 16px;">radio_button_unchecked</span> Circle
                             </button>
                             <button class="tool-btn" data-tool="fill">
-                                <span class="material-symbols-outlined" style="font-size: 16px;">format_color_fill</span> Fill
+                                <span class="material-symbols-outlined"
+                                    style="font-size: 16px;">format_color_fill</span> Fill
                             </button>
                         </div>
 
@@ -401,6 +440,24 @@
                             <button class="btn btn-secondary preset-btn" data-preset="ghost">
                                 <span class="material-symbols-outlined" style="font-size: 16px;">blur_on</span> Ghost
                             </button>
+                            <button class="btn btn-secondary preset-btn" data-preset="space_invader">
+                                <span class="material-symbols-outlined" style="font-size: 16px;">rocket_launch</span> Invader
+                            </button>
+                            <button class="btn btn-secondary preset-btn" data-preset="gamepad">
+                                <span class="material-symbols-outlined" style="font-size: 16px;">sports_esports</span> Gamepad
+                            </button>
+                            <button class="btn btn-secondary preset-btn" data-preset="diamond">
+                                <span class="material-symbols-outlined" style="font-size: 16px;">diamond</span> Diamond
+                            </button>
+                            <button class="btn btn-secondary preset-btn" data-preset="coffee">
+                                <span class="material-symbols-outlined" style="font-size: 16px;">coffee</span> Coffee
+                            </button>
+                            <button class="btn btn-secondary preset-btn" data-preset="music">
+                                <span class="material-symbols-outlined" style="font-size: 16px;">music_note</span> Music
+                            </button>
+                            <button class="btn btn-secondary preset-btn" data-preset="sun">
+                                <span class="material-symbols-outlined" style="font-size: 16px;">wb_sunny</span> Sun
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -412,7 +469,8 @@
             <div class="card" style="margin-bottom: 20px;">
                 <div class="card-header">
                     <div class="card-title">
-                        <span class="material-symbols-outlined" style="color: var(--color-midnight);">sports_esports</span>
+                        <span class="material-symbols-outlined"
+                            style="color: var(--color-midnight);">sports_esports</span>
                         Select Active Retro Game
                     </div>
                     <span id="activeGameTitle" class="status-badge">No Game Active</span>
@@ -513,7 +571,8 @@
                     <!-- Jump / Action Touch -->
                     <div style="display: flex; flex-direction: column; align-items: center; gap: 12px;">
                         <div class="switch-subtext">Action Trigger</div>
-                        <button id="btnGameAction" class="btn btn-primary" style="width: 120px; height: 120px; border-radius: 50%; font-size: 0.95rem; display: flex; flex-direction: column; gap: 4px;">
+                        <button id="btnGameAction" class="btn btn-primary"
+                            style="width: 120px; height: 120px; border-radius: 50%; font-size: 0.95rem; display: flex; flex-direction: column; gap: 4px;">
                             <span class="material-symbols-outlined" style="font-size: 28px;">touch_app</span>
                             JUMP / TOUCH
                         </button>
@@ -521,7 +580,9 @@
 
                     <!-- Tic-Tac-Toe 3x3 Grid Overlay -->
                     <div id="tttContainer" style="display: none; text-align: center;">
-                        <div id="tttStatusBanner" class="switch-subtext" style="font-weight: 700; color: var(--color-midnight); margin-bottom: 6px;">Your Turn (X)</div>
+                        <div id="tttStatusBanner" class="switch-subtext"
+                            style="font-weight: 700; color: var(--color-midnight); margin-bottom: 6px;">Your Turn (X)
+                        </div>
                         <div class="ttt-grid">
                             <div class="ttt-cell" data-r="0" data-c="0"></div>
                             <div class="ttt-cell" data-r="0" data-c="1"></div>
@@ -533,18 +594,23 @@
                             <div class="ttt-cell" data-r="2" data-c="1"></div>
                             <div class="ttt-cell" data-r="2" data-c="2"></div>
                         </div>
-                        <button id="btnTttReset" class="btn btn-secondary" style="margin-top: 6px; padding: 4px 14px; font-size: 0.76rem;">
-                            <span class="material-symbols-outlined" style="font-size: 14px;">restart_alt</span> Reset Board
+                        <button id="btnTttReset" class="btn btn-secondary"
+                            style="margin-top: 6px; padding: 4px 14px; font-size: 0.76rem;">
+                            <span class="material-symbols-outlined" style="font-size: 14px;">restart_alt</span> Reset
+                            Board
                         </button>
                     </div>
                 </div>
 
                 <!-- Keyboard Controls HUD Guide -->
                 <div class="keyboard-hud-guide">
-                    <span style="font-family: 'Space Grotesk', sans-serif; font-size: 0.82rem; font-weight: 700; color: var(--color-midnight); display: flex; align-items: center; gap: 6px;">
-                        <span class="material-symbols-outlined" style="font-size: 18px;">keyboard</span> Keyboard Controls:
+                    <span
+                        style="font-family: 'Space Grotesk', sans-serif; font-size: 0.82rem; font-weight: 700; color: var(--color-midnight); display: flex; align-items: center; gap: 6px;">
+                        <span class="material-symbols-outlined" style="font-size: 18px;">keyboard</span> Keyboard
+                        Controls:
                     </span>
-                    <div class="kbd-badge"><kbd>W / ▲</kbd> <kbd>S / ▼</kbd> <kbd>A / ◀</kbd> <kbd>D / ▶</kbd> Move</div>
+                    <div class="kbd-badge"><kbd>W / ▲</kbd> <kbd>S / ▼</kbd> <kbd>A / ◀</kbd> <kbd>D / ▶</kbd> Move
+                    </div>
                     <div class="kbd-badge"><kbd>Space</kbd> / <kbd>Enter</kbd> Jump / Touch</div>
                     <div class="kbd-badge"><kbd>Numpad 789 / 456 / 123</kbd> Grid Cells</div>
                     <div class="kbd-badge"><kbd>P</kbd> Pause</div>
@@ -566,17 +632,21 @@
                 <div style="max-width: 600px; display: flex; flex-direction: column; gap: 16px;">
                     <div>
                         <label class="switch-label">Notification Title</label>
-                        <input type="text" id="notifTitleInput" placeholder="ALERT" value="ALERT" style="width: 100%; margin-top: 6px; padding: 10px; background: #f8fafc; border: 1px solid var(--border-strong); color: var(--text-primary); border-radius: var(--radius-md);">
+                        <input type="text" id="notifTitleInput" placeholder="ALERT" value="ALERT"
+                            style="width: 100%; margin-top: 6px; padding: 10px; background: #f8fafc; border: 1px solid var(--border-strong); color: var(--text-primary); border-radius: var(--radius-md);">
                     </div>
                     <div>
                         <label class="switch-label">Message Body</label>
-                        <textarea id="notifMsgInput" rows="3" placeholder="Enter message text..." style="width: 100%; margin-top: 6px; padding: 10px; background: #f8fafc; border: 1px solid var(--border-strong); color: var(--text-primary); border-radius: var(--radius-md);">System Online! Welcome Shiva.</textarea>
+                        <textarea id="notifMsgInput" rows="3" placeholder="Enter message text..."
+                            style="width: 100%; margin-top: 6px; padding: 10px; background: #f8fafc; border: 1px solid var(--border-strong); color: var(--text-primary); border-radius: var(--radius-md);">System Online! Welcome Shiva.</textarea>
                     </div>
                     <div style="display: flex; gap: 12px; align-items: center;">
                         <label class="switch-label">Duration (ms):</label>
-                        <input type="number" id="notifDurInput" value="3500" style="width: 110px; padding: 8px; background: #f8fafc; border: 1px solid var(--border-strong); color: var(--text-primary); border-radius: var(--radius-md);">
+                        <input type="number" id="notifDurInput" value="3500"
+                            style="width: 110px; padding: 8px; background: #f8fafc; border: 1px solid var(--border-strong); color: var(--text-primary); border-radius: var(--radius-md);">
                         <button id="btnSendNotif" class="btn btn-primary" style="flex: 1;">
-                            <span class="material-symbols-outlined" style="font-size: 18px;">campaign</span> Push Notification
+                            <span class="material-symbols-outlined" style="font-size: 18px;">campaign</span> Push
+                            Notification
                         </button>
                     </div>
                 </div>
@@ -590,7 +660,8 @@
                 <div class="card">
                     <div class="card-header">
                         <div class="card-title">
-                            <span class="material-symbols-outlined" style="color: var(--color-midnight);">display_settings</span>
+                            <span class="material-symbols-outlined"
+                                style="color: var(--color-midnight);">display_settings</span>
                             Display & Hardware Configuration
                         </div>
                     </div>
@@ -598,8 +669,10 @@
                         <div>
                             <div class="switch-label" style="margin-bottom: 6px;">OLED Contrast & Brightness</div>
                             <div style="display: flex; align-items: center; gap: 12px;">
-                                <input type="range" id="settingBrightnessSlider" min="1" max="255" value="255" style="flex: 1; accent-color: var(--color-midnight);">
-                                <span id="settingBrightnessLabel" class="font-mono" style="font-weight: 700; color: var(--color-midnight); width: 40px;">255</span>
+                                <input type="range" id="settingBrightnessSlider" min="1" max="255" value="255"
+                                    style="flex: 1; accent-color: var(--color-midnight);">
+                                <span id="settingBrightnessLabel" class="font-mono"
+                                    style="font-weight: 700; color: var(--color-midnight); width: 40px;">255</span>
                             </div>
                         </div>
 
@@ -619,8 +692,10 @@
                                 <div class="switch-label">PWA Standalone App</div>
                                 <div class="switch-subtext">Install on Home Screen / Desktop</div>
                             </div>
-                            <button id="pwaInstallBtn" class="btn btn-secondary" style="padding: 6px 12px; font-size: 0.78rem;">
-                                <span class="material-symbols-outlined" style="font-size: 16px;">install_mobile</span> Install App
+                            <button id="pwaInstallBtn" class="btn btn-secondary"
+                                style="padding: 6px 12px; font-size: 0.78rem;">
+                                <span class="material-symbols-outlined" style="font-size: 16px;">install_mobile</span>
+                                Install App
                             </button>
                         </div>
                     </div>
@@ -630,29 +705,35 @@
                 <div class="card">
                     <div class="card-header">
                         <div class="card-title">
-                            <span class="material-symbols-outlined" style="color: var(--color-sage);">wifi_password</span>
+                            <span class="material-symbols-outlined"
+                                style="color: var(--color-sage);">wifi_password</span>
                             Wi-Fi & ESP32 System Control
                         </div>
                     </div>
                     <div style="display: flex; flex-direction: column; gap: 14px;">
                         <div>
                             <label class="switch-label">Wi-Fi SSID</label>
-                            <input type="text" id="settingSsidInput" value="vivo T4 5G" style="width: 100%; margin-top: 4px; padding: 8px 12px; background: #f8fafc; border: 1px solid var(--border-strong); color: var(--text-primary); border-radius: var(--radius-md);">
+                            <input type="text" id="settingSsidInput" value="vivo T4 5G"
+                                style="width: 100%; margin-top: 4px; padding: 8px 12px; background: #f8fafc; border: 1px solid var(--border-strong); color: var(--text-primary); border-radius: var(--radius-md);">
                         </div>
                         <div>
                             <label class="switch-label">Wi-Fi Password</label>
-                            <input type="password" id="settingPassInput" value="1234567890" style="width: 100%; margin-top: 4px; padding: 8px 12px; background: #f8fafc; border: 1px solid var(--border-strong); color: var(--text-primary); border-radius: var(--radius-md);">
+                            <input type="password" id="settingPassInput" value="1234567890"
+                                style="width: 100%; margin-top: 4px; padding: 8px 12px; background: #f8fafc; border: 1px solid var(--border-strong); color: var(--text-primary); border-radius: var(--radius-md);">
                         </div>
                         <button id="btnSaveWifi" class="btn btn-primary">
-                            <span class="material-symbols-outlined" style="font-size: 18px;">save</span> Save Wi-Fi & Reconnect
+                            <span class="material-symbols-outlined" style="font-size: 18px;">save</span> Save Wi-Fi &
+                            Reconnect
                         </button>
-                        
+
                         <div style="display: flex; gap: 10px; margin-top: 8px;">
                             <button id="btnRebootEsp" class="btn btn-secondary" style="flex: 1;">
-                                <span class="material-symbols-outlined" style="font-size: 16px;">restart_alt</span> Reboot ESP32
+                                <span class="material-symbols-outlined" style="font-size: 16px;">restart_alt</span>
+                                Reboot ESP32
                             </button>
                             <button id="btnFactoryReset" class="btn btn-danger" style="flex: 1;">
-                                <span class="material-symbols-outlined" style="font-size: 16px;">warning</span> Factory Reset
+                                <span class="material-symbols-outlined" style="font-size: 16px;">warning</span> Factory
+                                Reset
                             </button>
                         </div>
                     </div>
@@ -668,43 +749,55 @@
                 <div class="card-title" style="color: var(--color-midnight);">
                     <span class="material-symbols-outlined">cloud</span> Cloud Hosting & Tunnel Guide
                 </div>
-                <button class="modal-close" onclick="document.getElementById('cloudModal').classList.remove('open')">&times;</button>
+                <button class="modal-close"
+                    onclick="document.getElementById('cloudModal').classList.remove('open')">&times;</button>
             </div>
             <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 16px;">
-                Host this web dashboard in the cloud (GitHub Pages, Vercel, Netlify) so anyone can access it from their phone or laptop anywhere in the world!
+                Host this web dashboard in the cloud (GitHub Pages, Vercel, Netlify) so anyone can access it from their
+                phone or laptop anywhere in the world!
             </div>
 
             <div class="guide-step">
                 <div class="guide-step-title">
-                    <span class="material-symbols-outlined" style="font-size: 18px;">cloud</span> Option 1: Deploy with Cloudflare Pages (Recommended)
+                    <span class="material-symbols-outlined" style="font-size: 18px;">cloud</span> Option 1: Deploy with
+                    Cloudflare Pages (Recommended)
                 </div>
                 <div>Deploy instantly via Wrangler CLI with 1 command (unlimited global edge hosting):</div>
                 <div class="code-box">
                     <span>npx wrangler pages deploy . --project-name=esp32-assistant</span>
                 </div>
-                <div style="margin-top: 6px; font-size: 0.78rem;">Or drag-and-drop the <code>Smart_Assistant_Web</code> folder in the <strong>Cloudflare Dashboard &gt; Workers &amp; Pages &gt; Create &gt; Pages &gt; Upload assets</strong>.</div>
+                <div style="margin-top: 6px; font-size: 0.78rem;">Or drag-and-drop the <code>Smart_Assistant_Web</code>
+                    folder in the <strong>Cloudflare Dashboard &gt; Workers &amp; Pages &gt; Create &gt; Pages &gt;
+                        Upload assets</strong>.</div>
             </div>
 
             <div class="guide-step">
                 <div class="guide-step-title">
-                    <span class="material-symbols-outlined" style="font-size: 18px;">vpn_lock</span> Option 2: Cloudflare Tunnel (Free Worldwide ESP32 Access)
+                    <span class="material-symbols-outlined" style="font-size: 18px;">vpn_lock</span> Option 2:
+                    Cloudflare Tunnel (Free Worldwide ESP32 Access)
                 </div>
                 <div>Forward your local ESP32 IP securely with Cloudflare Quick Tunnel:</div>
                 <div class="code-box">
                     <span>cloudflared tunnel --url http://192.168.1.105:80</span>
                 </div>
-                <div style="margin-top: 6px; font-size: 0.78rem;">Copy the generated <code>https://xxxx.trycloudflare.com</code> URL into the top connection bar!</div>
+                <div style="margin-top: 6px; font-size: 0.78rem;">Copy the generated
+                    <code>https://xxxx.trycloudflare.com</code> URL into the top connection bar!
+                </div>
             </div>
 
             <div class="guide-step">
                 <div class="guide-step-title">
-                    <span class="material-symbols-outlined" style="font-size: 18px;">public</span> Option 3: GitHub Pages &amp; Vercel
+                    <span class="material-symbols-outlined" style="font-size: 18px;">public</span> Option 3: GitHub
+                    Pages &amp; Vercel
                 </div>
-                <div>Deploy via <code>npx vercel --prod</code> or enable GitHub Pages in your repository settings under <strong>Settings &gt; Pages</strong>.</div>
+                <div>Deploy via <code>npx vercel --prod</code> or enable GitHub Pages in your repository settings under
+                    <strong>Settings &gt; Pages</strong>.
+                </div>
             </div>
 
             <div style="text-align: right; margin-top: 16px;">
-                <button class="btn btn-primary" onclick="document.getElementById('cloudModal').classList.remove('open')">Got it!</button>
+                <button class="btn btn-primary"
+                    onclick="document.getElementById('cloudModal').classList.remove('open')">Got it!</button>
             </div>
         </div>
     </div>
@@ -723,4 +816,5 @@
     <script src="js/settings.js"></script>
     <script src="js/app.js"></script>
 </body>
+
 </html>
