@@ -1,150 +1,129 @@
 /**
- * SpotifyManager - Neural Spotify Player & OLED Visualizer Synchronizer
- * Handles playback simulation, preset playlists, iframe embeds, audio visualizer,
- * and real-time hardware sync with the ESP32 OLED display.
+ * SpotifyManager - Real Official Spotify Web Player & ESP32 OLED Live Sync
+ * Embeds official Spotify playlists/tracks directly and bridges real song telemetry
+ * from Spotify Web API or manual inputs to the physical ESP32 OLED screen.
  */
 const SpotifyManager = {
-    // Playback State
+    // Current Active Track State
+    currentTitle: "Shiva's Favorite Hits",
+    currentArtist: "Tamil Mix & Classics",
+    progressSec: 45,
+    durationSec: 215,
     isPlaying: true,
-    progress: 45,
-    duration: 195,
-    volume: 80,
-    isShuffle: false,
-    isRepeat: false,
-    currentTrackIndex: 0,
-    timerInterval: null,
+    activePreset: "custom1",
+
+    // Spotify Web API Token & Polling
+    apiToken: localStorage.getItem('spotify_access_token') || '',
+    apiPollInterval: null,
     visualizerAnimId: null,
 
-    // Curated Track Catalog
-    tracks: [
-        {
-            title: "Midnight Cyber Beats",
-            artist: "Synthwave Lo-Fi",
-            album: "Neon Cyber Companion OST",
-            duration: 195,
-            preset: "lofi",
-            embedUrl: "https://open.spotify.com/embed/playlist/37i9dQZF1DXdLEN7aqioXM?utm_source=generator&theme=0"
+    // Real Playlist Embed URLs
+    playlists: {
+        custom1: {
+            title: "Shiva's Favorite Hits",
+            artist: "Tamil Mix & Classics",
+            embedUrl: "https://open.spotify.com/embed/playlist/3a8vuZph9RQsd2uLSVQ6PN?utm_source=generator&theme=0"
         },
-        {
-            title: "Neon Horizons",
-            artist: "Cyberpunk Audio Lab",
-            album: "Grid City 2088",
-            duration: 210,
-            preset: "synthwave",
-            embedUrl: "https://open.spotify.com/embed/playlist/37i9dQZF1DXdLEN7aqioXM?utm_source=generator&theme=0"
+        ar_rahman: {
+            title: "AR Rahman Masterpieces",
+            artist: "A.R. Rahman (1992~2026)",
+            embedUrl: "https://open.spotify.com/embed/playlist/6PHSBLLzNLHjobls3gd3kg?utm_source=generator&theme=0"
         },
-        {
-            title: "Coffee & Code",
-            artist: "Chilled Cow Vibes",
-            album: "Dev Flow Sessions",
-            duration: 165,
-            preset: "electronic",
-            embedUrl: "https://open.spotify.com/embed/playlist/37i9dQZF1DXdLEN7aqioXM?utm_source=generator&theme=0"
+        trending_tamil: {
+            title: "Trending Now Tamil",
+            artist: "Official Hot Hits Tamil",
+            embedUrl: "https://open.spotify.com/embed/playlist/37i9dQZF1DX4Im4BTs2WMg?utm_source=generator&theme=0"
         },
-        {
-            title: "Electric Dreams",
-            artist: "Retro 80s Grid",
-            album: "Outrun Nostalgia",
-            duration: 240,
-            preset: "tophits",
-            embedUrl: "https://open.spotify.com/embed/playlist/37i9dQZF1DXcBWIGoYBM5M?utm_source=generator&theme=0"
+        travel_tamil: {
+            title: "90's Bus Travel Tamil",
+            artist: "Ilaiyaraaja & SPB Classics",
+            embedUrl: "https://open.spotify.com/embed/playlist/32O1UkxKFbhFGZrzYccTCc?utm_source=generator&theme=0"
         },
-        {
-            title: "Neural Synapse Flow",
-            artist: "Nexus AI Engine",
-            album: "Smart Companion v2.4",
-            duration: 180,
-            preset: "lofi",
-            embedUrl: "https://open.spotify.com/embed/playlist/37i9dQZF1DXdLEN7aqioXM?utm_source=generator&theme=0"
+        energy_tamil: {
+            title: "Tamil Energy Beats",
+            artist: "High Tempo Tamil Hits",
+            embedUrl: "https://open.spotify.com/embed/playlist/4Xg9aD8rEg9lIALLQclLg6?utm_source=generator&theme=0"
         }
-    ],
+    },
 
     init() {
         this.bindEvents();
-        this.startTicker();
         this.startVisualizer();
-        this.updateUi();
+
+        // Restore saved Spotify token if present
+        const tokenInput = document.getElementById('spotifyAccessTokenInput');
+        if (tokenInput && this.apiToken) {
+            tokenInput.value = this.apiToken;
+            this.startSpotifyApiPolling();
+        }
+
+        // Initial sync to ESP32
         this.syncToEsp32();
-        console.log('[Spotify] Neural Audio Player & Visualizer initialized.');
+        console.log('[Spotify] Real Spotify Player & ESP32 Bridge initialized.');
     },
 
     bindEvents() {
-        // Play / Pause
-        const playPauseBtn = document.getElementById('btnSpotifyPlayPause');
-        if (playPauseBtn) {
-            playPauseBtn.addEventListener('click', () => this.togglePlayPause());
-        }
-
-        // Next / Prev
-        const nextBtn = document.getElementById('btnSpotifyNext');
-        if (nextBtn) {
-            nextBtn.addEventListener('click', () => this.nextTrack());
-        }
-
-        const prevBtn = document.getElementById('btnSpotifyPrev');
-        if (prevBtn) {
-            prevBtn.addEventListener('click', () => this.prevTrack());
-        }
-
-        // Shuffle / Repeat
-        const shuffleBtn = document.getElementById('btnSpotifyShuffle');
-        if (shuffleBtn) {
-            shuffleBtn.addEventListener('click', () => {
-                this.isShuffle = !this.isShuffle;
-                shuffleBtn.classList.toggle('active', this.isShuffle);
-                App.showToast(this.isShuffle ? 'Shuffle Enabled 🔀' : 'Shuffle Disabled');
+        // Quick Playlist Pills
+        document.querySelectorAll('.spotify-quick-pill').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const presetKey = btn.getAttribute('data-preset');
+                this.loadPreset(presetKey);
             });
-        }
-
-        const repeatBtn = document.getElementById('btnSpotifyRepeat');
-        if (repeatBtn) {
-            repeatBtn.addEventListener('click', () => {
-                this.isRepeat = !this.isRepeat;
-                repeatBtn.classList.toggle('active', this.isRepeat);
-                App.showToast(this.isRepeat ? 'Repeat Track Active 🔁' : 'Repeat Disabled');
-            });
-        }
-
-        // Seek Progress Slider
-        const progSlider = document.getElementById('spotifyProgressSlider');
-        if (progSlider) {
-            progSlider.addEventListener('input', (e) => {
-                this.progress = parseInt(e.target.value, 10);
-                this.updateTimeDisplay();
-            });
-            progSlider.addEventListener('change', () => {
-                this.syncToEsp32();
-            });
-        }
-
-        // Volume Slider
-        const volSlider = document.getElementById('spotifyVolumeSlider');
-        const volLabel = document.getElementById('spotifyVolumeLabel');
-        if (volSlider) {
-            volSlider.addEventListener('input', (e) => {
-                this.volume = parseInt(e.target.value, 10);
-                if (volLabel) volLabel.textContent = `${this.volume}%`;
-            });
-        }
+        });
 
         // Push to OLED Now
         const pushOledBtn = document.getElementById('btnPushSpotifyToOled');
         if (pushOledBtn) {
             pushOledBtn.addEventListener('click', () => {
-                this.syncToEsp32(true);
-                App.showToast('Pushed Spotify Stream to ESP32 OLED! ♫');
+                this.readInputsAndSync(true);
+                App.showToast('Pushed Real Song to ESP32 OLED! ♫');
             });
         }
 
-        // Preset Playlist Cards
-        document.querySelectorAll('.spotify-preset-card').forEach(card => {
-            card.addEventListener('click', () => {
-                const preset = card.getAttribute('data-preset');
-                document.querySelectorAll('.spotify-preset-card').forEach(c => c.classList.remove('active'));
-                card.classList.add('active');
-                this.loadPreset(preset);
+        // Toggle Play/Pause on OLED
+        const togglePlayBtn = document.getElementById('btnToggleOledPlay');
+        const playIcon = document.getElementById('oledPlayIcon');
+        if (togglePlayBtn) {
+            togglePlayBtn.addEventListener('click', () => {
+                this.isPlaying = !this.isPlaying;
+                if (playIcon) playIcon.textContent = this.isPlaying ? 'pause' : 'play_arrow';
+                this.syncToEsp32();
+                App.showToast(this.isPlaying ? 'ESP32 Status: Playing ▶' : 'ESP32 Status: Paused ⏸');
             });
-        });
+        }
+
+        // Real-time text changes in Song Title & Artist
+        const titleInput = document.getElementById('liveSongTitleInput');
+        const artistInput = document.getElementById('liveArtistInput');
+        if (titleInput) {
+            titleInput.addEventListener('input', () => {
+                this.currentTitle = titleInput.value.trim() || 'Spotify Stream';
+                this.syncToEsp32();
+            });
+        }
+        if (artistInput) {
+            artistInput.addEventListener('input', () => {
+                this.currentArtist = artistInput.value.trim() || 'Spotify Audio';
+                this.syncToEsp32();
+            });
+        }
+
+        // Connect Real Spotify Web API (OAuth Token)
+        const connectApiBtn = document.getElementById('btnConnectSpotifyApi');
+        const tokenInput = document.getElementById('spotifyAccessTokenInput');
+        if (connectApiBtn && tokenInput) {
+            connectApiBtn.addEventListener('click', () => {
+                const token = tokenInput.value.trim();
+                if (token) {
+                    this.apiToken = token;
+                    localStorage.setItem('spotify_access_token', token);
+                    this.startSpotifyApiPolling();
+                    App.showToast('Connecting to Spotify Web API... 🎧');
+                } else {
+                    App.showToast('Please enter a valid Spotify OAuth token');
+                }
+            });
+        }
 
         // Load Custom Spotify URL
         const loadUrlBtn = document.getElementById('btnLoadSpotifyUrl');
@@ -157,82 +136,42 @@ const SpotifyManager = {
                 }
             });
             urlInput.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter') {
-                    loadUrlBtn.click();
-                }
+                if (e.key === 'Enter') loadUrlBtn.click();
             });
         }
     },
 
-    togglePlayPause() {
-        this.isPlaying = !this.isPlaying;
-        const disc = document.getElementById('spotifyVinylDisc');
-        const icon = document.getElementById('spotifyPlayIcon');
-        const badge = document.getElementById('spotifyPlaybackBadge');
+    loadPreset(presetKey) {
+        if (!this.playlists[presetKey]) return;
 
-        if (disc) {
-            disc.classList.toggle('playing', this.isPlaying);
-        }
-        if (icon) {
-            icon.textContent = this.isPlaying ? 'pause' : 'play_arrow';
-        }
-        if (badge) {
-            badge.textContent = this.isPlaying ? 'Streaming Active' : 'Playback Paused';
-            badge.className = this.isPlaying ? 'status-badge connected' : 'status-badge';
+        const data = this.playlists[presetKey];
+        this.activePreset = presetKey;
+        this.currentTitle = data.title;
+        this.currentArtist = data.artist;
+
+        // Update pills
+        document.querySelectorAll('.spotify-quick-pill').forEach(p => {
+            p.classList.toggle('active', p.getAttribute('data-preset') === presetKey);
+        });
+
+        // Update iframe embed at the top
+        const iframe = document.getElementById('spotifyIframe');
+        if (iframe) {
+            iframe.src = data.embedUrl;
         }
 
-        this.syncToEsp32();
-        App.showToast(this.isPlaying ? 'Spotify Playing ▶' : 'Spotify Paused ⏸');
-    },
+        // Update input boxes
+        const titleInput = document.getElementById('liveSongTitleInput');
+        const artistInput = document.getElementById('liveArtistInput');
+        if (titleInput) titleInput.value = this.currentTitle;
+        if (artistInput) artistInput.value = this.currentArtist;
 
-    nextTrack() {
-        if (this.isShuffle) {
-            this.currentTrackIndex = Math.floor(Math.random() * this.tracks.length);
-        } else {
-            this.currentTrackIndex = (this.currentTrackIndex + 1) % this.tracks.length;
-        }
-        this.progress = 0;
-        this.updateUi();
-        this.syncToEsp32();
-        const current = this.tracks[this.currentTrackIndex];
-        App.showToast(`Track: ${current.title} ♫`);
-    },
-
-    prevTrack() {
-        if (this.progress > 4) {
-            this.progress = 0;
-        } else {
-            this.currentTrackIndex = (this.currentTrackIndex - 1 + this.tracks.length) % this.tracks.length;
-            this.progress = 0;
-        }
-        this.updateUi();
-        this.syncToEsp32();
-        const current = this.tracks[this.currentTrackIndex];
-        App.showToast(`Track: ${current.title} ♫`);
-    },
-
-    loadPreset(presetName) {
-        const idx = this.tracks.findIndex(t => t.preset === presetName);
-        if (idx !== -1) {
-            this.currentTrackIndex = idx;
-            this.progress = 0;
-            this.isPlaying = true;
-            this.updateUi();
-            this.syncToEsp32();
-
-            // Update iframe embed if provided
-            const iframe = document.getElementById('spotifyIframe');
-            if (iframe && this.tracks[idx].embedUrl) {
-                iframe.src = this.tracks[idx].embedUrl;
-            }
-            App.showToast(`Loaded Preset: ${this.tracks[idx].title}`);
-        }
+        this.syncToEsp32(true);
+        App.showToast(`Loaded: ${data.title} ♫`);
     },
 
     loadCustomUrl(rawUrl) {
         let embedSrc = rawUrl;
-        // Transform standard open.spotify.com link into embed link
-        // Example: https://open.spotify.com/track/123 -> https://open.spotify.com/embed/track/123?utm_source=generator&theme=0
         if (embedSrc.includes('open.spotify.com/') && !embedSrc.includes('/embed/')) {
             embedSrc = embedSrc.replace('open.spotify.com/', 'open.spotify.com/embed/');
             if (!embedSrc.includes('?')) embedSrc += '?utm_source=generator&theme=0';
@@ -243,82 +182,108 @@ const SpotifyManager = {
             iframe.src = embedSrc;
         }
 
-        // Parse human-readable title if possible
-        const cleanTitle = rawUrl.split('/').pop().split('?')[0].replace(/[-_]/g, ' ') || 'Spotify Stream';
-        this.tracks[this.currentTrackIndex].title = cleanTitle.toUpperCase();
-        this.progress = 0;
-        this.isPlaying = true;
-        this.updateUi();
+        const cleanTitle = rawUrl.split('/').pop().split('?')[0].replace(/[-_]/g, ' ') || 'Custom Spotify Track';
+        this.currentTitle = cleanTitle.toUpperCase();
+        const titleInput = document.getElementById('liveSongTitleInput');
+        if (titleInput) titleInput.value = this.currentTitle;
+
         this.syncToEsp32(true);
-        App.showToast('Loaded Custom Spotify Embed! ♫');
+        App.showToast('Loaded Custom Spotify Stream! ♫');
     },
 
-    updateUi() {
-        const track = this.tracks[this.currentTrackIndex];
-        const titleEl = document.getElementById('spotifyTrackTitle');
-        const artistEl = document.getElementById('spotifyArtistName');
-        const albumEl = document.getElementById('spotifyAlbumName');
-        const progSlider = document.getElementById('spotifyProgressSlider');
+    readInputsAndSync(forceSwitchPage = false) {
+        const titleInput = document.getElementById('liveSongTitleInput');
+        const artistInput = document.getElementById('liveArtistInput');
+        if (titleInput) this.currentTitle = titleInput.value.trim() || 'Spotify Stream';
+        if (artistInput) this.currentArtist = artistInput.value.trim() || 'Spotify Audio';
+        this.syncToEsp32(forceSwitchPage);
+    },
 
-        if (titleEl) titleEl.textContent = track.title;
-        if (artistEl) artistEl.textContent = track.artist;
-        if (albumEl) albumEl.textContent = `Album: ${track.album}`;
+    syncToEsp32(forceSwitchPage = false) {
+        const payload = {
+            type: 'spotify_track',
+            title: this.currentTitle,
+            artist: this.currentArtist,
+            progress: this.progressSec,
+            duration: this.durationSec,
+            playing: this.isPlaying
+        };
 
-        if (progSlider) {
-            progSlider.max = track.duration;
-            progSlider.value = this.progress;
+        if (typeof Connection !== 'undefined') {
+            Connection.sendWs(payload);
+            if (forceSwitchPage) {
+                Connection.sendWs({ type: 'set_page', page: 'spotify' });
+            }
+        }
+    },
+
+    startSpotifyApiPolling() {
+        if (!this.apiToken) return;
+        if (this.apiPollInterval) clearInterval(this.apiPollInterval);
+
+        const badge = document.getElementById('spotifyApiStatusBadge');
+        if (badge) {
+            badge.textContent = 'API Live Polling';
+            badge.className = 'status-badge connected';
         }
 
-        this.updateTimeDisplay();
+        // Poll immediately and then every 2000ms
+        this.pollSpotifyCurrentlyPlaying();
+        this.apiPollInterval = setInterval(() => {
+            this.pollSpotifyCurrentlyPlaying();
+        }, 2000);
     },
 
-    updateTimeDisplay() {
-        const track = this.tracks[this.currentTrackIndex];
-        const elapsedEl = document.getElementById('spotifyTimeElapsed');
-        const durEl = document.getElementById('spotifyTimeDuration');
+    async pollSpotifyCurrentlyPlaying() {
+        if (!this.apiToken) return;
+        try {
+            const resp = await fetch('https://api.spotify.com/v1/me/player/currently-playing', {
+                headers: { 'Authorization': `Bearer ${this.apiToken}` }
+            });
 
-        if (elapsedEl) elapsedEl.textContent = this.formatTime(this.progress);
-        if (durEl) durEl.textContent = this.formatTime(track.duration);
-    },
+            if (resp.status === 200) {
+                const data = await resp.json();
+                if (data && data.item) {
+                    const songName = data.item.name;
+                    const artists = data.item.artists.map(a => a.name).join(', ');
+                    const progSec = Math.floor((data.progress_ms || 0) / 1000);
+                    const durSec = Math.floor((data.item.duration_ms || 180000) / 1000);
+                    const isPlay = data.is_playing;
 
-    formatTime(sec) {
-        const m = Math.floor(sec / 60);
-        const s = Math.floor(sec % 60);
-        return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
-    },
+                    this.currentTitle = songName;
+                    this.currentArtist = artists;
+                    this.progressSec = progSec;
+                    this.durationSec = durSec;
+                    this.isPlaying = isPlay;
 
-    startTicker() {
-        if (this.timerInterval) clearInterval(this.timerInterval);
-        this.timerInterval = setInterval(() => {
-            if (!this.isPlaying) return;
+                    // Update UI inputs
+                    const titleInput = document.getElementById('liveSongTitleInput');
+                    const artistInput = document.getElementById('liveArtistInput');
+                    if (titleInput && document.activeElement !== titleInput) titleInput.value = songName;
+                    if (artistInput && document.activeElement !== artistInput) artistInput.value = artists;
 
-            const track = this.tracks[this.currentTrackIndex];
-            this.progress++;
-            if (this.progress >= track.duration) {
-                if (this.isRepeat) {
-                    this.progress = 0;
-                } else {
-                    this.nextTrack();
-                    return;
+                    // Broadcast real track to ESP32 OLED
+                    this.syncToEsp32();
                 }
+            } else if (resp.status === 401) {
+                console.warn('[Spotify] Token expired. Please refresh token.');
+                const badge = document.getElementById('spotifyApiStatusBadge');
+                if (badge) {
+                    badge.textContent = 'Token Expired';
+                    badge.className = 'status-badge';
+                }
+                clearInterval(this.apiPollInterval);
             }
-
-            const progSlider = document.getElementById('spotifyProgressSlider');
-            if (progSlider) progSlider.value = this.progress;
-            this.updateTimeDisplay();
-
-            // Periodic 5s sync to ESP32
-            if (this.progress % 5 === 0) {
-                this.syncToEsp32();
-            }
-        }, 1000);
+        } catch (err) {
+            console.debug('[Spotify] Polling error:', err);
+        }
     },
 
     startVisualizer() {
         const canvas = document.getElementById('spotifyVisualizerCanvas');
         if (!canvas) return;
         const ctx = canvas.getContext('2d');
-        const numBars = 22;
+        const numBars = 28;
         let tick = 0;
 
         const render = () => {
@@ -327,14 +292,13 @@ const SpotifyManager = {
 
             const barWidth = Math.floor(canvas.width / numBars) - 2;
             for (let i = 0; i < numBars; i++) {
-                let h = 4;
+                let h = 3;
                 if (this.isPlaying) {
-                    const noise = Math.sin(tick * 0.08 + i * 0.5) * 0.5 + 0.5;
-                    const noise2 = Math.cos(tick * 0.12 - i * 0.3) * 0.5 + 0.5;
+                    const noise = Math.sin(tick * 0.09 + i * 0.45) * 0.5 + 0.5;
+                    const noise2 = Math.cos(tick * 0.14 - i * 0.3) * 0.5 + 0.5;
                     h = Math.floor((noise * 0.6 + noise2 * 0.4) * (canvas.height - 6)) + 4;
                 }
 
-                // Gradient from Spotify Green (#1DB954) to Emerald
                 const grad = ctx.createLinearGradient(0, canvas.height, 0, 0);
                 grad.addColorStop(0, '#14833b');
                 grad.addColorStop(1, '#1DB954');
@@ -347,25 +311,6 @@ const SpotifyManager = {
         };
 
         render();
-    },
-
-    syncToEsp32(forceSwitchPage = false) {
-        const track = this.tracks[this.currentTrackIndex];
-        const payload = {
-            type: 'spotify_track',
-            title: track.title,
-            artist: track.artist,
-            progress: this.progress,
-            duration: track.duration,
-            playing: this.isPlaying
-        };
-
-        if (typeof Connection !== 'undefined') {
-            Connection.sendWs(payload);
-            if (forceSwitchPage) {
-                Connection.sendWs({ type: 'set_page', page: 'spotify' });
-            }
-        }
     }
 };
 

@@ -175,16 +175,24 @@ class DashboardManager {
             ctx.font = '8px monospace';
             ctx.fillText(`  ${track.artist.slice(0, 18)}`, 4, 36);
 
-            // Progress Bar
-            ctx.strokeRect(4, 42, 120, 5);
-            const pct = track.duration > 0 ? (prog * 118) / track.duration : 0;
-            ctx.fillRect(5, 43, Math.min(118, Math.max(0, pct)), 3);
-
-            // Play/Pause & Time
-            const pM = Math.floor(prog / 60), pS = Math.floor(prog % 60);
-            const dM = Math.floor(track.duration / 60), dS = Math.floor(track.duration % 60);
-            const timeStr = `${isPlaying ? '▶' : '⏸'} ${String(pM).padStart(2, '0')}:${String(pS).padStart(2, '0')} / ${String(dM).padStart(2, '0')}:${String(dS).padStart(2, '0')}`;
-            ctx.fillText(timeStr, 4, 58);
+            // Big 16-Bar Audio Spectrum Visualizer (Bottom Half Y: 42 to 62)
+            ctx.fillRect(4, 63, 120, 1);
+            for (let i = 0; i < 16; i++) {
+                const x = 6 + i * 7;
+                let h = 2;
+                if (isPlaying) {
+                    const wave1 = Math.sin((this.frameCounter / 5.0) + i * 0.55);
+                    const wave2 = Math.cos((this.frameCounter / 7.5) - i * 0.35);
+                    h = 3 + Math.floor((wave1 * 0.6 + wave2 * 0.4 + 1.0) * 0.5 * 15);
+                    h = Math.max(2, Math.min(18, h));
+                }
+                // Solid bar
+                ctx.fillRect(x, 62 - h, 5, h);
+                // Peak dot
+                if (h > 6) {
+                    ctx.fillRect(x + 2, 62 - h - 2, 1, 1);
+                }
+            }
         } else {
             ctx.font = '12px monospace';
             ctx.textAlign = 'center';

@@ -698,146 +698,124 @@
 
         <!-- 6. SPOTIFY PLAYER STUDIO -->
         <section id="spotify-tab" class="tab-pane">
-            <div class="grid-container grid-cols-2">
-                <!-- Now Playing Vinyl Hub -->
-                <div class="card">
-                    <div class="card-header">
-                        <div class="card-title">
-                            <span class="material-symbols-outlined" style="color: #1DB954;">graphic_eq</span>
-                            Spotify Neural Audio Player
-                        </div>
-                        <span class="status-badge connected" id="spotifyPlaybackBadge">Streaming Active</span>
+            <!-- 1. TOP: Quick Playlist Selector Bar -->
+            <div class="card" style="margin-bottom: 16px; padding: 12px 18px;">
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <span class="material-symbols-outlined" style="color: #1DB954; font-size: 22px;">queue_music</span>
+                        <span style="font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 0.95rem; color: var(--color-midnight);">Quick Playlists:</span>
                     </div>
-
-                    <!-- Vinyl & Visualizer Flex Hub -->
-                    <div class="spotify-now-playing-hub">
-                        <!-- Rotating Vinyl Disc -->
-                        <div class="spotify-vinyl-box">
-                            <div id="spotifyVinylDisc" class="vinyl-disc playing">
-                                <div class="vinyl-groove-1"></div>
-                                <div class="vinyl-groove-2"></div>
-                                <div class="vinyl-center-label">
-                                    <span class="material-symbols-outlined" style="font-size: 28px; color: #ffffff;">music_note</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Track Metadata & Equalizer -->
-                        <div style="flex: 1; min-width: 200px; display: flex; flex-direction: column; justify-content: center; gap: 6px;">
-                            <div class="switch-subtext" style="color: #1DB954; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;">Now Streaming</div>
-                            <div id="spotifyTrackTitle" style="font-family: 'Space Grotesk', sans-serif; font-size: 1.25rem; font-weight: 700; color: var(--color-midnight); line-height: 1.2;">Midnight Cyber Beats</div>
-                            <div id="spotifyArtistName" style="font-size: 0.92rem; font-weight: 600; color: var(--text-secondary);">Synthwave Lo-Fi</div>
-                            <div id="spotifyAlbumName" style="font-size: 0.8rem; color: var(--text-muted);">Album: Neon Cyber Companion OST</div>
-
-                            <!-- Live Audio Visualizer Canvas -->
-                            <canvas id="spotifyVisualizerCanvas" width="220" height="32" style="width: 100%; height: 32px; margin-top: 8px; border-radius: 4px; background: #0f172a;"></canvas>
-                        </div>
-                    </div>
-
-                    <!-- Seekable Timeline Progress Bar -->
-                    <div style="margin-top: 18px;">
-                        <input type="range" id="spotifyProgressSlider" min="0" max="195" value="45" style="width: 100%; accent-color: #1DB954; cursor: pointer;">
-                        <div style="display: flex; justify-content: space-between; font-size: 0.78rem; font-family: 'JetBrains Mono', monospace; color: var(--text-muted); margin-top: 4px;">
-                            <span id="spotifyTimeElapsed">00:45</span>
-                            <span id="spotifyTimeDuration">03:15</span>
-                        </div>
-                    </div>
-
-                    <!-- Playback Controls -->
-                    <div class="spotify-controls-bar">
-                        <button id="btnSpotifyShuffle" class="btn btn-secondary spotify-ctrl-btn" title="Shuffle">
-                            <span class="material-symbols-outlined">shuffle</span>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap; flex: 1; justify-content: flex-end;">
+                        <button class="btn btn-secondary spotify-quick-pill active" data-preset="custom1">
+                            <span class="material-symbols-outlined" style="font-size: 16px; color: #1DB954;">favorite</span> Shiva's Favorites
                         </button>
-                        <button id="btnSpotifyPrev" class="btn btn-secondary spotify-ctrl-btn" title="Previous Track">
-                            <span class="material-symbols-outlined">skip_previous</span>
+                        <button class="btn btn-secondary spotify-quick-pill" data-preset="ar_rahman">
+                            <span class="material-symbols-outlined" style="font-size: 16px; color: #1DB954;">music_note</span> AR Rahman Hits
                         </button>
-                        <button id="btnSpotifyPlayPause" class="btn btn-spotify-play" title="Play / Pause">
-                            <span id="spotifyPlayIcon" class="material-symbols-outlined" style="font-size: 26px;">pause</span>
+                        <button class="btn btn-secondary spotify-quick-pill" data-preset="trending_tamil">
+                            <span class="material-symbols-outlined" style="font-size: 16px; color: #1DB954;">trending_up</span> Trending Tamil
                         </button>
-                        <button id="btnSpotifyNext" class="btn btn-secondary spotify-ctrl-btn" title="Next Track">
-                            <span class="material-symbols-outlined">skip_next</span>
+                        <button class="btn btn-secondary spotify-quick-pill" data-preset="travel_tamil">
+                            <span class="material-symbols-outlined" style="font-size: 16px; color: #1DB954;">directions_bus</span> 90's Bus Travel
                         </button>
-                        <button id="btnSpotifyRepeat" class="btn btn-secondary spotify-ctrl-btn" title="Repeat">
-                            <span class="material-symbols-outlined">repeat</span>
-                        </button>
-                    </div>
-
-                    <!-- Volume & Push to OLED Bar -->
-                    <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border-subtle); flex-wrap: wrap;">
-                        <div style="display: flex; align-items: center; gap: 8px; flex: 1; min-width: 140px;">
-                            <span class="material-symbols-outlined" style="font-size: 18px; color: var(--text-secondary);">volume_up</span>
-                            <input type="range" id="spotifyVolumeSlider" min="0" max="100" value="80" style="flex: 1; accent-color: #1DB954;">
-                            <span id="spotifyVolumeLabel" class="font-mono" style="font-size: 0.78rem; font-weight: 700; width: 34px;">80%</span>
-                        </div>
-                        <button id="btnPushSpotifyToOled" class="btn btn-primary" style="padding: 6px 14px; font-size: 0.78rem;">
-                            <span class="material-symbols-outlined" style="font-size: 16px;">screen_share</span> Display on OLED
+                        <button class="btn btn-secondary spotify-quick-pill" data-preset="energy_tamil">
+                            <span class="material-symbols-outlined" style="font-size: 16px; color: #1DB954;">bolt</span> Tamil Energy
                         </button>
                     </div>
                 </div>
+            </div>
 
-                <!-- Playlist Presets & Spotify Embed Link Card -->
-                <div style="display: flex; flex-direction: column; gap: 20px;">
-                    <!-- Curated Playlists Card -->
-                    <div class="card">
-                        <div class="card-header">
-                            <div class="card-title">
-                                <span class="material-symbols-outlined" style="color: var(--color-midnight);">queue_music</span>
-                                Curated Playlist Presets
-                            </div>
+            <!-- 2. TOP PRIMARY: Big Interactive Official Spotify Player (Plays Real Songs Directly) -->
+            <div class="card" style="margin-bottom: 20px; padding: 0; overflow: hidden; background: #121212; border: 1px solid var(--border-strong); box-shadow: 0 8px 30px rgba(0,0,0,0.3);">
+                <div style="padding: 12px 18px; display: flex; align-items: center; justify-content: space-between; background: #181818; border-bottom: 1px solid rgba(255,255,255,0.08);">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <span class="material-symbols-outlined" style="color: #1DB954; font-size: 22px;">play_circle</span>
+                        <span style="font-family: 'Space Grotesk', sans-serif; font-weight: 700; color: #ffffff; font-size: 0.95rem;">Real Official Spotify Web Player</span>
+                    </div>
+                    <span class="status-badge" style="background: rgba(29, 185, 84, 0.15); color: #1DB954; border: 1px solid rgba(29, 185, 84, 0.3);">Interactive Audio Engine</span>
+                </div>
+                <div id="spotifyEmbedContainer" style="width: 100%; min-height: 420px;">
+                    <iframe id="spotifyIframe" style="width: 100%; height: 420px; border: none;" src="https://open.spotify.com/embed/playlist/3a8vuZph9RQsd2uLSVQ6PN?utm_source=generator&theme=0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+                </div>
+            </div>
+
+            <!-- 3. REAL-TIME ESP32 OLED STREAM & SPOTIFY CONNECT BRIDGE -->
+            <div class="grid-container grid-cols-2">
+                <!-- Left: ESP32 OLED Live Broadcast Hub -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <span class="material-symbols-outlined" style="color: var(--color-midnight);">screen_share</span>
+                            ESP32 OLED Live Music Streamer
                         </div>
-                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
-                            <div class="spotify-preset-card active" data-preset="lofi">
-                                <div class="spotify-preset-icon"><span class="material-symbols-outlined">headphones</span></div>
-                                <div>
-                                    <div style="font-weight: 700; font-family: 'Space Grotesk', sans-serif;">Lofi Focus Beats</div>
-                                    <div class="switch-subtext">Relaxing chill study beats</div>
-                                </div>
-                            </div>
-                            <div class="spotify-preset-card" data-preset="synthwave">
-                                <div class="spotify-preset-icon"><span class="material-symbols-outlined">nightlife</span></div>
-                                <div>
-                                    <div style="font-weight: 700; font-family: 'Space Grotesk', sans-serif;">Synthwave Cyberpunk</div>
-                                    <div class="switch-subtext">Retro 80s neon synth flow</div>
-                                </div>
-                            </div>
-                            <div class="spotify-preset-card" data-preset="electronic">
-                                <div class="spotify-preset-icon"><span class="material-symbols-outlined">bolt</span></div>
-                                <div>
-                                    <div style="font-weight: 700; font-family: 'Space Grotesk', sans-serif;">Deep Electronic</div>
-                                    <div class="switch-subtext">Energetic coding tempo</div>
-                                </div>
-                            </div>
-                            <div class="spotify-preset-card" data-preset="tophits">
-                                <div class="spotify-preset-icon"><span class="material-symbols-outlined">star</span></div>
-                                <div>
-                                    <div style="font-weight: 700; font-family: 'Space Grotesk', sans-serif;">Global Top Hits</div>
-                                    <div class="switch-subtext">Trending chart tracks</div>
-                                </div>
-                            </div>
-                        </div>
+                        <span class="status-badge connected" id="oledStreamBadge">OLED Synchronized</span>
                     </div>
 
-                    <!-- Custom Spotify Embed & Link Player -->
-                    <div class="card">
-                        <div class="card-header">
-                            <div class="card-title">
-                                <span class="material-symbols-outlined" style="color: #1DB954;">open_in_new</span>
-                                Custom Spotify Link / Embed
-                            </div>
+                    <div style="display: flex; flex-direction: column; gap: 14px;">
+                        <div>
+                            <label class="switch-label">Live Song Title on OLED:</label>
+                            <input type="text" id="liveSongTitleInput" value="Shiva's Favorite Hits" style="width: 100%; margin-top: 4px; padding: 10px 12px; background: #f8fafc; border: 1px solid var(--border-strong); border-radius: var(--radius-md); font-family: 'Space Grotesk', sans-serif; font-weight: 700; color: var(--color-midnight);">
                         </div>
                         <div>
-                            <label class="switch-label">Paste Spotify Track / Album / Playlist URL:</label>
-                            <div style="display: flex; gap: 8px; margin-top: 6px;">
-                                <input type="text" id="spotifyUrlInput" placeholder="https://open.spotify.com/track/..." style="flex: 1; padding: 8px 12px; background: #f8fafc; border: 1px solid var(--border-strong); border-radius: var(--radius-md); color: var(--text-primary);">
-                                <button id="btnLoadSpotifyUrl" class="btn btn-primary" style="padding: 8px 16px;">
+                            <label class="switch-label">Artist / Album Subtitle:</label>
+                            <input type="text" id="liveArtistInput" value="Tamil Mix & Classics" style="width: 100%; margin-top: 4px; padding: 10px 12px; background: #f8fafc; border: 1px solid var(--border-strong); border-radius: var(--radius-md); color: var(--text-primary);">
+                        </div>
+
+                        <!-- Live Visualizer Preview -->
+                        <div>
+                            <label class="switch-label">Live Spectrum Equalizer:</label>
+                            <canvas id="spotifyVisualizerCanvas" width="280" height="36" style="width: 100%; height: 36px; margin-top: 6px; border-radius: 6px; background: #0f172a;"></canvas>
+                        </div>
+
+                        <div style="display: flex; gap: 10px; margin-top: 6px;">
+                            <button id="btnPushSpotifyToOled" class="btn btn-primary" style="flex: 1; padding: 10px;">
+                                <span class="material-symbols-outlined" style="font-size: 18px;">screen_share</span> Push to ESP32 OLED
+                            </button>
+                            <button id="btnToggleOledPlay" class="btn btn-secondary" style="padding: 10px 16px;">
+                                <span id="oledPlayIcon" class="material-symbols-outlined" style="font-size: 18px;">pause</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Spotify Live API Connect (Phone / PC Real-Time Sync) -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <span class="material-symbols-outlined" style="color: #1DB954;">sync_saved_locally</span>
+                            Live Spotify Account Sync (Web API)
+                        </div>
+                        <span id="spotifyApiStatusBadge" class="status-badge">API Offline</span>
+                    </div>
+
+                    <div style="display: flex; flex-direction: column; gap: 14px;">
+                        <div class="switch-subtext" style="line-height: 1.5; color: var(--text-secondary);">
+                            Connect your real Spotify account so ANY song playing on your phone or PC automatically broadcasts its real track name, artist, and playtime to the ESP32 OLED!
+                        </div>
+
+                        <div>
+                            <label class="switch-label">Spotify User Access Token:</label>
+                            <input type="password" id="spotifyAccessTokenInput" placeholder="Paste Spotify OAuth Token (Optional)..." style="width: 100%; margin-top: 4px; padding: 8px 12px; background: #f8fafc; border: 1px solid var(--border-strong); border-radius: var(--radius-md); font-family: monospace; font-size: 0.82rem;">
+                            <div style="margin-top: 4px; font-size: 0.76rem; color: var(--text-muted);">
+                                Get a free token from <a href="https://developer.spotify.com/console/get-users-currently-playing-track/" target="_blank" style="color: #1DB954; font-weight: 600; text-decoration: underline;">Spotify Web API Console</a> (User-Read-Currently-Playing scope).
+                            </div>
+                        </div>
+
+                        <div style="display: flex; gap: 10px;">
+                            <button id="btnConnectSpotifyApi" class="btn btn-primary" style="flex: 1;">
+                                <span class="material-symbols-outlined" style="font-size: 18px;">link</span> Connect Real Spotify API
+                            </button>
+                        </div>
+
+                        <!-- Load Custom URL -->
+                        <div style="padding-top: 10px; border-top: 1px solid var(--border-subtle);">
+                            <label class="switch-label">Or Load Any Spotify Playlist / Track URL:</label>
+                            <div style="display: flex; gap: 8px; margin-top: 4px;">
+                                <input type="text" id="spotifyUrlInput" placeholder="https://open.spotify.com/playlist/..." style="flex: 1; padding: 8px 12px; background: #f8fafc; border: 1px solid var(--border-strong); border-radius: var(--radius-md); color: var(--text-primary); font-size: 0.85rem;">
+                                <button id="btnLoadSpotifyUrl" class="btn btn-secondary" style="padding: 8px 14px;">
                                     <span class="material-symbols-outlined" style="font-size: 16px;">play_arrow</span> Load
                                 </button>
                             </div>
-                        </div>
-
-                        <!-- Embedded Spotify Player IFrame Container -->
-                        <div id="spotifyEmbedContainer" style="margin-top: 14px; border-radius: 12px; overflow: hidden; min-height: 80px; background: #0f172a; border: 1px solid var(--border-subtle);">
-                            <iframe id="spotifyIframe" style="border-radius: 12px; width: 100%; height: 152px;" src="https://open.spotify.com/embed/playlist/37i9dQZF1DXdLEN7aqioXM?utm_source=generator&theme=0" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
                         </div>
                     </div>
                 </div>
@@ -920,6 +898,252 @@
                                 style="padding: 6px 12px; font-size: 0.78rem;">
                                 <span class="material-symbols-outlined" style="font-size: 16px;">install_mobile</span>
                                 Install App
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hardware Sensors & Buzzer Studio Card -->
+                <div class="card" style="grid-column: span 2;">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <span class="material-symbols-outlined" style="color: var(--color-midnight);">sensors</span>
+                            Hardware Sensors &amp; Buzzer Soundboard (GPIO 18 / 27 / 34 / 5 / 19 / 13)
+                        </div>
+                        <span class="status-badge connected">Hardware Engine Active</span>
+                    </div>
+
+                    <div class="grid-container grid-cols-2" style="margin-bottom: 16px;">
+                        <!-- Live Sensor Telemetry -->
+                        <div style="background: #f8fafc; padding: 14px; border-radius: var(--radius-md); border: 1px solid var(--border-subtle);">
+                            <div style="font-weight: 700; font-family: 'Space Grotesk', sans-serif; margin-bottom: 10px; color: var(--color-midnight); display: flex; align-items: center; gap: 6px;">
+                                <span class="material-symbols-outlined" style="font-size: 18px; color: #1DB954;">analytics</span> Live Sensor Telemetry
+                            </div>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 0.85rem;">
+                                <div style="background: #ffffff; padding: 10px; border-radius: 6px; border: 1px solid var(--border-strong);">
+                                    <div class="switch-subtext">PIR Motion (GPIO 27)</div>
+                                    <div id="sensorMotionVal" style="font-weight: 700; color: var(--color-midnight); font-size: 1.1rem; margin-top: 2px;">Idle</div>
+                                </div>
+                                <div style="background: #ffffff; padding: 10px; border-radius: 6px; border: 1px solid var(--border-strong);">
+                                    <div class="switch-subtext">LDR Light (GPIO 34)</div>
+                                    <div id="sensorLightVal" style="font-weight: 700; color: var(--color-midnight); font-size: 1.1rem; margin-top: 2px;">65%</div>
+                                </div>
+                                <div style="background: #ffffff; padding: 10px; border-radius: 6px; border: 1px solid var(--border-strong);">
+                                    <div class="switch-subtext">Ultrasonic (GPIO 5/19)</div>
+                                    <div id="sensorDistanceVal" style="font-weight: 700; color: var(--color-midnight); font-size: 1.1rem; margin-top: 2px;">35.2 cm</div>
+                                </div>
+                                <div style="background: #ffffff; padding: 10px; border-radius: 6px; border: 1px solid var(--border-strong);">
+                                    <div class="switch-subtext">DHT Temp / Hum (GPIO 4)</div>
+                                    <div id="sensorDhtVal" style="font-weight: 700; color: var(--color-midnight); font-size: 1.1rem; margin-top: 2px;">28.5°C / 60%</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Piezo Buzzer Audio & Sound Studio -->
+                        <div style="background: #f8fafc; padding: 14px; border-radius: var(--radius-md); border: 1px solid var(--border-subtle); display: flex; flex-direction: column; gap: 12px;">
+                            <div style="font-weight: 700; font-family: 'Space Grotesk', sans-serif; color: var(--color-midnight); display: flex; align-items: center; justify-content: space-between;">
+                                <div style="display: flex; align-items: center; gap: 6px;">
+                                    <span class="material-symbols-outlined" style="font-size: 18px; color: #1DB954;">volume_up</span> Buzzer Audio &amp; Sound Studio (GPIO 18)
+                                </div>
+                                <label class="switch-container" title="Master Mute Buzzer">
+                                    <input type="checkbox" id="switchBuzzerMute">
+                                    <span class="switch-track"></span>
+                                </label>
+                            </div>
+
+                            <!-- Buzzer Volume Slider -->
+                            <div style="background: #ffffff; padding: 8px 12px; border-radius: 6px; border: 1px solid var(--border-strong);">
+                                <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; font-weight: 600; margin-bottom: 4px;">
+                                    <span style="display: flex; align-items: center; gap: 4px;"><span class="material-symbols-outlined" style="font-size: 16px; color: var(--text-secondary);">volume_down</span> Buzzer Volume (PWM Duty):</span>
+                                    <span id="buzzerVolumeLabel" class="font-mono" style="color: #1DB954; font-weight: 700;">80%</span>
+                                </div>
+                                <input type="range" id="buzzerVolumeSlider" min="0" max="100" value="80" style="width: 100%; accent-color: #1DB954;">
+                            </div>
+
+                            <!-- Notification Alert Theme Selector & Toggles -->
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                                <div>
+                                    <label class="switch-subtext" style="display: block; margin-bottom: 2px;">Notification Sound Theme:</label>
+                                    <select id="selectBuzzerTheme" style="width: 100%; padding: 6px 8px; background: #ffffff; border: 1px solid var(--border-strong); border-radius: 4px; font-size: 0.8rem; color: var(--text-primary);">
+                                        <option value="0" selected>🔔 Classic Dual Chime</option>
+                                        <option value="1">⚡ Cyber Harmonic Chime</option>
+                                        <option value="2">👾 8-Bit Retro Beep</option>
+                                        <option value="3">🚀 Sci-Fi Laser Sweep</option>
+                                        <option value="4">✨ Gentle Soft Pip</option>
+                                        <option value="5">🎼 Major Triad Chord</option>
+                                    </select>
+                                </div>
+                                <div style="display: flex; flex-direction: column; justify-content: center; gap: 6px;">
+                                    <label style="display: flex; align-items: center; gap: 6px; font-size: 0.78rem; color: var(--text-secondary); cursor: pointer;">
+                                        <input type="checkbox" id="switchTouchSound" checked style="accent-color: #1DB954;"> Touch Click Feedback
+                                    </label>
+                                    <label style="display: flex; align-items: center; gap: 6px; font-size: 0.78rem; color: var(--text-secondary); cursor: pointer;">
+                                        <input type="checkbox" id="switchGameSound" checked style="accent-color: #1DB954;"> Game Center Sound FX
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- 6 One-Click 8-Bit Sound Presets -->
+                            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px;">
+                                <button class="btn btn-secondary btn-buzzer-sound" data-sound="boot" style="padding: 5px; font-size: 0.74rem;">
+                                    <span class="material-symbols-outlined" style="font-size: 15px;">power</span> Cyber Boot
+                                </button>
+                                <button class="btn btn-secondary btn-buzzer-sound" data-sound="alert" style="padding: 5px; font-size: 0.74rem;">
+                                    <span class="material-symbols-outlined" style="font-size: 15px;">notifications</span> Notification
+                                </button>
+                                <button class="btn btn-secondary btn-buzzer-sound" data-sound="success" style="padding: 5px; font-size: 0.74rem;">
+                                    <span class="material-symbols-outlined" style="font-size: 15px;">verified</span> Victory Chime
+                                </button>
+                                <button class="btn btn-secondary btn-buzzer-sound" data-sound="jump" style="padding: 5px; font-size: 0.74rem;">
+                                    <span class="material-symbols-outlined" style="font-size: 15px;">arrow_upward</span> Mario Jump
+                                </button>
+                                <button class="btn btn-secondary btn-buzzer-sound" data-sound="gameover" style="padding: 5px; font-size: 0.74rem;">
+                                    <span class="material-symbols-outlined" style="font-size: 15px;">skull</span> Game Over
+                                </button>
+                                <button class="btn btn-secondary btn-buzzer-sound" data-sound="click" style="padding: 5px; font-size: 0.74rem;">
+                                    <span class="material-symbols-outlined" style="font-size: 15px;">touch_app</span> Touch Click
+                                </button>
+                            </div>
+
+                            <!-- Custom Frequency Tone Generator -->
+                            <div style="background: #ffffff; padding: 8px 10px; border-radius: 6px; border: 1px solid var(--border-strong); display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                                <div style="flex: 1; min-width: 100px;">
+                                    <div style="font-size: 0.72rem; color: var(--text-muted);">Frequency: <strong id="customToneFreqLabel" style="color: var(--color-midnight);">1200 Hz</strong></div>
+                                    <input type="range" id="customToneFreq" min="200" max="3500" step="50" value="1200" style="width: 100%; accent-color: var(--color-sage);">
+                                </div>
+                                <div style="width: 75px;">
+                                    <div style="font-size: 0.72rem; color: var(--text-muted);">Duration:</div>
+                                    <input type="number" id="customToneDur" min="20" max="1500" step="20" value="150" style="width: 100%; padding: 2px 4px; border: 1px solid var(--border-strong); border-radius: 4px; font-family: monospace; font-size: 0.78rem;">
+                                </div>
+                                <button id="btnPlayCustomTone" class="btn btn-primary" style="padding: 5px 10px; font-size: 0.75rem;">
+                                    <span class="material-symbols-outlined" style="font-size: 14px;">play_arrow</span> Test Tone
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Individual Sensor & GPIO Configuration Grid -->
+                    <div style="border-top: 1px solid var(--border-subtle); padding-top: 16px; margin-top: 6px;">
+                        <div style="font-weight: 700; font-family: 'Space Grotesk', sans-serif; margin-bottom: 12px; color: var(--color-midnight); display: flex; align-items: center; justify-content: space-between;">
+                            <div style="display: flex; align-items: center; gap: 6px;">
+                                <span class="material-symbols-outlined" style="font-size: 20px; color: var(--color-sage);">tune</span> Individual Sensor &amp; GPIO Pin Configuration
+                            </div>
+                            <span class="switch-subtext">Configurable per hardware component</span>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;">
+                            <!-- 1. Buzzer Config -->
+                            <div style="background: #f8fafc; padding: 12px; border-radius: var(--radius-md); border: 1px solid var(--border-strong);">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                                    <span style="font-weight: 700; font-size: 0.88rem; color: var(--color-midnight);">🔊 Piezo Buzzer</span>
+                                    <label class="switch-container">
+                                        <input type="checkbox" id="cfgBuzzerEn" checked>
+                                        <span class="switch-track"></span>
+                                    </label>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 6px;">
+                                    <span class="switch-subtext" style="width: 55px;">GPIO Pin:</span>
+                                    <input type="number" id="cfgBuzzerPin" value="18" min="0" max="39" style="width: 60px; padding: 4px 6px; background: #ffffff; border: 1px solid var(--border-strong); border-radius: 4px; font-family: monospace; font-size: 0.85rem;">
+                                </div>
+                            </div>
+
+                            <!-- 2. PIR Motion Config -->
+                            <div style="background: #f8fafc; padding: 12px; border-radius: var(--radius-md); border: 1px solid var(--border-strong);">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                                    <span style="font-weight: 700; font-size: 0.88rem; color: var(--color-midnight);">🏃 PIR Motion</span>
+                                    <label class="switch-container">
+                                        <input type="checkbox" id="cfgPirEn" checked>
+                                        <span class="switch-track"></span>
+                                    </label>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 6px;">
+                                    <span class="switch-subtext" style="width: 55px;">GPIO Pin:</span>
+                                    <input type="number" id="cfgPirPin" value="27" min="0" max="39" style="width: 60px; padding: 4px 6px; background: #ffffff; border: 1px solid var(--border-strong); border-radius: 4px; font-family: monospace; font-size: 0.85rem;">
+                                </div>
+                                <label style="display: flex; align-items: center; gap: 6px; font-size: 0.76rem; color: var(--text-secondary); cursor: pointer;">
+                                    <input type="checkbox" id="cfgPirWake" checked style="accent-color: #1DB954;"> Auto-Wake Screen
+                                </label>
+                            </div>
+
+                            <!-- 3. LDR Light Sensor Config -->
+                            <div style="background: #f8fafc; padding: 12px; border-radius: var(--radius-md); border: 1px solid var(--border-strong);">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                                    <span style="font-weight: 700; font-size: 0.88rem; color: var(--color-midnight);">💡 LDR Light (ADC)</span>
+                                    <label class="switch-container">
+                                        <input type="checkbox" id="cfgLdrEn" checked>
+                                        <span class="switch-track"></span>
+                                    </label>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 6px;">
+                                    <span class="switch-subtext" style="width: 55px;">ADC Pin:</span>
+                                    <input type="number" id="cfgLdrPin" value="34" min="0" max="39" style="width: 60px; padding: 4px 6px; background: #ffffff; border: 1px solid var(--border-strong); border-radius: 4px; font-family: monospace; font-size: 0.85rem;">
+                                </div>
+                                <label style="display: flex; align-items: center; gap: 6px; font-size: 0.76rem; color: var(--text-secondary); cursor: pointer;">
+                                    <input type="checkbox" id="cfgLdrAuto" checked style="accent-color: #1DB954;"> Auto-Dim OLED
+                                </label>
+                            </div>
+
+                            <!-- 4. Ultrasonic Sensor Config -->
+                            <div style="background: #f8fafc; padding: 12px; border-radius: var(--radius-md); border: 1px solid var(--border-strong);">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                                    <span style="font-weight: 700; font-size: 0.88rem; color: var(--color-midnight);">📏 Ultrasonic Proximity</span>
+                                    <label class="switch-container">
+                                        <input type="checkbox" id="cfgUsEn" checked>
+                                        <span class="switch-track"></span>
+                                    </label>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 4px;">
+                                    <span class="switch-subtext" style="width: 55px;">Trig Pin:</span>
+                                    <input type="number" id="cfgUsTrig" value="5" min="0" max="39" style="width: 60px; padding: 4px 6px; background: #ffffff; border: 1px solid var(--border-strong); border-radius: 4px; font-family: monospace; font-size: 0.85rem;">
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 6px;">
+                                    <span class="switch-subtext" style="width: 55px;">Echo Pin:</span>
+                                    <input type="number" id="cfgUsEcho" value="19" min="0" max="39" style="width: 60px; padding: 4px 6px; background: #ffffff; border: 1px solid var(--border-strong); border-radius: 4px; font-family: monospace; font-size: 0.85rem;">
+                                </div>
+                            </div>
+
+                            <!-- 5. DHT Temp/Hum Sensor Config -->
+                            <div style="background: #f8fafc; padding: 12px; border-radius: var(--radius-md); border: 1px solid var(--border-strong);">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                                    <span style="font-weight: 700; font-size: 0.88rem; color: var(--color-midnight);">🌡️ DHT Temp/Humidity</span>
+                                    <label class="switch-container">
+                                        <input type="checkbox" id="cfgDhtEn" checked>
+                                        <span class="switch-track"></span>
+                                    </label>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 4px;">
+                                    <span class="switch-subtext" style="width: 55px;">Data Pin:</span>
+                                    <input type="number" id="cfgDhtPin" value="4" min="0" max="39" style="width: 60px; padding: 4px 6px; background: #ffffff; border: 1px solid var(--border-strong); border-radius: 4px; font-family: monospace; font-size: 0.85rem;">
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 6px;">
+                                    <span class="switch-subtext" style="width: 55px;">Model:</span>
+                                    <select id="cfgDhtType" style="flex: 1; padding: 3px 6px; background: #ffffff; border: 1px solid var(--border-strong); border-radius: 4px; font-size: 0.82rem;">
+                                        <option value="11" selected>DHT11</option>
+                                        <option value="22">DHT22 / AM2302</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- 6. RGB Aura LED Config -->
+                            <div style="background: #f8fafc; padding: 12px; border-radius: var(--radius-md); border: 1px solid var(--border-strong);">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                                    <span style="font-weight: 700; font-size: 0.88rem; color: var(--color-midnight);">🌈 RGB Status LED</span>
+                                    <label class="switch-container">
+                                        <input type="checkbox" id="cfgRgbEn" checked>
+                                        <span class="switch-track"></span>
+                                    </label>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 6px;">
+                                    <span class="switch-subtext" style="width: 55px;">GPIO Pin:</span>
+                                    <input type="number" id="cfgRgbPin" value="13" min="0" max="39" style="width: 60px; padding: 4px 6px; background: #ffffff; border: 1px solid var(--border-strong); border-radius: 4px; font-family: monospace; font-size: 0.85rem;">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Save Hardware Configs Button -->
+                        <div style="display: flex; justify-content: flex-end; margin-top: 14px;">
+                            <button id="btnSaveSensorConfigs" class="btn btn-primary" style="padding: 8px 20px;">
+                                <span class="material-symbols-outlined" style="font-size: 18px;">save</span> Save Sensor &amp; GPIO Configurations
                             </button>
                         </div>
                     </div>

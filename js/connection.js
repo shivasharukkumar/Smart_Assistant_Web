@@ -252,6 +252,9 @@ class ConnectionManager {
             
             this.emit('status', data);
             this.emit('telemetry', data);
+            if (window.Settings && typeof window.Settings.updateSensorTelemetry === 'function') {
+                window.Settings.updateSensorTelemetry(data);
+            }
         } else if (this.isConnected) {
             // Fallback to WebSocket get_status if HTTP REST is blocked (e.g. Mixed Content / CORS)
             this.sendWs({ type: 'get_status' });
