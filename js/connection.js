@@ -133,6 +133,7 @@ class ConnectionManager {
                 this.updateStatus('connected', 'Connected');
                 this.startPingHeartbeat();
                 this.emit('connected', { ip: this.ip });
+                this.sendWs({ type: 'get_status' });
                 this.fetchStatus();
                 if (window.App) App.showToast('Connected to ESP32 Assistant!', 'success');
             };
@@ -144,6 +145,9 @@ class ConnectionManager {
                         const latency = Date.now() - this.lastPingSent;
                         const pingEl = document.getElementById('statPing');
                         if (pingEl) pingEl.textContent = `${latency} ms`;
+                        if (data.heap !== undefined || data.uptime !== undefined || data.rssi !== undefined) {
+                            this.emit('telemetry', data);
+                        }
                     } else if (data.type === 'telemetry') {
                         this.emit('telemetry', data);
                     } else if (data.type === 'event') {
@@ -248,6 +252,9 @@ class ConnectionManager {
             
             this.emit('status', data);
             this.emit('telemetry', data);
+        } else if (this.isConnected) {
+            // Fallback to WebSocket get_status if HTTP REST is blocked (e.g. Mixed Content / CORS)
+            this.sendWs({ type: 'get_status' });
         }
     }
 

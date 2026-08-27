@@ -69,10 +69,6 @@ class DrawingStudio {
             this.invertCanvas();
             App.showToast('Canvas Inverted 🌓');
         });
-        
-        document.getElementById('btnSendDrawing')?.addEventListener('click', () => {
-            this.sendToOled();
-        });
 
         // Keyboard Shortcuts (Ctrl+Z, Ctrl+Y, Delete)
         window.addEventListener('keydown', (e) => {
@@ -299,10 +295,20 @@ class DrawingStudio {
         this.ctx.drawImage(tempCanvas, 0, 0, this.canvas.width, this.canvas.height);
     }
 
-    saveState() {
+    saveState(autoSync = true) {
         this.history.push(new Uint8Array(this.pixels));
         if (this.history.length > this.maxHistory) this.history.shift();
         this.redoStack = [];
+        if (autoSync) {
+            this.debounceSyncToOled();
+        }
+    }
+
+    debounceSyncToOled() {
+        if (this.syncTimer) clearTimeout(this.syncTimer);
+        this.syncTimer = setTimeout(() => {
+            this.sendToOled(false);
+        }, 120);
     }
 
     undo() {
@@ -311,6 +317,7 @@ class DrawingStudio {
             const prevState = this.history[this.history.length - 1];
             this.pixels.set(prevState);
             this.renderFromMatrix();
+            this.debounceSyncToOled();
             App.showToast('Undo ↩️');
         }
     }
@@ -321,6 +328,7 @@ class DrawingStudio {
             this.history.push(nextState);
             this.pixels.set(nextState);
             this.renderFromMatrix();
+            this.debounceSyncToOled();
             App.showToast('Redo ↪️');
         }
     }
@@ -517,7 +525,7 @@ class DrawingStudio {
         return hex;
     }
 
-    sendToOled() {
+    sendToOled(showToast = false) {
         const buffer = this.encode1BitBitmap();
         const hexData = this.bitmapToHex(buffer);
 
@@ -530,11 +538,13 @@ class DrawingStudio {
             Connection.post('/api/drawing', { bitmap: hexData });
         }
 
-        // Switch ESP32 display to Drawing page immediately
+        // Switch ESP32 display to Drawing page
         Connection.sendWs({ type: 'set_page', page: 'drawing' });
         Connection.post('/api/page', { page: 'drawing' });
 
-        App.showToast('Drawing Sent to ESP32 OLED Screen!');
+        if (showToast && window.App) {
+            App.showToast('Drawing Sent to ESP32 OLED Screen!');
+        }
     }
 }
 
