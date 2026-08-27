@@ -17,6 +17,7 @@ const PAGES_LIST = [
     { id: 'drawing', name: 'Drawing Canvas', desc: '128x64 custom monochrome bitmap canvas', icon: 'draw' },
     { id: 'game_center', name: 'Game Center', desc: '6 interactive retro arcade games hub', icon: 'sports_esports' },
     { id: 'message', name: 'Custom Message', desc: 'Marquee scrolling banner announcement', icon: 'campaign' },
+    { id: 'spotify', name: 'Spotify Music', desc: 'Now playing song, artist, progress & animated equalizer', icon: 'graphic_eq' },
     { id: 'settings', name: 'System Settings', desc: 'Brightness, sound, and rotation settings', icon: 'tune' }
 ];
 

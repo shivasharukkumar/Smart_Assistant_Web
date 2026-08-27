@@ -23,6 +23,7 @@ class AppController {
             { name: 'Pages', init: () => window.Pages?.init() },
             { name: 'DrawingStudio', init: () => window.DrawingStudio?.init() },
             { name: 'GameCenter', init: () => window.GameCenter?.init() },
+            { name: 'Spotify', init: () => window.Spotify?.init() },
             { name: 'Notifications', init: () => window.Notifications?.init() },
             { name: 'Settings', init: () => window.Settings?.init() }
         ];
@@ -57,6 +58,10 @@ class AppController {
         } else if (tabId === 'faces') {
             Connection.sendWs({ type: 'set_page', page: 'face' });
             Connection.post('/api/page', { page: 'face' });
+        } else if (tabId === 'spotify') {
+            Connection.sendWs({ type: 'set_page', page: 'spotify' });
+            Connection.post('/api/page', { page: 'spotify' });
+            if (window.Spotify) window.Spotify.syncToEsp32();
         }
 
         // Update nav styling

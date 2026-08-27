@@ -149,6 +149,42 @@ class DashboardManager {
             if (window.DrawingStudioInstance) {
                 ctx.drawImage(window.DrawingStudioInstance.canvas, 0, 0, 128, 64);
             }
+        } else if (this.currentPage === 'spotify') {
+            const track = window.Spotify ? window.Spotify.tracks[window.Spotify.currentTrackIndex] : { title: 'Midnight Cyber Beats', artist: 'Synthwave Lo-Fi', duration: 195 };
+            const prog = window.Spotify ? window.Spotify.progress : 45;
+            const isPlaying = window.Spotify ? window.Spotify.isPlaying : true;
+
+            // Header
+            ctx.font = '8px monospace';
+            ctx.textAlign = 'left';
+            ctx.fillText('SPOTIFY ♫', 4, 10);
+
+            // Mini Equalizer in top right
+            if (isPlaying) {
+                for (let b = 0; b < 4; b++) {
+                    const h = 2 + Math.floor(Math.sin((this.frameCounter / 4.0) + b * 1.5) * 3 + 3);
+                    ctx.fillRect(96 + b * 4, 12 - h, 2, h);
+                }
+            }
+
+            // Title
+            ctx.font = '9px monospace';
+            ctx.fillText(`♪ ${track.title.slice(0, 18)}`, 4, 24);
+
+            // Artist
+            ctx.font = '8px monospace';
+            ctx.fillText(`  ${track.artist.slice(0, 18)}`, 4, 36);
+
+            // Progress Bar
+            ctx.strokeRect(4, 42, 120, 5);
+            const pct = track.duration > 0 ? (prog * 118) / track.duration : 0;
+            ctx.fillRect(5, 43, Math.min(118, Math.max(0, pct)), 3);
+
+            // Play/Pause & Time
+            const pM = Math.floor(prog / 60), pS = Math.floor(prog % 60);
+            const dM = Math.floor(track.duration / 60), dS = Math.floor(track.duration % 60);
+            const timeStr = `${isPlaying ? '▶' : '⏸'} ${String(pM).padStart(2, '0')}:${String(pS).padStart(2, '0')} / ${String(dM).padStart(2, '0')}:${String(dS).padStart(2, '0')}`;
+            ctx.fillText(timeStr, 4, 58);
         } else {
             ctx.font = '12px monospace';
             ctx.textAlign = 'center';
