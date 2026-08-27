@@ -7,7 +7,8 @@
     <meta name="description" content="Professional Cybernetic Neural Companion Dashboard for ESP32 Interactive Smart Assistant.">
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#7c8c66">
-    <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAACXBIWXMAAA7EAAAOxAGVKw4bAAACVklEQVRYR+2WP2gTURzHP7m0Fxx0EgRBqFihgx2E1q2Di4ODg4u4dDCCoIOQDoKLi0gHB3FxEZci6lCnDgURkXZwcHAQpIMgDjp16F5v7jGk5b3c5S7XlB74cRzy4f2+3+/33r17FyoqKhU0A2XgG7AU8R7wAPhR5n0v3X+l77Z21w8r2wAegEvAL80vAL+AV8BNk7u1707v307049w2qf4z8B5Y1/wA+K/5W+Ct5g/31F0VwARQ8iJ+2eT99dIeOAPcBmZ1YQ04qXl2j+vCfs3b6e82aX0BHAeOgJ6mY2W5kFwFHgFXgS57gWbL+039G104qfmW6f0bK4DtwB3gpq7L9p8s88C5Z2hZ3c2999/RvgPMAJ9t+Znl5q/o4l9f7f4O8NPy9q3uT71/FegCV4CLmrNqYx/wDtg1s0j4o1Z4qWb39d1O81w3/mF7k30yV8B1m4GvNuv52p12+03mH5uB8rB5r88FfGz/3VbN6Z+3F0bE965P1G2A1wFfgDHgq41v/k3pUeC2vV/11GkL4CPwU4/x1O771X67t+P2B8C61T/23Gl7wWvN+5kC7gMv/Wp19O3V/Z0/BtwCHtuz2Pez6333333tC116pP0r8L6aA1y1wz9n+cE5oE1mXNrmw/4M0N+f04C5vR7jJ+k7eH/X+u/9/yugq33f/6/70y1n7T9V9a+iomL/8Q/U4G9Zg5eKcwAAAABJRU5ErkJggg==">
+    <link rel="icon" type="image/png" href="assets/icon.png">
+    <link rel="apple-touch-icon" href="assets/icon.png">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
     <link rel="stylesheet" href="css/style.css">
 </head>
@@ -15,8 +16,8 @@
     <!-- Top Command Header & Connection HUD (#7c8c66 Sage Header) -->
     <header class="app-header">
         <div class="brand-section">
-            <div class="brand-logo">
-                <span class="material-symbols-outlined" style="font-size: 24px; color: #ffffff;">memory</span>
+            <div class="brand-logo" style="background: transparent; border: none; padding: 0;">
+                <img src="assets/icon.png" alt="ESP32 Assistant Icon" style="width: 38px; height: 38px; object-fit: contain; filter: drop-shadow(0 0 8px rgba(34, 197, 94, 0.5));">
             </div>
             <div class="brand-text">
                 <h1>
@@ -545,7 +546,7 @@
                     </span>
                     <div class="kbd-badge"><kbd>W / ▲</kbd> <kbd>S / ▼</kbd> <kbd>A / ◀</kbd> <kbd>D / ▶</kbd> Move</div>
                     <div class="kbd-badge"><kbd>Space</kbd> / <kbd>Enter</kbd> Jump / Touch</div>
-                    <div class="kbd-badge"><kbd>1 - 9</kbd> Tic-Tac-Toe Cells</div>
+                    <div class="kbd-badge"><kbd>Numpad 789 / 456 / 123</kbd> Grid Cells</div>
                     <div class="kbd-badge"><kbd>P</kbd> Pause</div>
                     <div class="kbd-badge"><kbd>R</kbd> Resume</div>
                     <div class="kbd-badge"><kbd>Esc</kbd> / <kbd>Q</kbd> Exit</div>
@@ -675,30 +676,31 @@
 
             <div class="guide-step">
                 <div class="guide-step-title">
-                    <span class="material-symbols-outlined" style="font-size: 18px;">bolt</span> Option 1: Deploy to Vercel (1-Click Free Hosting)
+                    <span class="material-symbols-outlined" style="font-size: 18px;">cloud</span> Option 1: Deploy with Cloudflare Pages (Recommended)
                 </div>
-                <div>Install Vercel CLI and run inside <code>Smart_Assistant_Web</code>:</div>
+                <div>Deploy instantly via Wrangler CLI with 1 command (unlimited global edge hosting):</div>
                 <div class="code-box">
-                    <span>npx vercel --prod</span>
+                    <span>npx wrangler pages deploy . --project-name=esp32-assistant</span>
                 </div>
+                <div style="margin-top: 6px; font-size: 0.78rem;">Or drag-and-drop the <code>Smart_Assistant_Web</code> folder in the <strong>Cloudflare Dashboard &gt; Workers &amp; Pages &gt; Create &gt; Pages &gt; Upload assets</strong>.</div>
             </div>
 
             <div class="guide-step">
                 <div class="guide-step-title">
-                    <span class="material-symbols-outlined" style="font-size: 18px;">public</span> Option 2: GitHub Pages (100% Free Forever)
+                    <span class="material-symbols-outlined" style="font-size: 18px;">vpn_lock</span> Option 2: Cloudflare Tunnel (Free Worldwide ESP32 Access)
                 </div>
-                <div>Push the <code>Smart_Assistant_Web</code> folder to GitHub and enable <strong>Settings &gt; Pages &gt; Deploy from Branch (main)</strong>.</div>
+                <div>Forward your local ESP32 IP securely with Cloudflare Quick Tunnel:</div>
+                <div class="code-box">
+                    <span>cloudflared tunnel --url http://192.168.1.105:80</span>
+                </div>
+                <div style="margin-top: 6px; font-size: 0.78rem;">Copy the generated <code>https://xxxx.trycloudflare.com</code> URL into the top connection bar!</div>
             </div>
 
             <div class="guide-step">
                 <div class="guide-step-title">
-                    <span class="material-symbols-outlined" style="font-size: 18px;">vpn_lock</span> Option 3: ngrok Secure Tunnel (Worldwide Access to ESP32)
+                    <span class="material-symbols-outlined" style="font-size: 18px;">public</span> Option 3: GitHub Pages &amp; Vercel
                 </div>
-                <div>If your website is hosted on HTTPS, forward your ESP32 IP with free ngrok:</div>
-                <div class="code-box">
-                    <span>ngrok http 192.168.1.105:80</span>
-                </div>
-                <div style="margin-top: 6px; font-size: 0.78rem;">Then paste the <code>https://xxxx.ngrok-free.app</code> URL into the top connection bar!</div>
+                <div>Deploy via <code>npx vercel --prod</code> or enable GitHub Pages in your repository settings under <strong>Settings &gt; Pages</strong>.</div>
             </div>
 
             <div style="text-align: right; margin-top: 16px;">
