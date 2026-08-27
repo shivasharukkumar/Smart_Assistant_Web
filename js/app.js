@@ -16,12 +16,9 @@ class AppController {
             });
         });
 
-        // Initialize all subsystems
-        Connection.init();
+        // Initialize subsystems that don't self-initialize
         Dashboard.init();
         FaceStudio.init();
-        PagesManagerInstance.init();
-        DrawingStudioInstance.init();
         GameCenterInstance.init();
         NotificationManagerInstance.init();
         SettingsWeb.init();
@@ -44,7 +41,8 @@ class AppController {
     }
 
     showToast(message, type = 'info') {
-        const container = document.getElementById('toast-container');
+        // ID matches the HTML: <div id="toastContainer">
+        const container = document.getElementById('toastContainer');
         if (!container) return;
 
         const toast = document.createElement('div');

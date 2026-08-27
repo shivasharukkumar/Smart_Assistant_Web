@@ -72,7 +72,7 @@ class GameCenter {
     startGame(gameId) {
         this.activeGame = gameId;
         Connection.sendWs({ type: 'game_start', game: gameId });
-        Connection.apiPost('/api/game/start', { game: gameId });
+        Connection.post('/api/game/start', { game: gameId });
         this.updateControllerLayout();
         App.showToast(`Started Game: ${gameId.toUpperCase()}`);
 
@@ -81,70 +81,99 @@ class GameCenter {
     }
 
     updateControllerLayout() {
-        const titleEl = document.getElementById('controllerGameTitle');
-        const dpad = document.getElementById('controllerDpad');
-        const actionBtn = document.getElementById('controllerActionBtn');
-        const tttBoard = document.getElementById('controllerTicTacToe');
+        // HTML element IDs from index.html
+        // D-pad container = the div wrapping btnDpadUp etc. — we target the parent div
+        const dpadSection = document.querySelector('.dpad-container')?.closest('div')?.parentElement;
+        const actionSection = document.getElementById('btnGameAction')?.closest('div[style]');
+        const tttContainer = document.getElementById('tttContainer');
+        const activeTitle = document.getElementById('activeGameTitle');
 
-        if (titleEl) titleEl.textContent = `🎮 ${this.activeGame.toUpperCase()} Controller`;
+        // Update game title badge
+        const game = GAMES_LIST.find(g => g.id === this.activeGame);
+        if (activeTitle) {
+            activeTitle.textContent = game ? `${game.icon} ${game.name}` : 'No Game Active';
+        }
 
-        if (dpad) dpad.style.display = 'none';
-        if (actionBtn) actionBtn.style.display = 'none';
-        if (tttBoard) tttBoard.style.display = 'none';
+        // Show/hide controller sections based on active game
+        if (dpadSection) dpadSection.style.display = 'none';
+        if (actionSection) actionSection.style.display = 'none';
+        if (tttContainer) tttContainer.style.display = 'none';
 
         switch (this.activeGame) {
             case 'snake':
             case 'pong':
-                if (dpad) dpad.style.display = 'grid';
+                if (dpadSection) dpadSection.style.display = 'block';
                 break;
 
             case 'flappy':
             case 'flappy_face':
-            case 'reaction':
-                if (actionBtn) {
-                    actionBtn.style.display = 'block';
-                    const btn = document.getElementById('btnBigAction');
-                    if (btn) btn.textContent = this.activeGame === 'reaction' ? 'TOUCH!' : 'JUMP';
-                }
+            case 'reaction': {
+                if (actionSection) actionSection.style.display = 'flex';
+                // Update button label
+                const actionBtn = document.getElementById('btnGameAction');
+                if (actionBtn) actionBtn.textContent = this.activeGame === 'reaction' ? 'TOUCH!' : 'JUMP';
                 break;
+            }
 
             case 'tictactoe':
-                if (tttBoard) {
-                    tttBoard.style.display = 'grid';
+                if (tttContainer) {
+                    tttContainer.style.display = 'block';
                     this.clearTicTacToeBoard();
                 }
                 break;
 
             default:
+                // Show D-pad by default (when no game is active, show all)
+                if (dpadSection) dpadSection.style.display = 'block';
+                if (actionSection) actionSection.style.display = 'flex';
                 break;
         }
     }
 
     bindControllerEvents() {
-        // D-Pad buttons
-        document.querySelectorAll('.d-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const act = btn.getAttribute('data-act');
-                if (act) this.sendInput(act);
-            });
+        // D-Pad buttons — class="dpad-btn" with id btnDpadUp/Down/Left/Right/Center
+        const dpadMap = {
+            btnDpadUp: 'UP',
+            btnDpadDown: 'DOWN',
+            btnDpadLeft: 'LEFT',
+            btnDpadRight: 'RIGHT',
+            btnDpadCenter: 'SELECT'
+        };
+        Object.entries(dpadMap).forEach(([id, action]) => {
+            document.getElementById(id)?.addEventListener('click', () => this.sendInput(action));
         });
 
-        // Big Action Button (Jump / Touch)
-        document.getElementById('btnBigAction')?.addEventListener('click', () => {
+        // Action Button (Jump / Touch) — id="btnGameAction"
+        document.getElementById('btnGameAction')?.addEventListener('click', () => {
             this.sendInput(this.activeGame === 'reaction' ? 'TOUCH' : 'JUMP');
         });
 
-        // Pause & Exit buttons
+        // Pause button
         document.getElementById('btnGamePause')?.addEventListener('click', () => {
             Connection.sendWs({ type: 'game_input', action: 'PAUSE' });
-            Connection.apiPost('/api/game/pause', {});
+            Connection.post('/api/game/pause', {});
         });
 
+        // Resume button
+        document.getElementById('btnGameResume')?.addEventListener('click', () => {
+            Connection.sendWs({ type: 'game_input', action: 'RESUME' });
+            Connection.post('/api/game/resume', {});
+        });
+
+        // Exit button
         document.getElementById('btnGameExit')?.addEventListener('click', () => {
             Connection.sendWs({ type: 'game_input', action: 'EXIT' });
-            Connection.apiPost('/api/game/exit', {});
+            Connection.post('/api/game/exit', {});
             this.activeGame = 'none';
             this.updateControllerLayout();
+        });
+
+        // Game tile selection (index.html has .game-tile elements, not a dynamic grid)
+        document.querySelectorAll('.game-tile').forEach(tile => {
+            tile.addEventListener('click', () => {
+                const gameId = tile.getAttribute('data-game');
+                if (gameId) this.startGame(gameId);
+            });
         });
 
         // Tic-Tac-Toe Cells
@@ -158,7 +187,7 @@ class GameCenter {
                 cell.classList.add('x');
 
                 Connection.sendWs({ type: 'game_input', cell: `${r},${c}` });
-                Connection.apiPost('/api/game/input', { cell: `${r},${c}` });
+                Connection.post('/api/game/input', { cell: `${r},${c}` });
             });
         });
     }
@@ -172,7 +201,7 @@ class GameCenter {
 
     sendInput(action) {
         Connection.sendWs({ type: 'game_input', action: action });
-        Connection.apiPost('/api/game/input', { action: action });
+        Connection.post('/api/game/input', { action: action });
     }
 
     initKeyboardListener() {

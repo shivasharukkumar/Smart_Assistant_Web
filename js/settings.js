@@ -4,67 +4,76 @@
 
 class SettingsManagerWeb {
     init() {
-        // Brightness slider
-        const bSlider = document.getElementById('settingBrightness');
-        const bLabel = document.getElementById('valBrightness');
+        // Brightness slider — IDs: settingBrightnessSlider / settingBrightnessLabel
+        const bSlider = document.getElementById('settingBrightnessSlider');
+        const bLabel = document.getElementById('settingBrightnessLabel');
         if (bSlider) {
             bSlider.addEventListener('input', (e) => {
                 if (bLabel) bLabel.textContent = e.target.value;
+                // Send live brightness update via WebSocket for real-time feedback
+                Connection.sendWs({ type: 'set_brightness', value: parseInt(e.target.value) });
+            });
+            bSlider.addEventListener('change', (e) => {
+                Connection.post('/api/settings', { brightness: parseInt(e.target.value) });
             });
         }
 
-        // Save Display & Audio Settings
-        document.getElementById('btnSaveDisplaySettings')?.addEventListener('click', () => {
-            const brightness = parseInt(document.getElementById('settingBrightness')?.value || '255');
-            const sound = document.getElementById('settingSound')?.checked || false;
-
-            Connection.apiPost('/api/settings', {
-                brightness: brightness,
-                sound: sound
+        // Auto-reconnect toggle
+        const switchAutoReconnect = document.getElementById('switchAutoReconnect');
+        if (switchAutoReconnect) {
+            switchAutoReconnect.checked = Connection.autoReconnect;
+            switchAutoReconnect.addEventListener('change', (e) => {
+                Connection.autoReconnect = e.target.checked;
+                localStorage.setItem('esp32_auto_reconnect', e.target.checked);
+                App.showToast(`Auto-Reconnect ${e.target.checked ? 'enabled' : 'disabled'}`);
             });
+        }
 
-            App.showToast('Display & Audio settings saved! 💾');
+        // PWA install button
+        let deferredInstallPrompt = null;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredInstallPrompt = e;
+        });
+        document.getElementById('pwaInstallBtn')?.addEventListener('click', () => {
+            if (deferredInstallPrompt) {
+                deferredInstallPrompt.prompt();
+            } else {
+                App.showToast('Open in Chrome on Android/Desktop to install as PWA 📲', 'info');
+            }
         });
 
-        // Save Wi-Fi Credentials
+        // Save Wi-Fi Credentials — IDs: settingSsidInput / settingPassInput
         document.getElementById('btnSaveWifi')?.addEventListener('click', () => {
-            const ssid = document.getElementById('settingSsid')?.value.trim();
-            const pass = document.getElementById('settingPass')?.value.trim();
+            const ssid = document.getElementById('settingSsidInput')?.value.trim();
+            const pass = document.getElementById('settingPassInput')?.value.trim();
 
             if (!ssid) {
                 App.showToast('Please enter a valid Wi-Fi SSID', 'error');
                 return;
             }
 
-            Connection.apiPost('/api/settings', {
+            Connection.post('/api/settings', {
                 wifiSsid: ssid,
                 wifiPass: pass
             });
 
-            App.showToast('Wi-Fi credentials updated. ESP32 will reconnect.');
+            App.showToast('Wi-Fi credentials updated. ESP32 will reconnect. 📶');
         });
 
-        // Restart ESP32
-        document.getElementById('btnRestartEsp')?.addEventListener('click', () => {
+        // Reboot ESP32 — ID: btnRebootEsp
+        document.getElementById('btnRebootEsp')?.addEventListener('click', () => {
             if (confirm('Are you sure you want to reboot the ESP32?')) {
-                Connection.apiPost('/api/restart', {});
+                Connection.post('/api/restart', {});
                 App.showToast('ESP32 Rebooting... 🔄');
             }
         });
 
-        // Reset High Scores
-        document.getElementById('btnResetHighScores')?.addEventListener('click', () => {
-            if (confirm('Reset all saved game high scores?')) {
-                Connection.apiPost('/api/settings', { resetScores: true });
-                App.showToast('High scores cleared.');
-            }
-        });
-
-        // Factory Reset
+        // Factory Reset — ID: btnFactoryReset
         document.getElementById('btnFactoryReset')?.addEventListener('click', () => {
             if (confirm('WARNING: This will wipe all NVS settings, Wi-Fi credentials, and high scores. Proceed?')) {
-                Connection.apiPost('/api/factory-reset', {});
-                App.showToast('Factory reset complete. Rebooting...');
+                Connection.post('/api/factory-reset', {});
+                App.showToast('Factory reset initiated. ESP32 rebooting... ⚠️');
             }
         });
     }

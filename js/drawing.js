@@ -36,7 +36,7 @@ class DrawingStudio {
         this.canvas.addEventListener('pointermove', (e) => this.onPointerMove(e));
         window.addEventListener('pointerup', () => this.onPointerUp());
 
-        // Tool buttons
+        // Tool buttons — class="tool-btn" data-tool="..."
         document.querySelectorAll('.tool-btn[data-tool]').forEach(btn => {
             btn.addEventListener('click', () => {
                 document.querySelectorAll('.tool-btn[data-tool]').forEach(b => b.classList.remove('active'));
@@ -45,40 +45,21 @@ class DrawingStudio {
             });
         });
 
-        // Brush size slider
-        const brushSlider = document.getElementById('brushSize');
-        if (brushSlider) {
-            brushSlider.addEventListener('input', (e) => {
-                this.brushSize = parseInt(e.target.value);
-                const valEl = document.getElementById('valBrushSize');
-                if (valEl) valEl.textContent = `${this.brushSize}px`;
+        // Preset shape buttons — class="preset-btn" data-preset="..."
+        document.querySelectorAll('.preset-btn[data-preset]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const preset = btn.getAttribute('data-preset');
+                if (preset) this.loadPreset(preset);
             });
-        }
+        });
 
-        // Action buttons
-        document.getElementById('btnUndo')?.addEventListener('click', () => this.undo());
-        document.getElementById('btnRedo')?.addEventListener('click', () => this.redo());
-        document.getElementById('btnInvert')?.addEventListener('click', () => this.invertCanvas());
-        document.getElementById('btnClear')?.addEventListener('click', () => {
+        // Action buttons — IDs from index.html
+        document.getElementById('btnClearDrawing')?.addEventListener('click', () => {
             this.clearCanvas();
             this.saveState();
         });
-
-        // Presets selector
-        const presetSelect = document.getElementById('presetSelector');
-        if (presetSelect) {
-            presetSelect.addEventListener('change', (e) => {
-                if (e.target.value) {
-                    this.loadPreset(e.target.value);
-                    e.target.value = '';
-                }
-            });
-        }
-
-        // Send to OLED button
-        document.getElementById('btnSendToOled')?.addEventListener('click', () => {
-            this.sendToOled();
-        });
+        document.getElementById('btnInvertDrawing')?.addEventListener('click', () => this.invertCanvas());
+        document.getElementById('btnSendDrawing')?.addEventListener('click', () => this.sendToOled());
     }
 
     getCanvasCoords(e) {
@@ -254,7 +235,7 @@ class DrawingStudio {
             }
         } else {
             // Send preset directly by name
-            Connection.apiPost('/api/drawing', { preset: presetName });
+            Connection.post('/api/drawing', { preset: presetName });
         }
 
         this.renderFromMatrix();
@@ -300,7 +281,7 @@ class DrawingStudio {
         });
 
         if (!sentWs) {
-            Connection.apiPost('/api/drawing', { bitmap: hexData });
+            Connection.post('/api/drawing', { bitmap: hexData });
         }
 
         App.showToast('Drawing Sent to ESP32 OLED Screen! 🚀');
@@ -308,3 +289,4 @@ class DrawingStudio {
 }
 
 window.DrawingStudioInstance = new DrawingStudio();
+document.addEventListener('DOMContentLoaded', () => window.DrawingStudioInstance.init());

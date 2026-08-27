@@ -7,39 +7,36 @@ class NotificationManager {
         const sendBtn = document.getElementById('btnSendNotif');
         if (sendBtn) {
             sendBtn.addEventListener('click', () => {
-                const title = document.getElementById('notifTitle')?.value || 'ALERT';
-                const message = document.getElementById('notifMessage')?.value || '';
-                const face = document.getElementById('notifFace')?.value || 'happy';
-                const duration = parseInt(document.getElementById('notifDuration')?.value || '3000');
+                // IDs match index.html: notifTitleInput, notifMsgInput, notifDurInput
+                const title = document.getElementById('notifTitleInput')?.value.trim() || 'ALERT';
+                const message = document.getElementById('notifMsgInput')?.value.trim() || '';
+                const duration = parseInt(document.getElementById('notifDurInput')?.value || '3500');
 
-                this.dispatchNotification(title, message, face, duration);
+                this.dispatchNotification(title, message, duration);
             });
         }
 
-        // Quick Preset Buttons
+        // Quick Preset Buttons (data-title / data-msg attributes)
         document.querySelectorAll('.preset-notif-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 const title = btn.getAttribute('data-title') || 'ALERT';
                 const msg = btn.getAttribute('data-msg') || '';
-                const face = btn.getAttribute('data-face') || 'happy';
-                this.dispatchNotification(title, msg, face, 3500);
+                this.dispatchNotification(title, msg, 3500);
             });
         });
     }
 
-    dispatchNotification(title, message, face, duration = 3000) {
+    dispatchNotification(title, message, duration = 3500) {
         Connection.sendWs({
             type: 'notification',
             title: title,
             message: message,
-            face: face,
             duration: duration
         });
 
-        Connection.apiPost('/api/notification', {
+        Connection.post('/api/notification', {
             title: title,
             message: message,
-            face: face,
             duration: duration
         });
 

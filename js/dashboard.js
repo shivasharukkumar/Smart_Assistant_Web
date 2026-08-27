@@ -20,28 +20,28 @@ class DashboardManager {
 
         // Prev / Next / Home buttons
         document.getElementById('btnOledPrev')?.addEventListener('click', () => {
-            Connection.apiPost('/api/page', { page: 'prev' });
-            PagesManagerInstance?.prevPage();
+            Connection.post('/api/page', { page: 'prev' });
+            if (window.Pages) Pages.prevPage();
         });
 
         document.getElementById('btnOledNext')?.addEventListener('click', () => {
-            Connection.apiPost('/api/page', { page: 'next' });
-            PagesManagerInstance?.nextPage();
+            Connection.post('/api/page', { page: 'next' });
+            if (window.Pages) Pages.nextPage();
         });
 
         document.getElementById('btnOledHome')?.addEventListener('click', () => {
-            Connection.apiPost('/api/page', { page: 'face' });
+            Connection.post('/api/page', { page: 'face' });
             this.currentPage = 'face';
             this.updateBadges();
         });
 
-        // Quick emotion buttons
-        document.querySelectorAll('.quick-face-btn').forEach(btn => {
+        // Quick mood buttons — class="quick-mood-btn" data-mood="..."
+        document.querySelectorAll('.quick-mood-btn').forEach(btn => {
             btn.addEventListener('click', () => {
-                const face = btn.getAttribute('data-face');
+                const face = btn.getAttribute('data-mood');
                 if (face) {
                     Connection.sendWs({ type: 'set_face', face: face });
-                    Connection.apiPost('/api/face', { face: face });
+                    Connection.post('/api/face', { face: face });
                     this.currentFace = face;
                     this.updateBadges();
                     App.showToast(`Assistant Face: ${face.toUpperCase()}`);
@@ -59,22 +59,19 @@ class DashboardManager {
         if (data.face) this.currentFace = data.face;
         if (data.page) this.currentPage = data.page;
 
-        // Update DOM elements
-        const statFace = document.getElementById('statCurrentFace');
-        if (statFace) statFace.textContent = this.currentFace.toUpperCase();
-
-        const statGame = document.getElementById('statActiveGame');
-        if (statGame) statGame.textContent = data.game ? data.game.toUpperCase() : 'NONE';
+        // Update DOM elements — IDs match index.html
+        const statGame = document.getElementById('statGame');
+        if (statGame) statGame.textContent = data.game ? data.game.toUpperCase() : 'None';
 
         const statUptime = document.getElementById('statUptime');
         if (statUptime && data.uptime !== undefined) {
             const h = Math.floor(data.uptime / 3600);
             const m = Math.floor((data.uptime % 3600) / 60);
             const s = data.uptime % 60;
-            statUptime.textContent = `${h}h ${m}m ${s}s`;
+            statUptime.textContent = h > 0 ? `${h}h ${m}m ${s}s` : m > 0 ? `${m}m ${s}s` : `${s}s`;
         }
 
-        const statHeap = document.getElementById('statFreeHeap');
+        const statHeap = document.getElementById('statHeap');
         if (statHeap && data.heap !== undefined) {
             statHeap.textContent = `${(data.heap / 1024).toFixed(1)} KB`;
         }
@@ -84,7 +81,7 @@ class DashboardManager {
             statTemp.textContent = `${parseFloat(data.temp).toFixed(1)} °C`;
         }
 
-        const statHum = document.getElementById('statHumidity');
+        const statHum = document.getElementById('statHum');
         if (statHum && data.hum !== undefined) {
             statHum.textContent = `${parseFloat(data.hum).toFixed(1)} %`;
         }

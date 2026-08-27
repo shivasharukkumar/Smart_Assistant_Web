@@ -232,6 +232,11 @@ class ConnectionManager {
         }
     }
 
+    // Alias used throughout modules (apiPost → post)
+    async apiPost(endpoint, body) {
+        return this.post(endpoint, body);
+    }
+
     async fetchStatus() {
         const data = await this.get('/api/status');
         if (data) this.emit('status', data);

@@ -192,7 +192,8 @@ class FaceStudioManager {
     }
 
     init() {
-        const grid = document.getElementById('faceCardsGrid');
+        // ID in index.html is 'facesGrid'
+        const grid = document.getElementById('facesGrid');
         if (!grid) return;
         grid.innerHTML = '';
 
@@ -221,20 +222,28 @@ class FaceStudioManager {
             });
         });
 
-        // Sliders & Controls
-        const animToggle = document.getElementById('faceAnimToggle');
+        // Sliders & Controls (only bind if elements exist in HTML)
+        const animToggle = document.getElementById('switchSaccades');
         if (animToggle) {
             animToggle.addEventListener('change', (e) => {
-                Connection.sendWs({ type: 'set_face_anim', enabled: e.target.checked });
-                Connection.apiPost('/api/face', { animation: e.target.checked });
+                Connection.sendWs({ type: 'set_face_anim', saccades: e.target.checked });
+                Connection.post('/api/face', { saccades: e.target.checked });
             });
         }
 
-        const speedSlider = document.getElementById('faceAnimSpeed');
-        if (speedSlider) {
-            speedSlider.addEventListener('input', (e) => {
-                document.getElementById('valAnimSpeed').textContent = `${e.target.value}%`;
-                Connection.apiPost('/api/face', { speed: parseInt(e.target.value) });
+        const blinkToggle = document.getElementById('switchBlinking');
+        if (blinkToggle) {
+            blinkToggle.addEventListener('change', (e) => {
+                Connection.sendWs({ type: 'set_face_anim', blinking: e.target.checked });
+                Connection.post('/api/face', { blinking: e.target.checked });
+            });
+        }
+
+        const weatherMoodToggle = document.getElementById('switchWeatherMood');
+        if (weatherMoodToggle) {
+            weatherMoodToggle.addEventListener('change', (e) => {
+                Connection.sendWs({ type: 'set_face_anim', weatherMood: e.target.checked });
+                Connection.post('/api/face', { weatherMood: e.target.checked });
             });
         }
 
@@ -257,8 +266,8 @@ class FaceStudioManager {
         });
 
         Connection.sendWs({ type: 'set_face', face: faceId });
-        Connection.apiPost('/api/face', { face: faceId });
-        App.showToast(`Active Face Set: ${faceId.toUpperCase()}`);
+        Connection.post('/api/face', { face: faceId });
+        App.showToast(`Active Face: ${faceId.toUpperCase()} 😊`);
     }
 }
 

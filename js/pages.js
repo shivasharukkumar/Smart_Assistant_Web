@@ -181,7 +181,27 @@ class PageController {
             oledBadge.textContent = `Page: ${this.activePage.toUpperCase()}`;
         }
     }
+
+    prevPage() {
+        const ids = PAGES_LIST.map(p => p.id);
+        const enabledIds = ids.filter(id => this.pageEnabledStates[id] !== false);
+        if (enabledIds.length === 0) return;
+        const idx = enabledIds.indexOf(this.activePage);
+        const prevId = enabledIds[(idx - 1 + enabledIds.length) % enabledIds.length];
+        this.activatePage(prevId);
+    }
+
+    nextPage() {
+        const ids = PAGES_LIST.map(p => p.id);
+        const enabledIds = ids.filter(id => this.pageEnabledStates[id] !== false);
+        if (enabledIds.length === 0) return;
+        const idx = enabledIds.indexOf(this.activePage);
+        const nextId = enabledIds[(idx + 1) % enabledIds.length];
+        this.activatePage(nextId);
+    }
 }
 
+// Export as both names so any caller works
 window.Pages = new PageController();
+window.PagesManagerInstance = window.Pages;
 document.addEventListener('DOMContentLoaded', () => window.Pages.init());
