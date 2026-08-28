@@ -46,7 +46,7 @@
                 </button>
             </div>
 
-            <input type="text" id="esp32IpInput" placeholder="192.168.1.105 or https://..." value="192.168.1.105">
+            <input type="text" id="esp32IpInput" placeholder="10.17.129.33 or https://..." value="10.17.129.33">
             <button id="connectBtn" class="btn btn-primary">
                 <span class="material-symbols-outlined" style="font-size: 18px;">link</span> Connect
             </button>
@@ -58,6 +58,9 @@
 
             <button id="cloudGuideBtn" class="btn btn-secondary" style="padding: 6px 12px; font-size: 0.78rem;">
                 <span class="material-symbols-outlined" style="font-size: 16px;">cloud_sync</span> Cloud Guide
+            </button>
+            <button id="headerSettingsBtn" class="btn btn-secondary" onclick="window.App?.switchTab('settings')" style="padding: 6px 12px; font-size: 0.78rem;" title="Go to Settings">
+                <span class="material-symbols-outlined" style="font-size: 16px;">tune</span> Settings
             </button>
         </div>
     </header>
@@ -72,6 +75,10 @@
             <span class="material-symbols-outlined">face</span>
             Face Studio
         </div>
+        <div class="nav-tab" data-tab="pet">
+            <span class="material-symbols-outlined">pets</span>
+            Virtual Pet
+        </div>
         <div class="nav-tab" data-tab="pages">
             <span class="material-symbols-outlined">layers</span>
             Page Manager
@@ -80,13 +87,25 @@
             <span class="material-symbols-outlined">draw</span>
             Drawing Studio
         </div>
+        <div class="nav-tab" data-tab="animator">
+            <span class="material-symbols-outlined">animation</span>
+            Animation Studio
+        </div>
         <div class="nav-tab" data-tab="games">
             <span class="material-symbols-outlined">sports_esports</span>
             Game Center
         </div>
+        <div class="nav-tab" data-tab="pc_monitor">
+            <span class="material-symbols-outlined">monitoring</span>
+            PC Monitor
+        </div>
         <div class="nav-tab" data-tab="spotify">
             <span class="material-symbols-outlined">graphic_eq</span>
             Spotify
+        </div>
+        <div class="nav-tab" data-tab="jukebox">
+            <span class="material-symbols-outlined">music_note</span>
+            Buzzer Jukebox
         </div>
         <div class="nav-tab" data-tab="notifications">
             <span class="material-symbols-outlined">notifications_active</span>
@@ -593,6 +612,20 @@
                         </div>
                         <div style="font-weight: 700; font-family: 'Space Grotesk', sans-serif;">Flappy Face</div>
                         <div class="switch-subtext">Fly companion head</div>
+                    </div>
+                    <div class="game-tile" data-game="dino">
+                        <div class="game-tile-icon">
+                            <span class="material-symbols-outlined" style="font-size: 24px;">directions_run</span>
+                        </div>
+                        <div style="font-weight: 700; font-family: 'Space Grotesk', sans-serif;">Chrome Dino</div>
+                        <div class="switch-subtext">Jump cacti & pterodactyls</div>
+                    </div>
+                    <div class="game-tile" data-game="space_invaders">
+                        <div class="game-tile-icon">
+                            <span class="material-symbols-outlined" style="font-size: 24px;">rocket</span>
+                        </div>
+                        <div style="font-weight: 700; font-family: 'Space Grotesk', sans-serif;">Space Invaders</div>
+                        <div class="switch-subtext">Retro alien blaster</div>
                     </div>
                 </div>
             </div>
@@ -1170,11 +1203,46 @@
                                 style="width: 100%; margin-top: 4px; padding: 8px 12px; background: #f8fafc; border: 1px solid var(--border-strong); color: var(--text-primary); border-radius: var(--radius-md);">
                         </div>
                         <button id="btnSaveWifi" class="btn btn-primary">
-                            <span class="material-symbols-outlined" style="font-size: 18px;">save</span> Save Wi-Fi &
+                            <span class="material-symbols-outlined" style="font-size: 18px;">save</span> Save Wi-Fi &amp;
                             Reconnect
                         </button>
 
-                        <div style="display: flex; gap: 10px; margin-top: 8px;">
+                        <!-- Static Fixed IP Setup Card -->
+                        <div style="background: #f8fafc; padding: 12px; border-radius: var(--radius-md); border: 1px solid var(--border-strong); margin-top: 4px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                                <div>
+                                    <span style="font-weight: 700; font-size: 0.88rem; color: var(--color-midnight);">🔒 Fixed Static IP</span>
+                                    <div class="switch-subtext">Prevent IP address from changing</div>
+                                </div>
+                                <label class="cyber-switch">
+                                    <input type="checkbox" id="switchStaticIp">
+                                    <span class="switch-slider"></span>
+                                </label>
+                            </div>
+                            <div id="staticIpFields" style="display: flex; flex-direction: column; gap: 6px; margin-top: 8px;">
+                                <div style="display: flex; align-items: center; gap: 6px;">
+                                    <span class="switch-subtext" style="width: 70px;">Static IP:</span>
+                                    <input type="text" id="cfgStaticIp" value="192.168.1.200" style="flex: 1; padding: 4px 8px; background: #ffffff; border: 1px solid var(--border-strong); border-radius: 4px; font-family: monospace; font-size: 0.82rem;">
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 6px;">
+                                    <span class="switch-subtext" style="width: 70px;">Gateway:</span>
+                                    <input type="text" id="cfgGateway" value="192.168.1.1" style="flex: 1; padding: 4px 8px; background: #ffffff; border: 1px solid var(--border-strong); border-radius: 4px; font-family: monospace; font-size: 0.82rem;">
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 6px;">
+                                    <span class="switch-subtext" style="width: 70px;">Subnet:</span>
+                                    <input type="text" id="cfgSubnet" value="255.255.255.0" style="flex: 1; padding: 4px 8px; background: #ffffff; border: 1px solid var(--border-strong); border-radius: 4px; font-family: monospace; font-size: 0.82rem;">
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 6px;">
+                                    <span class="switch-subtext" style="width: 70px;">DNS Server:</span>
+                                    <input type="text" id="cfgDns" value="8.8.8.8" style="flex: 1; padding: 4px 8px; background: #ffffff; border: 1px solid var(--border-strong); border-radius: 4px; font-family: monospace; font-size: 0.82rem;">
+                                </div>
+                            </div>
+                            <button id="btnSaveStaticIp" class="btn btn-secondary" style="width: 100%; margin-top: 8px; padding: 6px; font-size: 0.78rem;">
+                                <span class="material-symbols-outlined" style="font-size: 14px;">lock</span> Lock Fixed IP &amp; Apply
+                            </button>
+                        </div>
+
+                        <div style="display: flex; gap: 10px; margin-top: 4px;">
                             <button id="btnRebootEsp" class="btn btn-secondary" style="flex: 1;">
                                 <span class="material-symbols-outlined" style="font-size: 16px;">restart_alt</span>
                                 Reboot ESP32
@@ -1188,6 +1256,535 @@
                 </div>
             </div>
         </section>
+
+        <!-- 8. VIRTUAL PET / TAMAGOTCHI HUB -->
+        <section id="pet-tab" class="tab-pane">
+            <div class="grid-container grid-cols-3">
+                <!-- Left 2 Cols: Pet Avatar & Stat Gauges -->
+                <div class="card" style="grid-column: span 2;">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <span class="material-symbols-outlined" style="color: #ec4899;">pets</span>
+                            <span id="petDisplayName">Pixel</span>'s Tamagotchi Sanctuary
+                        </div>
+                        <div style="display: flex; gap: 8px; align-items: center;">
+                            <span id="petLevelBadge" class="status-badge" style="background: rgba(236,72,153,0.15); color: #ec4899; border: 1px solid rgba(236,72,153,0.3); font-weight: 700;">Level 1</span>
+                            <span id="petStatusBadge" class="status-badge connected">Feeling Good</span>
+                        </div>
+                    </div>
+
+                    <!-- Pet Interactive Display Stage -->
+                    <div style="display: flex; gap: 24px; align-items: center; justify-content: space-around; padding: 18px 10px; background: #f8fafc; border-radius: var(--radius-lg); border: 1px solid var(--border-strong); margin-bottom: 20px; flex-wrap: wrap;">
+                        <div style="text-align: center;">
+                            <canvas id="petCanvas" width="128" height="128" style="background: #000000; border-radius: 12px; border: 2px solid var(--border-strong); image-rendering: pixelated; box-shadow: 0 4px 14px rgba(0,0,0,0.15);"></canvas>
+                            <div style="font-size: 0.78rem; color: var(--text-secondary); margin-top: 6px;">Touch sensor on ESP32 pets your companion!</div>
+                        </div>
+
+                        <!-- Stat Progress Bars -->
+                        <div style="flex: 1; min-width: 240px; display: flex; flex-direction: column; gap: 12px;">
+                            <div>
+                                <div style="display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 600; margin-bottom: 4px;">
+                                    <span>🍖 Hunger</span>
+                                    <span id="petHungerText">85%</span>
+                                </div>
+                                <div class="stat-progress-bar"><div id="petHungerBar" class="stat-progress-fill" style="width: 85%; background: #f59e0b;"></div></div>
+                            </div>
+                            <div>
+                                <div style="display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 600; margin-bottom: 4px;">
+                                    <span>💖 Happiness / Fun</span>
+                                    <span id="petHappyText">90%</span>
+                                </div>
+                                <div class="stat-progress-bar"><div id="petHappyBar" class="stat-progress-fill" style="width: 90%; background: #ec4899;"></div></div>
+                            </div>
+                            <div>
+                                <div style="display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 600; margin-bottom: 4px;">
+                                    <span>⚡ Energy / Rest</span>
+                                    <span id="petEnergyText">80%</span>
+                                </div>
+                                <div class="stat-progress-bar"><div id="petEnergyBar" class="stat-progress-fill" style="width: 80%; background: #3b82f6;"></div></div>
+                            </div>
+                            <div>
+                                <div style="display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 600; margin-bottom: 4px;">
+                                    <span>🧼 Hygiene / Clean</span>
+                                    <span id="petHygieneText">85%</span>
+                                </div>
+                                <div class="stat-progress-bar"><div id="petHygieneBar" class="stat-progress-fill" style="width: 85%; background: #10b981;"></div></div>
+                            </div>
+                            <!-- XP Bar -->
+                            <div style="margin-top: 4px; padding-top: 8px; border-top: 1px dashed var(--border-strong);">
+                                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 4px;">
+                                    <span>Experience Points (XP)</span>
+                                    <span id="petXpText">25 / 100 XP</span>
+                                </div>
+                                <div class="stat-progress-bar" style="height: 6px;"><div id="petXpBar" class="stat-progress-fill" style="width: 25%; background: #8b5cf6;"></div></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pet Actions Buttons Grid -->
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px;">
+                        <button id="btnPetFeed" class="btn btn-primary" style="background: #f59e0b; border-color: #d97706; padding: 12px 10px; display: flex; flex-direction: column; align-items: center; gap: 4px;">
+                            <span class="material-symbols-outlined" style="font-size: 24px;">restaurant</span>
+                            <span>Feed Snack (+30)</span>
+                        </button>
+                        <button id="btnPetPlay" class="btn btn-primary" style="background: #ec4899; border-color: #db2777; padding: 12px 10px; display: flex; flex-direction: column; align-items: center; gap: 4px;">
+                            <span class="material-symbols-outlined" style="font-size: 24px;">sports_esports</span>
+                            <span>Play (+35 Fun)</span>
+                        </button>
+                        <button id="btnPetClean" class="btn btn-primary" style="background: #10b981; border-color: #059669; padding: 12px 10px; display: flex; flex-direction: column; align-items: center; gap: 4px;">
+                            <span class="material-symbols-outlined" style="font-size: 24px;">soap</span>
+                            <span>Clean Bath (100%)</span>
+                        </button>
+                        <button id="btnPetSleep" class="btn btn-primary" style="background: #3b82f6; border-color: #2563eb; padding: 12px 10px; display: flex; flex-direction: column; align-items: center; gap: 4px;">
+                            <span class="material-symbols-outlined" style="font-size: 24px;">bedtime</span>
+                            <span id="petSleepBtnText">Sleep / Nap</span>
+                        </button>
+                        <button id="btnPetTouch" class="btn btn-primary" style="background: #8b5cf6; border-color: #7c3aed; padding: 12px 10px; display: flex; flex-direction: column; align-items: center; gap: 4px;">
+                            <span class="material-symbols-outlined" style="font-size: 24px;">favorite</span>
+                            <span>Pet &amp; Cuddle</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Right 1 Col: Pet Settings & Info -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <span class="material-symbols-outlined" style="color: var(--color-midnight);">badge</span>
+                            Companion Profile
+                        </div>
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 14px;">
+                        <div>
+                            <label class="switch-label">Pet Name</label>
+                            <div style="display: flex; gap: 8px; margin-top: 4px;">
+                                <input type="text" id="petNameInput" value="Pixel" style="flex: 1; padding: 8px 12px; background: #f8fafc; border: 1px solid var(--border-strong); border-radius: var(--radius-md);">
+                                <button id="btnSavePetName" class="btn btn-secondary">Save</button>
+                            </div>
+                        </div>
+
+                        <div style="background: #f8fafc; padding: 12px; border-radius: var(--radius-md); border: 1px solid var(--border-strong); font-size: 0.82rem; color: var(--text-secondary); line-height: 1.5;">
+                            <div style="font-weight: 700; color: var(--color-midnight); margin-bottom: 4px;">💡 How It Works</div>
+                            • Pet stats are saved directly to the ESP32's <strong>NVS Flash memory</strong>.<br>
+                            • Touching the <strong>TTP223 sensor</strong> on your hardware pets the companion and raises happiness!<br>
+                            • If hunger or energy drops too low, the companion gets sad or sleepy.
+                        </div>
+
+                        <button id="btnSwitchToPetOled" class="btn btn-secondary" style="margin-top: 8px;">
+                            <span class="material-symbols-outlined" style="font-size: 16px;">screen_share</span>
+                            Show Pet on OLED Screen
+                        </button>
+
+                        <button id="btnResetPet" class="btn btn-danger" style="margin-top: 4px;">
+                            <span class="material-symbols-outlined" style="font-size: 16px;">restart_alt</span>
+                            Reset Pet Data
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 9. PC SYSTEM MONITOR HUB -->
+        <section id="pc_monitor-tab" class="tab-pane">
+            <div class="grid-container grid-cols-3">
+                <!-- Left 2 Cols: Live Telemetry Gauges -->
+                <div class="card" style="grid-column: span 2;">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <span class="material-symbols-outlined" style="color: var(--color-midnight);">monitoring</span>
+                            PC Hardware Telemetry Stream
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <label class="switch-container">
+                                <input type="checkbox" id="chkAutoStreamPc" checked>
+                                <span class="switch-track"></span>
+                            </label>
+                            <span class="switch-label" style="font-size: 0.82rem;">Auto-Sync to OLED</span>
+                        </div>
+                    </div>
+
+                    <div class="grid-container grid-cols-2" style="margin-bottom: 20px;">
+                        <!-- CPU Card -->
+                        <div style="background: #f8fafc; padding: 16px; border-radius: var(--radius-lg); border: 1px solid var(--border-strong);">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                                <span style="font-weight: 700; font-family: 'Space Grotesk', sans-serif; color: var(--color-midnight); display: flex; align-items: center; gap: 6px;">
+                                    <span class="material-symbols-outlined" style="font-size: 20px; color: #3b82f6;">memory</span> PC CPU Load
+                                </span>
+                                <span id="pcCpuVal" style="font-size: 1.2rem; font-weight: 800; color: #3b82f6;">32%</span>
+                            </div>
+                            <div class="stat-progress-bar" style="height: 10px;"><div id="pcCpuBar" class="stat-progress-fill" style="width: 32%; background: #3b82f6;"></div></div>
+                            <input type="range" id="sliderPcCpu" min="0" max="100" value="32" style="width: 100%; margin-top: 10px;">
+                        </div>
+
+                        <!-- GPU Card -->
+                        <div style="background: #f8fafc; padding: 16px; border-radius: var(--radius-lg); border: 1px solid var(--border-strong);">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                                <span style="font-weight: 700; font-family: 'Space Grotesk', sans-serif; color: var(--color-midnight); display: flex; align-items: center; gap: 6px;">
+                                    <span class="material-symbols-outlined" style="font-size: 20px; color: #10b981;">speed</span> PC GPU Load &amp; Temp
+                                </span>
+                                <span id="pcGpuVal" style="font-size: 1.2rem; font-weight: 800; color: #10b981;">45% (52°C)</span>
+                            </div>
+                            <div class="stat-progress-bar" style="height: 10px;"><div id="pcGpuBar" class="stat-progress-fill" style="width: 45%; background: #10b981;"></div></div>
+                            <input type="range" id="sliderPcGpu" min="0" max="100" value="45" style="width: 100%; margin-top: 10px;">
+                        </div>
+
+                        <!-- RAM Card -->
+                        <div style="background: #f8fafc; padding: 16px; border-radius: var(--radius-lg); border: 1px solid var(--border-strong);">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                                <span style="font-weight: 700; font-family: 'Space Grotesk', sans-serif; color: var(--color-midnight); display: flex; align-items: center; gap: 6px;">
+                                    <span class="material-symbols-outlined" style="font-size: 20px; color: #8b5cf6;">storage</span> System RAM
+                                </span>
+                                <span id="pcRamVal" style="font-size: 1.2rem; font-weight: 800; color: #8b5cf6;">58% (18.5/32GB)</span>
+                            </div>
+                            <div class="stat-progress-bar" style="height: 10px;"><div id="pcRamBar" class="stat-progress-fill" style="width: 58%; background: #8b5cf6;"></div></div>
+                            <input type="range" id="sliderPcRam" min="0" max="100" value="58" style="width: 100%; margin-top: 10px;">
+                        </div>
+
+                        <!-- Telemetry Strings Card -->
+                        <div style="background: #f8fafc; padding: 16px; border-radius: var(--radius-lg); border: 1px solid var(--border-strong); display: flex; flex-direction: column; gap: 8px;">
+                            <div>
+                                <label class="switch-subtext">RAM Readout Text</label>
+                                <input type="text" id="pcRamTextInput" value="18.5 / 32 GB" style="width: 100%; padding: 4px 8px; background: #ffffff; border: 1px solid var(--border-strong); border-radius: 4px; font-size: 0.85rem;">
+                            </div>
+                            <div>
+                                <label class="switch-subtext">GPU Temperature Text</label>
+                                <input type="text" id="pcGpuTempInput" value="52C" style="width: 100%; padding: 4px 8px; background: #ffffff; border: 1px solid var(--border-strong); border-radius: 4px; font-size: 0.85rem;">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 12px; justify-content: flex-end;">
+                        <button id="btnPushPcStatsNow" class="btn btn-primary">
+                            <span class="material-symbols-outlined" style="font-size: 18px;">send</span>
+                            Push Telemetry to OLED
+                        </button>
+                        <button id="btnSwitchToPcPage" class="btn btn-secondary">
+                            <span class="material-symbols-outlined" style="font-size: 18px;">tv</span>
+                            Switch OLED to PC Monitor
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Right 1 Col: Python Bridge Auto-Sync Guide -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <span class="material-symbols-outlined" style="color: var(--color-midnight);">terminal</span>
+                            Python Companion Bridge
+                        </div>
+                    </div>
+                    <div style="font-size: 0.82rem; color: var(--text-secondary); line-height: 1.5;">
+                        Run the companion Python script on your Windows/Mac/Linux PC to stream real live CPU, RAM, and GPU stats automatically every second!
+                    </div>
+
+                    <div class="code-box" style="margin-top: 12px; max-height: 160px; overflow-y: auto;">
+                        <span># 1. Install psutil &amp; requests<br>pip install psutil requests<br><br># 2. Run companion script:<br>python companion/pc_monitor_bridge.py</span>
+                    </div>
+
+                    <button class="btn btn-secondary" style="margin-top: 12px; width: 100%;" onclick="navigator.clipboard.writeText('python companion/pc_monitor_bridge.py'); App.showToast('Copied script command!');">
+                        <span class="material-symbols-outlined" style="font-size: 16px;">content_copy</span> Copy Launch Command
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 10. CUSTOM ANIMATION & FACE CREATOR STUDIO -->
+        <section id="animator-tab" class="tab-pane">
+            <div class="grid-container grid-cols-3">
+                <!-- Left 2 Cols: Pixel Animation Grid & Timeline -->
+                <div class="card" style="grid-column: span 2;">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <span class="material-symbols-outlined" style="color: var(--color-midnight);">animation</span>
+                            Frame-by-Frame Pixel Animation Studio
+                        </div>
+                        <div style="display: flex; gap: 8px; align-items: center;">
+                            <button id="btnAnimPlayToggle" class="btn btn-primary" style="padding: 6px 14px;">
+                                <span class="material-symbols-outlined" style="font-size: 18px;" id="animPlayIcon">play_arrow</span>
+                                <span id="animPlayText">Play Loop</span>
+                            </button>
+                            <button id="btnAnimStreamEsp" class="btn btn-secondary" style="padding: 6px 14px;">
+                                <span class="material-symbols-outlined" style="font-size: 18px;">screen_share</span> Stream to ESP32
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Animation Editor Workspace -->
+                    <div style="display: flex; gap: 20px; align-items: flex-start; margin-bottom: 16px; flex-wrap: wrap;">
+                        <!-- Canvas Editor (32x32 or 128x64) -->
+                        <div style="text-align: center;">
+                            <canvas id="animGridCanvas" width="256" height="128" style="background: #000000; border: 2px solid var(--border-strong); border-radius: 8px; cursor: crosshair; image-rendering: pixelated; box-shadow: 0 4px 14px rgba(0,0,0,0.1);"></canvas>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px; font-size: 0.8rem;">
+                                <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                                    <input type="checkbox" id="chkOnionSkin" checked>
+                                    <span>🧅 Onion Skinning</span>
+                                </label>
+                                <span id="animCoords">X: 0, Y: 0</span>
+                            </div>
+                        </div>
+
+                        <!-- Animation Controls & Tools -->
+                        <div style="flex: 1; min-width: 200px; display: flex; flex-direction: column; gap: 10px;">
+                            <div>
+                                <label class="switch-label">Animation Playback Speed: <span id="animFpsText" style="color: var(--color-midnight); font-weight: 700;">8 FPS</span></label>
+                                <input type="range" id="animFpsSlider" min="1" max="24" value="8" style="width: 100%; margin-top: 4px;">
+                            </div>
+
+                            <div style="display: flex; gap: 8px;">
+                                <button id="btnAnimClearFrame" class="btn btn-secondary" style="flex: 1; padding: 6px 10px; font-size: 0.78rem;">
+                                    <span class="material-symbols-outlined" style="font-size: 14px;">delete</span> Clear Frame
+                                </button>
+                                <button id="btnAnimInvertFrame" class="btn btn-secondary" style="flex: 1; padding: 6px 10px; font-size: 0.78rem;">
+                                    <span class="material-symbols-outlined" style="font-size: 14px;">invert_colors</span> Invert
+                                </button>
+                            </div>
+
+                            <!-- Preset Animation Templates -->
+                            <div>
+                                <label class="switch-label" style="margin-bottom: 6px;">Preset Animations</label>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
+                                    <button class="btn btn-secondary anim-preset-btn" data-preset="blinking_eyes" style="font-size: 0.76rem; padding: 6px 8px;">👀 Blinking Eyes</button>
+                                    <button class="btn btn-secondary anim-preset-btn" data-preset="pulsing_heart" style="font-size: 0.76rem; padding: 6px 8px;">💖 Heart Pulse</button>
+                                    <button class="btn btn-secondary anim-preset-btn" data-preset="running_dino" style="font-size: 0.76rem; padding: 6px 8px;">🦖 Running Dino</button>
+                                    <button class="btn btn-secondary anim-preset-btn" data-preset="space_ship" style="font-size: 0.76rem; padding: 6px 8px;">🚀 Space Thrust</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Multi-Frame Timeline Strip -->
+                    <div style="background: #f8fafc; padding: 12px; border-radius: var(--radius-md); border: 1px solid var(--border-strong);">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                            <span style="font-weight: 700; font-size: 0.85rem; color: var(--color-midnight);">Timeline Frames</span>
+                            <div style="display: flex; gap: 6px;">
+                                <button id="btnAnimAddFrame" class="btn btn-secondary" style="padding: 4px 10px; font-size: 0.78rem;">
+                                    <span class="material-symbols-outlined" style="font-size: 14px;">add</span> Add Frame
+                                </button>
+                                <button id="btnAnimDuplicateFrame" class="btn btn-secondary" style="padding: 4px 10px; font-size: 0.78rem;">
+                                    <span class="material-symbols-outlined" style="font-size: 14px;">content_copy</span> Duplicate
+                                </button>
+                                <button id="btnAnimDeleteFrame" class="btn btn-danger" style="padding: 4px 10px; font-size: 0.78rem;">
+                                    <span class="material-symbols-outlined" style="font-size: 14px;">delete</span> Delete
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Horizontal Frame List Strip -->
+                        <div id="animTimelineStrip" style="display: flex; gap: 10px; overflow-x: auto; padding: 6px 2px;">
+                            <!-- Frame thumbnails dynamically rendered here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right 1 Col: Live Preview & Hex Export -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <span class="material-symbols-outlined" style="color: var(--color-midnight);">visibility</span>
+                            Live Loop Preview
+                        </div>
+                    </div>
+                    <div style="text-align: center; margin-bottom: 14px;">
+                        <canvas id="animPreviewCanvas" width="128" height="64" style="background: #000000; border-radius: 8px; border: 2px solid var(--border-strong); image-rendering: pixelated; box-shadow: 0 4px 12px rgba(0,0,0,0.15);"></canvas>
+                        <div id="animFrameIndicator" style="font-size: 0.82rem; font-weight: 600; color: var(--color-midnight); margin-top: 6px;">Frame 1 of 3</div>
+                    </div>
+
+                    <div>
+                        <label class="switch-label">Animation JSON / Frame Bytes</label>
+                        <textarea id="animExportText" style="width: 100%; height: 90px; margin-top: 4px; padding: 6px 8px; font-family: monospace; font-size: 0.75rem; background: #f8fafc; border: 1px solid var(--border-strong); border-radius: var(--radius-md); resize: none;" readonly></textarea>
+                        <button id="btnCopyAnimJson" class="btn btn-secondary" style="width: 100%; margin-top: 6px; font-size: 0.78rem;">
+                            <span class="material-symbols-outlined" style="font-size: 14px;">content_copy</span> Copy Animation JSON
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 11. BUZZER 8-BIT JUKEBOX & SYNTHESIZER -->
+        <section id="jukebox-tab" class="tab-pane">
+            <div class="grid-container grid-cols-3">
+                <!-- Left 2 Cols: Featured Soundtrack & Soundboard -->
+                <div class="card" style="grid-column: span 2;">
+                    <!-- Hero Card: Pirates of the Caribbean Melody -->
+                    <div style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); color: #ffffff; padding: 20px; border-radius: var(--radius-lg); border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 8px 24px rgba(0,0,0,0.25); margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
+                        <div>
+                            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+                                <span style="font-size: 24px;">🏴‍☠️</span>
+                                <span style="font-family: 'Space Grotesk', sans-serif; font-weight: 800; font-size: 1.3rem; color: #fbbf24;">He's a Pirate</span>
+                            </div>
+                            <div style="font-size: 0.85rem; color: #94a3b8;">Pirates of the Caribbean (Klaus Badelt / Hans Zimmer)</div>
+                            <div style="font-size: 0.78rem; color: #cbd5e1; margin-top: 6px;">8-Bit Non-blocking PWM Polyphonic Synthesis on GPIO 18</div>
+                        </div>
+                        <div style="display: flex; gap: 10px;">
+                            <button id="btnPlayPirates" class="btn btn-primary" style="background: #fbbf24; color: #0f172a; border-color: #f59e0b; padding: 10px 22px; font-weight: 700;">
+                                <span class="material-symbols-outlined" style="font-size: 20px;">play_arrow</span> Play Pirates Theme
+                            </button>
+                            <button id="btnStopMelody" class="btn btn-danger" style="padding: 10px 16px;">
+                                <span class="material-symbols-outlined" style="font-size: 20px;">stop</span> Stop
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 8-Bit Melody Jukebox Playlist -->
+                    <div class="card-header">
+                        <div class="card-title">
+                            <span class="material-symbols-outlined" style="color: var(--color-midnight);">library_music</span>
+                            8-Bit Legendary Hits Jukebox
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-bottom: 24px;">
+                        <!-- 1. He's a Pirate -->
+                        <div style="background: #f8fafc; padding: 14px; border-radius: var(--radius-md); border: 1px solid var(--border-strong); display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <div style="font-weight: 700; font-size: 0.9rem; color: var(--color-midnight);">🏴‍☠️ He's a Pirate</div>
+                                <div style="font-size: 0.76rem; color: var(--text-secondary);">Pirates of the Caribbean</div>
+                            </div>
+                            <button class="btn btn-secondary btn-play-song" data-song="pirates" style="padding: 6px 12px;">Play</button>
+                        </div>
+
+                        <!-- 2. Imperial March -->
+                        <div style="background: #f8fafc; padding: 14px; border-radius: var(--radius-md); border: 1px solid var(--border-strong); display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <div style="font-weight: 700; font-size: 0.9rem; color: var(--color-midnight);">🌌 The Imperial March</div>
+                                <div style="font-size: 0.76rem; color: var(--text-secondary);">Star Wars (Darth Vader)</div>
+                            </div>
+                            <button class="btn btn-secondary btn-play-song" data-song="starwars" style="padding: 6px 12px;">Play</button>
+                        </div>
+
+                        <!-- 3. Billie Jean -->
+                        <div style="background: #f8fafc; padding: 14px; border-radius: var(--radius-md); border: 1px solid var(--border-strong); display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <div style="font-weight: 700; font-size: 0.9rem; color: var(--color-midnight);">🕺 Billie Jean</div>
+                                <div style="font-size: 0.76rem; color: var(--text-secondary);">Michael Jackson</div>
+                            </div>
+                            <button class="btn btn-secondary btn-play-song" data-song="billie_jean" style="padding: 6px 12px;">Play</button>
+                        </div>
+
+                        <!-- 4. Naatu Naatu -->
+                        <div style="background: #f8fafc; padding: 14px; border-radius: var(--radius-md); border: 1px solid var(--border-strong); display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <div style="font-weight: 700; font-size: 0.9rem; color: var(--color-midnight);">🥁 Naatu Naatu</div>
+                                <div style="font-size: 0.76rem; color: var(--text-secondary);">RRR (Oscar Winner)</div>
+                            </div>
+                            <button class="btn btn-secondary btn-play-song" data-song="naatu_naatu" style="padding: 6px 12px;">Play</button>
+                        </div>
+
+                        <!-- 5. Gangnam Style -->
+                        <div style="background: #f8fafc; padding: 14px; border-radius: var(--radius-md); border: 1px solid var(--border-strong); display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <div style="font-weight: 700; font-size: 0.9rem; color: var(--color-midnight);">🕶️ Gangnam Style</div>
+                                <div style="font-size: 0.76rem; color: var(--text-secondary);">PSY Electro-Pop</div>
+                            </div>
+                            <button class="btn btn-secondary btn-play-song" data-song="gangnam_style" style="padding: 6px 12px;">Play</button>
+                        </div>
+
+                        <!-- 6. Blinding Lights -->
+                        <div style="background: #f8fafc; padding: 14px; border-radius: var(--radius-md); border: 1px solid var(--border-strong); display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <div style="font-weight: 700; font-size: 0.9rem; color: var(--color-midnight);">🌃 Blinding Lights</div>
+                                <div style="font-size: 0.76rem; color: var(--text-secondary);">The Weeknd Synthwave</div>
+                            </div>
+                            <button class="btn btn-secondary btn-play-song" data-song="blinding_lights" style="padding: 6px 12px;">Play</button>
+                        </div>
+
+                        <!-- 7. Eye of the Tiger -->
+                        <div style="background: #f8fafc; padding: 14px; border-radius: var(--radius-md); border: 1px solid var(--border-strong); display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <div style="font-weight: 700; font-size: 0.9rem; color: var(--color-midnight);">🥊 Eye of the Tiger</div>
+                                <div style="font-size: 0.76rem; color: var(--text-secondary);">Survivor (Rocky III)</div>
+                            </div>
+                            <button class="btn btn-secondary btn-play-song" data-song="eye_of_tiger" style="padding: 6px 12px;">Play</button>
+                        </div>
+
+                        <!-- 8. Take On Me -->
+                        <div style="background: #f8fafc; padding: 14px; border-radius: var(--radius-md); border: 1px solid var(--border-strong); display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <div style="font-weight: 700; font-size: 0.9rem; color: var(--color-midnight);">🎹 Take On Me</div>
+                                <div style="font-size: 0.76rem; color: var(--text-secondary);">A-ha Synth-Pop</div>
+                            </div>
+                            <button class="btn btn-secondary btn-play-song" data-song="take_on_me" style="padding: 6px 12px;">Play</button>
+                        </div>
+
+                        <!-- 9. Super Mario -->
+                        <div style="background: #f8fafc; padding: 14px; border-radius: var(--radius-md); border: 1px solid var(--border-strong); display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <div style="font-weight: 700; font-size: 0.9rem; color: var(--color-midnight);">🍄 Super Mario Bros</div>
+                                <div style="font-size: 0.76rem; color: var(--text-secondary);">Classic Overworld</div>
+                            </div>
+                            <button class="btn btn-secondary btn-play-song" data-song="mario" style="padding: 6px 12px;">Play</button>
+                        </div>
+
+                        <!-- 10. Tetris -->
+                        <div style="background: #f8fafc; padding: 14px; border-radius: var(--radius-md); border: 1px solid var(--border-strong); display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <div style="font-weight: 700; font-size: 0.9rem; color: var(--color-midnight);">🕹️ Tetris (Korobeiniki)</div>
+                                <div style="font-size: 0.76rem; color: var(--text-secondary);">Russian Folk Theme</div>
+                            </div>
+                            <button class="btn btn-secondary btn-play-song" data-song="tetris" style="padding: 6px 12px;">Play</button>
+                        </div>
+
+                        <!-- 11. Nokia -->
+                        <div style="background: #f8fafc; padding: 14px; border-radius: var(--radius-md); border: 1px solid var(--border-strong); display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <div style="font-weight: 700; font-size: 0.9rem; color: var(--color-midnight);">📱 Nokia Ringtone</div>
+                                <div style="font-size: 0.76rem; color: var(--text-secondary);">Grand Valse Classic</div>
+                            </div>
+                            <button class="btn btn-secondary btn-play-song" data-song="nokia" style="padding: 6px 12px;">Play</button>
+                        </div>
+                    </div>
+
+                    <!-- Interactive Sound Effects Matrix -->
+                    <div class="card-header">
+                        <div class="card-title">
+                            <span class="material-symbols-outlined" style="color: var(--color-midnight);">volume_up</span>
+                            Instant Retro Sound Effects
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                        <button class="btn btn-secondary btn-sfx" data-sfx="dino_jump">🦖 Dino Jump</button>
+                        <button class="btn btn-secondary btn-sfx" data-sfx="laser">🚀 Laser Blast</button>
+                        <button class="btn btn-secondary btn-sfx" data-sfx="explosion">💥 Alien Explosion</button>
+                        <button class="btn btn-secondary btn-sfx" data-sfx="pet_feed">🍎 Pet Feed</button>
+                        <button class="btn btn-secondary btn-sfx" data-sfx="pet_happy">💖 Pet Happy</button>
+                        <button class="btn btn-secondary btn-sfx" data-sfx="success">🏆 Victory Triad</button>
+                        <button class="btn btn-secondary btn-sfx" data-sfx="gameover">💀 Game Over</button>
+                        <button class="btn btn-secondary btn-sfx" data-sfx="click">🖱️ Touch Click</button>
+                    </div>
+                </div>
+
+                <!-- Right 1 Col: Live 8-Bit Piano Synthesizer -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <span class="material-symbols-outlined" style="color: var(--color-midnight);">piano</span>
+                            8-Bit Live Piano Keys
+                        </div>
+                    </div>
+                    <div style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 12px;">Click piano keys to transmit live audio frequencies to the buzzer:</div>
+
+                    <div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-bottom: 14px;">
+                        <button class="piano-key" data-freq="262">C4</button>
+                        <button class="piano-key" data-freq="294">D4</button>
+                        <button class="piano-key" data-freq="330">E4</button>
+                        <button class="piano-key" data-freq="349">F4</button>
+                        <button class="piano-key" data-freq="392">G4</button>
+                        <button class="piano-key" data-freq="440">A4</button>
+                        <button class="piano-key" data-freq="494">B4</button>
+                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px;">
+                        <button class="piano-key" data-freq="523">C5</button>
+                        <button class="piano-key" data-freq="587">D5</button>
+                        <button class="piano-key" data-freq="659">E5</button>
+                        <button class="piano-key" data-freq="698">F5</button>
+                        <button class="piano-key" data-freq="784">G5</button>
+                        <button class="piano-key" data-freq="880">A5</button>
+                        <button class="piano-key" data-freq="1046">C6</button>
+                    </div>
+                </div>
+            </div>
+        </section>
     </main>
 
     <!-- Cloud Hosting Guide Modal -->
@@ -1195,7 +1792,7 @@
         <div class="modal-dialog">
             <div class="modal-header">
                 <div class="card-title" style="color: var(--color-midnight);">
-                    <span class="material-symbols-outlined">cloud</span> Cloud Hosting & Tunnel Guide
+                    <span class="material-symbols-outlined">cloud</span> Cloud Hosting &amp; Tunnel Guide
                 </div>
                 <button class="modal-close"
                     onclick="document.getElementById('cloudModal').classList.remove('open')">&times;</button>
@@ -1259,8 +1856,19 @@
     <script src="js/faces.js"></script>
     <script src="js/pages.js"></script>
     <script src="js/drawing.js"></script>
+    <script src="games/snake.js"></script>
+    <script src="games/flappy.js"></script>
+    <script src="games/pong.js"></script>
+    <script src="games/reaction.js"></script>
+    <script src="games/tictactoe.js"></script>
+    <script src="games/dino.js"></script>
+    <script src="games/invaders.js"></script>
     <script src="js/games.js"></script>
     <script src="js/spotify.js"></script>
+    <script src="js/pet.js"></script>
+    <script src="js/pc_monitor.js"></script>
+    <script src="js/animator.js"></script>
+    <script src="js/jukebox.js"></script>
     <script src="js/notifications.js"></script>
     <script src="js/settings.js"></script>
     <script src="js/app.js"></script>

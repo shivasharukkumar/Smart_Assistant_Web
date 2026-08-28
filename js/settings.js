@@ -159,6 +159,31 @@ class SettingsManagerWeb {
             App.showToast('Wi-Fi credentials updated. ESP32 will reconnect.');
         });
 
+        // Save Static IP Configuration
+        document.getElementById('btnSaveStaticIp')?.addEventListener('click', () => {
+            const isEnabled = document.getElementById('switchStaticIp')?.checked ?? false;
+            const ip = document.getElementById('cfgStaticIp')?.value.trim() || '192.168.1.200';
+            const gw = document.getElementById('cfgGateway')?.value.trim() || '192.168.1.1';
+            const sn = document.getElementById('cfgSubnet')?.value.trim() || '255.255.255.0';
+            const dns = document.getElementById('cfgDns')?.value.trim() || '8.8.8.8';
+
+            Connection.post('/api/settings', {
+                staticIpEnabled: isEnabled,
+                staticIp: ip,
+                gateway: gw,
+                subnet: sn,
+                dns: dns
+            });
+
+            App.showToast(isEnabled ? `Fixed Static IP set to ${ip}! Reboot to apply.` : 'Switched to Dynamic DHCP. Reboot to apply.');
+        });
+
+        // Toggle static IP fields visibility
+        document.getElementById('switchStaticIp')?.addEventListener('change', (e) => {
+            const fields = document.getElementById('staticIpFields');
+            if (fields) fields.style.opacity = e.target.checked ? '1' : '0.5';
+        });
+
         // Reboot ESP32 — ID: btnRebootEsp
         document.getElementById('btnRebootEsp')?.addEventListener('click', () => {
             if (confirm('Are you sure you want to reboot the ESP32?')) {
@@ -182,6 +207,23 @@ class SettingsManagerWeb {
     async fetchSettings() {
         const s = await Connection.get('/api/settings');
         if (!s) return;
+
+        // Static IP Configuration
+        if (s.staticIpEnabled !== undefined && document.getElementById('switchStaticIp')) {
+            document.getElementById('switchStaticIp').checked = s.staticIpEnabled;
+        }
+        if (s.staticIp && document.getElementById('cfgStaticIp')) {
+            document.getElementById('cfgStaticIp').value = s.staticIp;
+        }
+        if (s.gateway && document.getElementById('cfgGateway')) {
+            document.getElementById('cfgGateway').value = s.gateway;
+        }
+        if (s.subnet && document.getElementById('cfgSubnet')) {
+            document.getElementById('cfgSubnet').value = s.subnet;
+        }
+        if (s.dns && document.getElementById('cfgDns')) {
+            document.getElementById('cfgDns').value = s.dns;
+        }
 
         // Buzzer Audio Controls
         if (s.buzzerVolume !== undefined && document.getElementById('buzzerVolumeSlider')) {

@@ -8,7 +8,9 @@ const GAMES_LIST = [
     { id: 'pong', name: 'PONG', desc: 'Face off against ESP32 AI in high-speed paddle rallies.', icon: 'sports_tennis' },
     { id: 'reaction', name: 'REACTION TEST', desc: 'Test human nerve response speed in milliseconds.', icon: 'bolt' },
     { id: 'tictactoe', name: 'TIC-TAC-TOE', desc: 'Classic 3x3 strategy against ESP32 Minimax AI.', icon: 'grid_3x3' },
-    { id: 'flappy_face', name: 'FLAPPY FACE', desc: 'Your active Assistant Face becomes the flying player!', icon: 'mood' }
+    { id: 'flappy_face', name: 'FLAPPY FACE', desc: 'Your active Assistant Face becomes the flying player!', icon: 'mood' },
+    { id: 'dino', name: 'CHROME DINO', desc: 'Jump over cacti and flying pterodactyls with Space/Tap.', icon: 'directions_run' },
+    { id: 'space_invaders', name: 'SPACE INVADERS', desc: 'Move left/right and fire at alien fleet with Space.', icon: 'rocket' }
 ];
 
 class GameCenter {
@@ -87,6 +89,7 @@ class GameCenter {
                 if (dpadSection) dpadSection.style.display = 'block';
                 break;
 
+            case 'dino':
             case 'flappy':
             case 'flappy_face':
             case 'reaction': {
@@ -95,11 +98,25 @@ class GameCenter {
                 if (actionBtn) {
                     actionBtn.innerHTML = `
                         <span class="material-symbols-outlined" style="font-size: 28px;">touch_app</span>
-                        ${this.activeGame === 'reaction' ? 'TOUCH (Space)' : 'JUMP (Space)'}
+                        ${this.activeGame === 'reaction' ? 'TOUCH (Space)' : (this.activeGame === 'dino' ? 'JUMP (Space/▲)' : 'JUMP (Space)')}
                     `;
                 }
                 break;
             }
+
+            case 'space_invaders':
+                if (dpadSection) dpadSection.style.display = 'block';
+                if (actionSection) {
+                    actionSection.style.display = 'flex';
+                    const actionBtn = document.getElementById('btnGameAction');
+                    if (actionBtn) {
+                        actionBtn.innerHTML = `
+                            <span class="material-symbols-outlined" style="font-size: 28px;">rocket</span>
+                            FIRE (Space)
+                        `;
+                    }
+                }
+                break;
 
             case 'tictactoe':
                 if (tttContainer) {

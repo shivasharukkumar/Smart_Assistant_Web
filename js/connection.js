@@ -5,7 +5,7 @@
 
 class ConnectionManager {
     constructor() {
-        this.ip = localStorage.getItem('esp32_assistant_ip') || '192.168.1.105';
+        this.ip = localStorage.getItem('esp32_assistant_ip') || '10.17.129.33';
         this.mode = localStorage.getItem('esp32_conn_mode') || 'lan'; // 'lan' | 'cloud'
         this.autoReconnect = localStorage.getItem('esp32_auto_reconnect') !== 'false';
         this.ws = null;
@@ -37,7 +37,7 @@ class ConnectionManager {
                 localStorage.setItem('esp32_conn_mode', 'lan');
                 this.updateModeButtons();
                 if (!this.ip.includes('.') || this.ip.startsWith('http')) {
-                    this.ip = '192.168.1.105';
+                    this.ip = '10.17.129.33';
                     this.ipInput.value = this.ip;
                 }
             });
@@ -87,7 +87,7 @@ class ConnectionManager {
         if (this.mode === 'lan') {
             this.modeLanBtn.classList.add('active');
             this.modeCloudBtn.classList.remove('active');
-            this.ipInput.placeholder = '192.168.1.105';
+            this.ipInput.placeholder = '10.17.129.33';
         } else {
             this.modeCloudBtn.classList.add('active');
             this.modeLanBtn.classList.remove('active');

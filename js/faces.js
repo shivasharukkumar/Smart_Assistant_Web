@@ -155,6 +155,9 @@ const FaceRenderer = {
             ctx.beginPath();
             ctx.arc(64, 8, 5, 0, Math.PI * 2.5);
             ctx.stroke();
+        } else if (mood === 'cry') {
+            drawDrop(ctx, 46, 36, 5, color);
+            drawDrop(ctx, 76, 36, 5, color);
         }
 
         // 2. Eyes Drawing Routine
@@ -238,88 +241,6 @@ const FaceRenderer = {
 
         drawEye(lx, ly, lw, lh, true);
         drawEye(rx, ry, rw, rh, false);
-
-        // 3. Mouth Drawing Routine at cx=64, baseY=50
-        const cx = 64, baseY = 50;
-        ctx.strokeStyle = color;
-        ctx.fillStyle = color;
-        ctx.lineWidth = 2;
-
-        switch (mood) {
-            case 'happy': case 'heart_eyes': case 'love':
-                ctx.beginPath();
-                ctx.moveTo(cx - 10, baseY);
-                ctx.lineTo(cx, baseY + 5);
-                ctx.lineTo(cx + 10, baseY);
-                ctx.stroke();
-                break;
-            case 'laugh': case 'excited':
-                fillRoundRect(cx - 12, baseY - 2, 24, 10, 4);
-                break;
-            case 'sad': case 'scared':
-                ctx.beginPath();
-                ctx.moveTo(cx - 10, baseY + 5);
-                ctx.lineTo(cx, baseY);
-                ctx.lineTo(cx + 10, baseY + 5);
-                ctx.stroke();
-                break;
-            case 'cry':
-                ctx.beginPath();
-                ctx.moveTo(cx - 10, baseY + 5);
-                ctx.lineTo(cx, baseY);
-                ctx.lineTo(cx + 10, baseY + 5);
-                ctx.stroke();
-                drawDrop(ctx, cx - 18, baseY - 12, 5, color);
-                drawDrop(ctx, cx + 14, baseY - 12, 5, color);
-                break;
-            case 'angry':
-                ctx.beginPath();
-                ctx.moveTo(cx - 10, baseY + 3);
-                ctx.lineTo(cx + 10, baseY + 3);
-                ctx.stroke();
-                break;
-            case 'shock': case 'surprised':
-                ctx.beginPath();
-                ctx.arc(cx, baseY, 5, 0, Math.PI * 2);
-                ctx.stroke();
-                break;
-            case 'thinking':
-                ctx.beginPath();
-                ctx.moveTo(cx - 6, baseY);
-                ctx.lineTo(cx + 4, baseY);
-                ctx.stroke();
-                break;
-            case 'confused': case 'nervous':
-                ctx.beginPath();
-                ctx.moveTo(cx - 8, baseY);
-                ctx.lineTo(cx - 3, baseY + 3);
-                ctx.lineTo(cx + 3, baseY - 3);
-                ctx.lineTo(cx + 8, baseY);
-                ctx.stroke();
-                break;
-            case 'robot':
-                ctx.strokeRect(cx - 10, baseY - 3, 20, 8);
-                for (let i = -6; i <= 6; i += 4) {
-                    ctx.beginPath(); ctx.moveTo(cx + i, baseY - 3); ctx.lineTo(cx + i, baseY + 5); ctx.stroke();
-                }
-                break;
-            case 'shiver':
-                for (let i = -8; i <= 8; i += 4) {
-                    ctx.beginPath(); ctx.moveTo(cx + i, baseY); ctx.lineTo(cx + i, baseY + 5); ctx.stroke();
-                }
-                break;
-            case 'yawn':
-                ctx.beginPath();
-                ctx.arc(cx, baseY + 2, 6, 0, Math.PI * 2);
-                ctx.fill();
-                break;
-            default:
-                ctx.beginPath();
-                ctx.moveTo(cx - 8, baseY);
-                ctx.lineTo(cx + 8, baseY);
-                ctx.stroke();
-                break;
-        }
     }
 };
 

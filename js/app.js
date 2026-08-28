@@ -8,6 +8,16 @@ class AppController {
     }
 
     init() {
+        const nav = document.querySelector('.app-nav');
+        if (nav) {
+            nav.addEventListener('wheel', (e) => {
+                if (e.deltaY !== 0) {
+                    e.preventDefault();
+                    nav.scrollLeft += e.deltaY;
+                }
+            }, { passive: false });
+        }
+
         // Tab switching
         document.querySelectorAll('.nav-tab').forEach(tab => {
             tab.addEventListener('click', () => {
@@ -24,6 +34,10 @@ class AppController {
             { name: 'DrawingStudio', init: () => window.DrawingStudio?.init() },
             { name: 'GameCenter', init: () => window.GameCenter?.init() },
             { name: 'Spotify', init: () => window.Spotify?.init() },
+            { name: 'Pet', init: () => window.Pet?.init() },
+            { name: 'PcMonitor', init: () => window.PcMonitor?.init() },
+            { name: 'Animator', init: () => window.Animator?.init() },
+            { name: 'Jukebox', init: () => window.Jukebox?.init() },
             { name: 'Notifications', init: () => window.Notifications?.init() },
             { name: 'Settings', init: () => window.Settings?.init() }
         ];
@@ -58,15 +72,26 @@ class AppController {
         } else if (tabId === 'faces') {
             Connection.sendWs({ type: 'set_page', page: 'face' });
             Connection.post('/api/page', { page: 'face' });
+        } else if (tabId === 'pet') {
+            Connection.sendWs({ type: 'set_page', page: 'pet' });
+            Connection.post('/api/page', { page: 'pet' });
+        } else if (tabId === 'pc_monitor') {
+            Connection.sendWs({ type: 'set_page', page: 'pc_monitor' });
+            Connection.post('/api/page', { page: 'pc_monitor' });
+            if (window.PcMonitor) window.PcMonitor.syncToEsp32(true);
         } else if (tabId === 'spotify') {
             Connection.sendWs({ type: 'set_page', page: 'spotify' });
             Connection.post('/api/page', { page: 'spotify' });
             if (window.Spotify) window.Spotify.syncToEsp32();
         }
 
-        // Update nav styling
+        // Update nav styling & scroll tab into view
         document.querySelectorAll('.nav-tab').forEach(t => {
-            t.classList.toggle('active', t.getAttribute('data-tab') === tabId);
+            const isActive = t.getAttribute('data-tab') === tabId;
+            t.classList.toggle('active', isActive);
+            if (isActive) {
+                t.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+            }
         });
 
         // Show active pane
